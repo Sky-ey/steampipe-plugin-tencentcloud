@@ -1,0 +1,8 @@
+[
+  {
+    "object_id": "clb-test",
+    "object_name": "test-clb",
+    "type": "CLB",
+    "status": 1
+  }
+]

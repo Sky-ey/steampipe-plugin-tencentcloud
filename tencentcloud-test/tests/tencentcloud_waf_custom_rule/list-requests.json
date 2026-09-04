@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCustomRuleList",
+    "region": "ap-singapore",
+    "body": {
+      "Domain": "test.example.com",
+      "Limit": 100,
+      "Offset": 0
+    }
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "ListUsers",
+    "body": {}
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "ListAccessKeys",
+    "body": {
+      "TargetUin": 123
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "GetSecurityLastUsed",
+    "body": {
+      "SecretIdList": [
+        "AKID-test"
+      ]
+    }
+  }
+]

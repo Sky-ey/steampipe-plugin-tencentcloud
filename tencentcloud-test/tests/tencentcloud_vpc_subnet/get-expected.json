@@ -1,0 +1,7 @@
+[
+  {
+    "subnet_id": "subnet-test",
+    "title": "test-subnet",
+    "region": "ap-guangzhou"
+  }
+]

@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeVpnGateways",
+    "region": "ap-guangzhou",
+    "body": {
+      "VpnGatewayIds": [
+        "vpngw-test"
+      ]
+    }
+  }
+]

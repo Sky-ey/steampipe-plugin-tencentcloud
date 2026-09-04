@@ -1,0 +1,19 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeInstances",
+    "region": "ap-singapore",
+    "body": {
+      "Filters": [
+        {
+          "Name": "InstanceId",
+          "Values": [
+            "wafins-test"
+          ],
+          "ExactMatch": true
+        }
+      ]
+    }
+  }
+]

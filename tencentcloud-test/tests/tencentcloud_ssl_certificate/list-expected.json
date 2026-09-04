@@ -1,0 +1,7 @@
+[
+  {
+    "certificate_id": "cert-test",
+    "alias": "test-cert",
+    "domain": "example.com"
+  }
+]

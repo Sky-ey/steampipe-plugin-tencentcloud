@@ -1,0 +1,8 @@
+[
+  {
+    "ccn_id": "ccn-test",
+    "instance_id": "vpc-test",
+    "instance_type": "VPC",
+    "instance_name": "test-vpc"
+  }
+]

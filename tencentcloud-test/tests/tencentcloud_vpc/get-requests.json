@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeVpcs",
+    "region": "ap-guangzhou",
+    "body": {
+      "VpcIds": [
+        "vpc-test"
+      ]
+    }
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "vpn_gateway_id": "vpngw-test",
+    "route_id": "vpnr-test",
+    "destination_cidr_block": "10.0.0.0/8",
+    "region": "ap-guangzhou"
+  }
+]

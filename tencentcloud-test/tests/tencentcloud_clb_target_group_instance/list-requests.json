@@ -1,0 +1,20 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeTargetGroupInstances",
+    "region": "ap-guangzhou",
+    "body": {
+      "Offset": 0,
+      "Limit": 100,
+      "Filters": [
+        {
+          "Name": "TargetGroupId",
+          "Values": [
+            "tg-test"
+          ]
+        }
+      ]
+    }
+  }
+]

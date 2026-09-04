@@ -1,0 +1,8 @@
+[
+  {
+    "machine_group_id": "mg-test",
+    "machine_group_name": "test-mg",
+    "os_type": 0,
+    "region": "ap-guangzhou"
+  }
+]

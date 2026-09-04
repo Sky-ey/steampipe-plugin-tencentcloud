@@ -1,0 +1,7 @@
+[
+  {
+    "customer_gateway_id": "cgw-test",
+    "customer_gateway_name": "test-cgw",
+    "region": "ap-guangzhou"
+  }
+]

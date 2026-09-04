@@ -1,0 +1,8 @@
+[
+  {
+    "instance_id": "ins-test",
+    "namespace": "QCE/CVM",
+    "value": 42.5,
+    "region": "ap-guangzhou"
+  }
+]

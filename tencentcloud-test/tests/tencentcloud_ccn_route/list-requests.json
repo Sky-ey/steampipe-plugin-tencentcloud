@@ -1,0 +1,23 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCcns",
+    "region": "ap-singapore",
+    "body": {
+      "Offset": 0,
+      "Limit": 100
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCcnRoutes",
+    "region": "ap-singapore",
+    "body": {
+      "CcnId": "ccn-test",
+      "Offset": 0,
+      "Limit": 100
+    }
+  }
+]

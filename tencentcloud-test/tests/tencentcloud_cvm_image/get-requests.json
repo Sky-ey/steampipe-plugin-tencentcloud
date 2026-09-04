@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeImages",
+    "region": "ap-guangzhou",
+    "body": {
+      "ImageIds": ["img-test"]
+    }
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "rule_id": "rule-test",
+    "rule_name": "test-rule",
+    "domain": "test.example.com",
+    "status": "1"
+  }
+]

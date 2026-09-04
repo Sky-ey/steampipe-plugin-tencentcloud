@@ -1,0 +1,12 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeTargetGroupList",
+    "region": "ap-guangzhou",
+    "body": {
+      "Offset": 0,
+      "Limit": 100
+    }
+  }
+]

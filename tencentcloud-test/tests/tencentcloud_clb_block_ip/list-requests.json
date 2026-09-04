@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeBlockIPList",
+    "region": "ap-guangzhou",
+    "body": {
+      "LoadBalancerId": "lb-test",
+      "Offset": 0,
+      "Limit": 100
+    }
+  }
+]

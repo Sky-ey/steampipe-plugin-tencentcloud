@@ -1,0 +1,8 @@
+[
+  {
+    "alarm_notice_id": "notice-test",
+    "name": "test-notice",
+    "type": "Trigger",
+    "region": "ap-guangzhou"
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDomains",
+    "region": "ap-singapore",
+    "body": {
+      "Filters": [
+        {
+          "Name": "DomainId",
+          "Values": [
+            "waf-domain-test"
+          ],
+          "ExactMatch": true
+        }
+      ]
+    }
+  }
+]

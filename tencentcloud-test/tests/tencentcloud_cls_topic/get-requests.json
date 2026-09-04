@@ -1,0 +1,18 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeTopics",
+    "region": "ap-guangzhou",
+    "body": {
+      "Filters": [
+        {
+          "Key": "topicId",
+          "Values": [
+            "topic-test"
+          ]
+        }
+      ]
+    }
+  }
+]

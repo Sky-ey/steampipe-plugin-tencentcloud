@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeNatGateways",
+    "region": "ap-guangzhou",
+    "body": {
+      "NatGatewayIds": [
+        "nat-test"
+      ]
+    }
+  }
+]

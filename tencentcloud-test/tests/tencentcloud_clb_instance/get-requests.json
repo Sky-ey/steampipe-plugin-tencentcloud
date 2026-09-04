@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeLoadBalancers",
+    "region": "ap-guangzhou",
+    "body": {
+      "LoadBalancerIds": [
+        "lb-test"
+      ]
+    }
+  }
+]

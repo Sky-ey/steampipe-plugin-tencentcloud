@@ -1,0 +1,20 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeInternetAddress",
+    "region": "ap-guangzhou",
+    "body": {
+      "Offset": 0,
+      "Limit": 100,
+      "Filters": [
+        {
+          "Name": "AddrType",
+          "Values": [
+            "0"
+          ]
+        }
+      ]
+    }
+  }
+]

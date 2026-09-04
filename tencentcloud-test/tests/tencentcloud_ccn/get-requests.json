@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCcns",
+    "region": "",
+    "body": {
+      "CcnIds": [
+        "ccn-test"
+      ]
+    }
+  }
+]

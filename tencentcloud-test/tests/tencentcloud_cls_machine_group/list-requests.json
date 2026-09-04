@@ -1,0 +1,12 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeMachineGroups",
+    "region": "ap-guangzhou",
+    "body": {
+      "Limit": 100,
+      "Offset": 0
+    }
+  }
+]

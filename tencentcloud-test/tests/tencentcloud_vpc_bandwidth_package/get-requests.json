@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeBandwidthPackages",
+    "region": "ap-guangzhou",
+    "body": {
+      "BandwidthPackageIds": [
+        "bp-test"
+      ]
+    }
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeInstances",
+    "region": "ap-singapore",
+    "body": {
+      "Limit": 100,
+      "Offset": 0
+    }
+  }
+]

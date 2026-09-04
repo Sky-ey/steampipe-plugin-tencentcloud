@@ -1,0 +1,9 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeZones",
+    "region": "ap-guangzhou",
+    "body": {}
+  }
+]

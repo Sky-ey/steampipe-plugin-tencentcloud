@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeSubnets",
+    "region": "ap-guangzhou",
+    "body": {
+      "SubnetIds": [
+        "subnet-test"
+      ]
+    }
+  }
+]

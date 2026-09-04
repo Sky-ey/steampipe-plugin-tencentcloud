@@ -1,0 +1,9 @@
+[
+  {
+    "instance_id": "ins-test",
+    "metric_name": "CPUUsage",
+    "namespace": "QCE/CVM",
+    "value": 42.5,
+    "region": "ap-guangzhou"
+  }
+]

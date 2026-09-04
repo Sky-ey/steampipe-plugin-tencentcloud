@@ -1,0 +1,18 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeHosts",
+    "region": "ap-guangzhou",
+    "body": {
+      "Filters": [
+        {
+          "Name": "host-id",
+          "Values": [
+            "host-test"
+          ]
+        }
+      ]
+    }
+  }
+]

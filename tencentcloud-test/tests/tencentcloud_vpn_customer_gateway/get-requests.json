@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCustomerGateways",
+    "region": "ap-guangzhou",
+    "body": {
+      "CustomerGatewayIds": [
+        "cgw-test"
+      ]
+    }
+  }
+]

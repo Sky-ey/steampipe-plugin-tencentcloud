@@ -1,0 +1,15 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeIpAccessControl",
+    "region": "ap-singapore",
+    "body": {
+      "ActionType": 40,
+      "Count": 1,
+      "Domain": "test.example.com",
+      "Limit": 100,
+      "OffSet": 0
+    }
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "GetRole",
+    "body": {
+      "RoleName": "test-role"
+    }
+  }
+]

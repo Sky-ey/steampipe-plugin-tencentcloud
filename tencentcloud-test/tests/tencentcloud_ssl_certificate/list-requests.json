@@ -1,0 +1,12 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCertificates",
+    "region": "",
+    "body": {
+      "Offset": 0,
+      "Limit": 1000
+    }
+  }
+]

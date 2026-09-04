@@ -1,0 +1,7 @@
+[
+  {
+    "route_table_id": "rtb-test",
+    "route_item_id": "route-item-test",
+    "region": "ap-guangzhou"
+  }
+]

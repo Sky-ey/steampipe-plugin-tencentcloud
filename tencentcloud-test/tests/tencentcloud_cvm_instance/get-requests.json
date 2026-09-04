@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeInstances",
+    "region": "ap-guangzhou",
+    "body": {
+      "InstanceIds": ["ins-test"]
+    }
+  }
+]

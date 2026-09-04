@@ -1,0 +1,7 @@
+[
+  {
+    "network_interface_id": "eni-test",
+    "title": "test-eni",
+    "region": "ap-guangzhou"
+  }
+]

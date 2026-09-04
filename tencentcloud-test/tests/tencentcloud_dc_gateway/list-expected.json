@@ -1,0 +1,7 @@
+[
+  {
+    "direct_connect_gateway_id": "dcg-test",
+    "direct_connect_gateway_name": "test-dcg",
+    "region": "ap-guangzhou"
+  }
+]

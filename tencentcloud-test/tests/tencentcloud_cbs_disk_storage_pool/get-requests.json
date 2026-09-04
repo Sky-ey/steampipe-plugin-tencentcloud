@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDiskStoragePool",
+    "region": "ap-guangzhou",
+    "body": {
+      "CdcIds": [
+        "cdc-test"
+      ]
+    }
+  }
+]

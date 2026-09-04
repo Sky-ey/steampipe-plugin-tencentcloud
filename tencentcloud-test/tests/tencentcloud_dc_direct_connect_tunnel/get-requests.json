@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDirectConnectTunnels",
+    "region": "ap-guangzhou",
+    "body": {
+      "DirectConnectTunnelIds": [
+        "dcx-test"
+      ]
+    }
+  }
+]

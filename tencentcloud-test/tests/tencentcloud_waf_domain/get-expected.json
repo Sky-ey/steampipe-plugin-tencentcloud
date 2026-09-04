@@ -1,0 +1,8 @@
+[
+  {
+    "domain": "test.example.com",
+    "domain_id": "waf-domain-test",
+    "instance_id": "wafins-test",
+    "region": "ap-guangzhou"
+  }
+]

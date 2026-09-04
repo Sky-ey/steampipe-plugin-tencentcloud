@@ -1,0 +1,9 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeObjects",
+    "region": "ap-singapore",
+    "body": {}
+  }
+]

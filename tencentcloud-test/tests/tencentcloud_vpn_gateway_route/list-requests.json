@@ -1,0 +1,23 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeVpnGateways",
+    "region": "ap-guangzhou",
+    "body": {
+      "Offset": 0,
+      "Limit": 100
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeVpnGatewayRoutes",
+    "region": "ap-guangzhou",
+    "body": {
+      "VpnGatewayId": "vpngw-test",
+      "Offset": 0,
+      "Limit": 100
+    }
+  }
+]

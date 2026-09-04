@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDirectConnectGateways",
+    "region": "ap-guangzhou",
+    "body": {
+      "DirectConnectGatewayIds": [
+        "dcg-test"
+      ]
+    }
+  }
+]

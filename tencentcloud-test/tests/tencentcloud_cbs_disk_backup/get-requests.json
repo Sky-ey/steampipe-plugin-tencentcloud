@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDiskBackups",
+    "region": "ap-guangzhou",
+    "body": {
+      "DiskBackupIds": ["dbp-test"]
+    }
+  }
+]

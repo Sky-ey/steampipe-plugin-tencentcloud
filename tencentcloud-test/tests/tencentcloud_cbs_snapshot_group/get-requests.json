@@ -1,0 +1,16 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeSnapshotGroups",
+    "region": "ap-guangzhou",
+    "body": {
+      "Filters": [
+        {
+          "Name": "snapshot-group-id",
+          "Values": ["csnap-test"]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeRewrite",
+    "region": "ap-guangzhou",
+    "body": {
+      "LoadBalancerId": "lb-test"
+    }
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "security_group_id": "sg-test",
+    "direction": "INBOUND",
+    "protocol": "TCP",
+    "region": "ap-guangzhou"
+  },
+  {
+    "security_group_id": "sg-test",
+    "direction": "OUTBOUND",
+    "protocol": "ALL",
+    "region": "ap-guangzhou"
+  }
+]

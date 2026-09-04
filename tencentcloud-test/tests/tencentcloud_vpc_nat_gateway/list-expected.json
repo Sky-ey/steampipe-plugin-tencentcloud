@@ -1,0 +1,7 @@
+[
+  {
+    "nat_gateway_id": "nat-test",
+    "title": "test-nat",
+    "region": "ap-guangzhou"
+  }
+]

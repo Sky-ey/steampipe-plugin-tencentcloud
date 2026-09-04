@@ -1,0 +1,7 @@
+[
+  {
+    "auto_scaling_group_id": "asg-test",
+    "title": "test-asg",
+    "region": "ap-guangzhou"
+  }
+]

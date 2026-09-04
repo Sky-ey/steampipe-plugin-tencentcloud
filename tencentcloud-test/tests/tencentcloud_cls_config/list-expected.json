@@ -1,0 +1,9 @@
+[
+  {
+    "config_id": "config-test",
+    "config_name": "test-config",
+    "topic_id": "topic-test",
+    "log_type": "json_log",
+    "region": "ap-guangzhou"
+  }
+]

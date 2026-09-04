@@ -1,0 +1,7 @@
+[
+  {
+    "vpn_gateway_id": "vpngw-test",
+    "vpn_gateway_name": "test-vpngw",
+    "region": "ap-guangzhou"
+  }
+]

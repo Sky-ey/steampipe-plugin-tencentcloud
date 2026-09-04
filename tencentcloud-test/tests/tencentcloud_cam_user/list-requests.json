@@ -1,0 +1,8 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "ListUsers",
+    "body": {}
+  }
+]

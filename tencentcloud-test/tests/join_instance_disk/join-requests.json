@@ -1,0 +1,22 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeInstances",
+    "region": "ap-guangzhou",
+    "body": {
+      "Offset": 0,
+      "Limit": 100
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDisks",
+    "region": "ap-guangzhou",
+    "body": {
+      "Offset": 0,
+      "Limit": 100
+    }
+  }
+]

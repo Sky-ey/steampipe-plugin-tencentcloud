@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCertificates",
+    "region": "",
+    "body": {
+      "CertIds": [
+        "cert-test"
+      ]
+    }
+  }
+]

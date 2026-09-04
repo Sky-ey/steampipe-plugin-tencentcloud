@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeAddresses",
+    "region": "ap-guangzhou",
+    "body": {
+      "AddressIds": [
+        "eip-test"
+      ]
+    }
+  }
+]

@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCustomizedConfigList",
+    "region": "ap-guangzhou",
+    "body": {
+      "UconfigIds": [
+        "uconfig-test"
+      ]
+    }
+  }
+]

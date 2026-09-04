@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDisasterRecoverGroups",
+    "region": "ap-guangzhou",
+    "body": {
+      "DisasterRecoverGroupIds": ["drg-test"]
+    }
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "topic_id": "topic-test",
+    "topic_name": "test-topic",
+    "logset_id": "logset-test",
+    "region": "ap-guangzhou"
+  }
+]

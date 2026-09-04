@@ -1,0 +1,14 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeListeners",
+    "region": "ap-guangzhou",
+    "body": {
+      "LoadBalancerId": "lb-test",
+      "ListenerIds": [
+        "listener-test"
+      ]
+    }
+  }
+]

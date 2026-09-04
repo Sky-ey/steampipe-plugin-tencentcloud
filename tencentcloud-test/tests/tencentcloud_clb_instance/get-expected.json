@@ -1,0 +1,7 @@
+[
+  {
+    "load_balancer_id": "lb-test",
+    "title": "test-lb",
+    "region": "ap-guangzhou"
+  }
+]

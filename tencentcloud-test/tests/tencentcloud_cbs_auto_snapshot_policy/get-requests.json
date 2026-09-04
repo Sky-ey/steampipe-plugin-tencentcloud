@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeAutoSnapshotPolicies",
+    "region": "ap-guangzhou",
+    "body": {
+      "AutoSnapshotPolicyIds": ["asp-test"]
+    }
+  }
+]

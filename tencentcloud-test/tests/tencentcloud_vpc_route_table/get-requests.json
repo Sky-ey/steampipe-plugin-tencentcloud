@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeRouteTables",
+    "region": "ap-guangzhou",
+    "body": {
+      "RouteTableIds": [
+        "rtb-test"
+      ]
+    }
+  }
+]

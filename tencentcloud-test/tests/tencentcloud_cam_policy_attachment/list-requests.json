@@ -1,0 +1,22 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "ListPolicies",
+    "body": {
+      "Page": 1,
+      "Rp": 200,
+      "Scope": "All"
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "ListEntitiesForPolicy",
+    "body": {
+      "PolicyId": 1,
+      "Page": 1,
+      "Rp": 200
+    }
+  }
+]

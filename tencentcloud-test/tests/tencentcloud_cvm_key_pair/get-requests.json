@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeKeyPairs",
+    "region": "ap-guangzhou",
+    "body": {
+      "KeyIds": ["skey-test"]
+    }
+  }
+]

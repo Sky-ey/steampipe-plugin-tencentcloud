@@ -1,0 +1,12 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "ListPolicies",
+    "body": {
+      "Page": 1,
+      "Rp": 200,
+      "Scope": "All"
+    }
+  }
+]

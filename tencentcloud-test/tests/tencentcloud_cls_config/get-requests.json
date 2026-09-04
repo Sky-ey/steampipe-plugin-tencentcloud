@@ -1,0 +1,18 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeConfigs",
+    "region": "ap-guangzhou",
+    "body": {
+      "Filters": [
+        {
+          "Key": "configId",
+          "Values": [
+            "config-test"
+          ]
+        }
+      ]
+    }
+  }
+]

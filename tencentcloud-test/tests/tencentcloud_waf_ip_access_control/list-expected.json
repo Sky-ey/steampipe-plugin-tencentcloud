@@ -1,0 +1,9 @@
+[
+  {
+    "rule_id": 1,
+    "domain": "test.example.com",
+    "action_type": 40,
+    "ip": "1.2.3.4",
+    "note": "test-rule"
+  }
+]

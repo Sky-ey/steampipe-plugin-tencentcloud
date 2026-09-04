@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeSecurityGroups",
+    "region": "ap-guangzhou",
+    "body": {
+      "SecurityGroupIds": [
+        "sg-test"
+      ]
+    }
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "auto_snapshot_policy_id": "asp-test",
+    "title": "test-auto-snapshot-policy",
+    "region": "ap-guangzhou"
+  }
+]

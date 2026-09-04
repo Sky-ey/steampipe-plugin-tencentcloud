@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeTrafficPackages",
+    "region": "ap-guangzhou",
+    "body": {
+      "TrafficPackageIds": [
+        "tp-test"
+      ]
+    }
+  }
+]

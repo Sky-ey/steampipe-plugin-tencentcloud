@@ -1,0 +1,7 @@
+[
+  {
+    "vpc_id": "vpc-test",
+    "title": "test-vpc",
+    "region": "ap-guangzhou"
+  }
+]

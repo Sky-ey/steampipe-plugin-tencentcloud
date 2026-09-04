@@ -1,0 +1,116 @@
+connection "tencentcloud" {
+  plugin = "tencentcloud/tencentcloud"
+
+  # ---- Credentials ----
+  # The plugin resolves credentials in this order:
+  #   1. Static credentials in this file (`secret_id`, `secret_key`, plus optional `token`)
+  #   2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY`, `TENCENTCLOUD_TOKEN` env vars
+  #   3. The SDK DefaultProviderChain: env vars -> credentials file -> CVM instance role
+  # When `secret_id`/`secret_key` are omitted, the default chain takes over — the
+  # recommended mode for production (a shared credentials file or an attached CVM role).
+  # secret_id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxx"
+  # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+  # STS temporary token, used together with `secret_id`/`secret_key` for cross-account
+  # access (assuming a role via STS). Also set with the `TENCENTCLOUD_TOKEN` env var.
+  # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+  # Path to a shared Tencent Cloud credentials file, forwarded to the SDK
+  # ProfileProvider via `TENCENTCLOUD_CREDENTIALS_FILE`. Defaults to
+  # `~/.tencentcloud/credentials` (INI format with a `[default]` section holding
+  # `secret_id` and `secret_key`).
+  # credentials_file = "~/.tencentcloud/credentials"
+
+  # `regions` specifies the list of regions to query when no region is specified.
+  # Use SQL conditions like `WHERE region = 'ap-guangzhou'` will ignore this setting.
+  # The plugin queries these regions concurrently and merges the results.
+  # Wildcards are supported: `*` matches any number of characters
+  # `?` matches a single character, `[gs]` matches a set of characters
+  # and `[^g]` means exclusion (note: use `^` instead of `!`). Brace expansion like `{a,b}` is not supported.
+  #
+  # When `regions` is not configured, the plugin only queries the default region `ap-singapore`;
+  # resources in other regions will not displayed in the query results.
+  #
+  #regions = ["*"]                           # all available regions
+  #regions = ["ap-*"]                        # all Asia Pacific regions
+  #regions = ["ap-guangzhou", "ap-shanghai"] # specific regions
+  #regions = ["ap-*", "eu-frankfurt"]        # mix wildcards with exact values
+
+  # Custom API endpoint
+  #endpoint = "cvm.internal.tencentcloudapi.com"
+
+  # DNS overrides: keep requesting the default API domains but resolve them to a
+  # specific address (e.g. a local mock or an internal gateway). The request URL,
+  # Host header and TC3 signature all keep the original domain — only the
+  # connection target address is replaced.
+  # Keys can be an exact domain or a `*.` wildcard prefix. When multiple wildcards
+  # match, the longest suffix wins. Connection config overrides the env var
+  # TENCENTCLOUD_DNS_OVERRIDE (format: host=ip,host=ip).
+  #dns_override = {
+  #  "clb.tencentcloudapi.com" = "127.0.0.1",
+  #  "*.tencentcloudapi.com"   = "10.0.0.5",
+  #}
+
+  # Skip TLS certificate verification. Only needed when the target site's
+  # certificate does not match the requested domain (e.g. IP direct connection
+  # to a test environment). Only do this for trusted test environments.
+  #insecure_skip_verify = true
+
+  # ---- Timeout & retry ----
+  # Request timeout in seconds. Defaults to the SDK built-in value.
+  #timeout = 10
+
+  # Enable automatic retries on network failures and rate limit errors (true/false).
+  # Defaults to true. Set to `false` to disable retries entirely.
+  #auto_retry = true
+
+  # Maximum number of retry attempts for failing API calls (>= 1). Defaults to 3.
+  # Applied to both network failures and rate limit errors with exponential backoff.
+  #max_retry_time = 5
+
+  # ---- Error handling ----
+  # Additional Tencent Cloud error codes to ignore for all queries, on top of the
+  # plugin's default not-found codes (e.g. `ResourceNotFound`, `.NotFound`).
+  #ignore_error_codes = ["AuthFailure", "UnauthorizedOperation"]
+
+  # Additional Tencent Cloud error codes to retry for all queries, on top of the
+  # plugin's default retryable codes (e.g. `RequestLimitExceeded`, `InternalError`,
+  # `ServiceUnavailable`). Useful for flaky internal services that report a
+  # business error code you want to retry automatically.
+  #retry_error_codes = ["LimitExceeded", "ResourceInUse"]
+}
+
+# ---------------------------------------------------------------------------
+# Multi-account configuration (optional)
+# ---------------------------------------------------------------------------
+# Define one connection per account, then an aggregator that merges them.
+# Every table exposes `owner_uin` (OwnerUin) as a connection key column, so
+# filtering an aggregator query by `where owner_uin = '...'` skips the
+# non-matching child connections entirely.
+#
+# connection "tencentcloud_dev" {
+#   plugin     = "tencentcloud/tencentcloud"
+#   secret_id  = "AKIDxxxxxxxx"
+#   secret_key = "xxxxxxxxxxxx"
+#   regions    = ["ap-guangzhou", "ap-shanghai"]
+# }
+#
+# connection "tencentcloud_prod" {
+#   plugin     = "tencentcloud/tencentcloud"
+#   secret_id  = "AKIDyyyyyyyy"
+#   secret_key = "yyyyyyyyyyyy"
+#   regions    = ["*"]
+# }
+#
+# connection "tencentcloud_all" {
+#   plugin      = "tencentcloud/tencentcloud"
+#   type        = "aggregator"
+#   connections = ["tencentcloud_*"]
+# }
+#
+# Example query against the aggregator:
+#
+#   select owner_uin, region, count(*)
+#   from tencentcloud_all.tencentcloud_cvm_instance
+#   group by owner_uin, region;
+

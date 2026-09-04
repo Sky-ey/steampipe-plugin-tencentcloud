@@ -1,0 +1,8 @@
+[
+  {
+    "cluster_id": "cls-test",
+    "cluster_name": "test-cluster",
+    "cluster_status": "Running",
+    "region": "ap-guangzhou"
+  }
+]

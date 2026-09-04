@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDirectConnects",
+    "region": "ap-guangzhou",
+    "body": {
+      "DirectConnectIds": [
+        "dc-test"
+      ]
+    }
+  }
+]

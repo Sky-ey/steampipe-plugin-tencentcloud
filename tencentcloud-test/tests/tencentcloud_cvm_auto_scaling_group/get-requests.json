@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeAutoScalingGroups",
+    "region": "ap-guangzhou",
+    "body": {
+      "AutoScalingGroupIds": ["asg-test"]
+    }
+  }
+]

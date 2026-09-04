@@ -1,0 +1,7 @@
+[
+  {
+    "ccn_id": "ccn-test",
+    "route_id": "ccnr-test",
+    "destination_cidr_block": "10.0.0.0/8"
+  }
+]

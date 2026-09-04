@@ -1,0 +1,9 @@
+[
+  {
+    "instance_id": "ins-test",
+    "cluster_id": "cls-test",
+    "instance_role": "WORKER",
+    "instance_state": "running",
+    "region": "ap-guangzhou"
+  }
+]

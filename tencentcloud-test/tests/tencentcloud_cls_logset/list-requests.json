@@ -1,0 +1,12 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeLogsets",
+    "region": "ap-guangzhou",
+    "body": {
+      "Limit": 100,
+      "Offset": 0
+    }
+  }
+]

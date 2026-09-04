@@ -1,0 +1,7 @@
+[
+  {
+    "load_balancer_id": "lb-test",
+    "ip": "1.2.3.4",
+    "region": "ap-guangzhou"
+  }
+]

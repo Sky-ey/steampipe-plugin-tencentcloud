@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeLaunchTemplates",
+    "region": "ap-guangzhou",
+    "body": {
+      "LaunchTemplateIds": ["lt-test"]
+    }
+  }
+]

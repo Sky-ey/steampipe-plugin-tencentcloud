@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeSnapshots",
+    "region": "ap-guangzhou",
+    "body": {
+      "SnapshotIds": ["snap-test"]
+    }
+  }
+]

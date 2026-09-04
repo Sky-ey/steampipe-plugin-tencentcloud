@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeClusterInstances",
+    "region": "ap-guangzhou",
+    "body": {
+      "ClusterId": "cls-test",
+      "Limit": 100,
+      "Offset": 0
+    }
+  }
+]

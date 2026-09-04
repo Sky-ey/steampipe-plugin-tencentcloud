@@ -1,0 +1,10 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "GetUser",
+    "body": {
+      "Name": "test-user"
+    }
+  }
+]

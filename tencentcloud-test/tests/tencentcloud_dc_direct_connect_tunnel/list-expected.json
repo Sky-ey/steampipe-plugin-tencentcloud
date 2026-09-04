@@ -1,0 +1,7 @@
+[
+  {
+    "direct_connect_tunnel_id": "dcx-test",
+    "direct_connect_tunnel_name": "test-dcx",
+    "region": "ap-guangzhou"
+  }
+]

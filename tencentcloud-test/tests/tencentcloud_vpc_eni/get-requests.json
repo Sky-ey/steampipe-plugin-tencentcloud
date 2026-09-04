@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeNetworkInterfaces",
+    "region": "ap-guangzhou",
+    "body": {
+      "NetworkInterfaceIds": [
+        "eni-test"
+      ]
+    }
+  }
+]

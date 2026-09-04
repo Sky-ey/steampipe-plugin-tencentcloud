@@ -1,0 +1,18 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeMachineGroups",
+    "region": "ap-guangzhou",
+    "body": {
+      "Filters": [
+        {
+          "Key": "machineGroupId",
+          "Values": [
+            "mg-test"
+          ]
+        }
+      ]
+    }
+  }
+]

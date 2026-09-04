@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "ListGroups",
+    "body": {
+      "Page": 1,
+      "Rp": 200
+    }
+  }
+]

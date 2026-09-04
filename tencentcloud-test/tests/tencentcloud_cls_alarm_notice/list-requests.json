@@ -1,0 +1,12 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeAlarmNotices",
+    "region": "ap-guangzhou",
+    "body": {
+      "Limit": 100,
+      "Offset": 0
+    }
+  }
+]

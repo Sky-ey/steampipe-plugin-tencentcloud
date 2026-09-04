@@ -1,0 +1,18 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeLogsets",
+    "region": "ap-guangzhou",
+    "body": {
+      "Filters": [
+        {
+          "Key": "logsetId",
+          "Values": [
+            "logset-test"
+          ]
+        }
+      ]
+    }
+  }
+]

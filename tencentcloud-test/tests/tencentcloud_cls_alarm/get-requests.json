@@ -1,0 +1,18 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeAlarms",
+    "region": "ap-guangzhou",
+    "body": {
+      "Filters": [
+        {
+          "Key": "alarmId",
+          "Values": [
+            "alarm-test"
+          ]
+        }
+      ]
+    }
+  }
+]

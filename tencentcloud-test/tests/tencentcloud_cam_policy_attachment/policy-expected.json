@@ -1,0 +1,9 @@
+[
+  {
+    "policy_id": 1,
+    "policy_name": "test-policy",
+    "entity_id": "user-test",
+    "entity_name": "test-user",
+    "related_type": 1
+  }
+]

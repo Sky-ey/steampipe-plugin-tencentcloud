@@ -1,0 +1,19 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeObjects",
+    "region": "ap-singapore",
+    "body": {
+      "Filters": [
+        {
+          "Name": "ObjectId",
+          "Values": [
+            "clb-test"
+          ],
+          "ExactMatch": true
+        }
+      ]
+    }
+  }
+]

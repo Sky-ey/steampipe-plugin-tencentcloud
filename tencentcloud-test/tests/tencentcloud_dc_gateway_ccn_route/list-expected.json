@@ -1,0 +1,8 @@
+[
+  {
+    "direct_connect_gateway_id": "dcg-test",
+    "route_id": "route-test",
+    "destination_cidr_block": "10.0.0.0/8",
+    "region": "ap-guangzhou"
+  }
+]

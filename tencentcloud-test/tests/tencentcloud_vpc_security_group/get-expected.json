@@ -1,0 +1,7 @@
+[
+  {
+    "security_group_id": "sg-test",
+    "title": "test-sg",
+    "region": "ap-guangzhou"
+  }
+]

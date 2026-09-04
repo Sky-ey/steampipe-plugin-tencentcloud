@@ -1,0 +1,8 @@
+[
+  {
+    "instance_id": "wafins-test",
+    "instance_name": "test-waf",
+    "edition": "saas",
+    "region": "ap-guangzhou"
+  }
+]

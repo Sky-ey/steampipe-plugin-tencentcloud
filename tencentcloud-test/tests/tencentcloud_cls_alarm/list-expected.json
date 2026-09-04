@@ -1,0 +1,8 @@
+[
+  {
+    "alarm_id": "alarm-test",
+    "alarm_name": "test-alarm",
+    "status": true,
+    "region": "ap-guangzhou"
+  }
+]

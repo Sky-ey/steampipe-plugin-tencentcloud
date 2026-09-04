@@ -1,0 +1,23 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDirectConnectGateways",
+    "region": "ap-guangzhou",
+    "body": {
+      "Offset": 0,
+      "Limit": 100
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeDirectConnectGatewayCcnRoutes",
+    "region": "ap-guangzhou",
+    "body": {
+      "DirectConnectGatewayId": "dcg-test",
+      "Offset": 0,
+      "Limit": 100
+    }
+  }
+]

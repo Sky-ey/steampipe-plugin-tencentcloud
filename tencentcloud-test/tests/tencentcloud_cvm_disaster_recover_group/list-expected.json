@@ -1,0 +1,8 @@
+[
+  {
+    "disaster_recover_group_id": "drg-test",
+    "name": "test-drg",
+    "title": "test-drg",
+    "region": "ap-guangzhou"
+  }
+]

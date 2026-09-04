@@ -1,0 +1,10 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "GetGroup",
+    "body": {
+      "GroupId": 1
+    }
+  }
+]

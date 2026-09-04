@@ -1,0 +1,11 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeRegions",
+    "region": "ap-guangzhou",
+    "body": {
+      "Product": "cvm"
+    }
+  }
+]

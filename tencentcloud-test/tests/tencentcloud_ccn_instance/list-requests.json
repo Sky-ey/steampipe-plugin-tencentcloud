@@ -1,0 +1,23 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCcns",
+    "region": "",
+    "body": {
+      "Offset": 0,
+      "Limit": 100
+    }
+  },
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeCcnAttachedInstances",
+    "region": "",
+    "body": {
+      "CcnId": "ccn-test",
+      "Offset": 0,
+      "Limit": 100
+    }
+  }
+]

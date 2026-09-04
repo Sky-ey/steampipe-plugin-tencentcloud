@@ -1,0 +1,13 @@
+[
+  {
+    "method": "POST",
+    "path": "/",
+    "action": "DescribeVpnConnections",
+    "region": "ap-guangzhou",
+    "body": {
+      "VpnConnectionIds": [
+        "vpnx-test"
+      ]
+    }
+  }
+]
