@@ -147,5 +147,5 @@ CAM (Access Management) 7, CCN (Cloud Connect Network) 3, CBS (Cloud Block Stora
 - **Multi-account queries** — every table exposes `owner_uin` / `caller_uin` / `owner_app_id` account columns; `owner_uin` is registered as the connection key column so aggregator connections prune child connections on account filters.
 - **Credential chain** — connection config > environment variables (`TENCENTCLOUD_SECRET_ID` / `TENCENTCLOUD_SECRET_KEY` / `TENCENTCLOUD_TOKEN`) > SDK default provider chain (shared credentials file `~/.tencentcloud/credentials`, CVM instance role). STS temporary credentials supported via `token`.
 - **Network customization** — `endpoint` / `base_url` routing to custom or internal gateways, per-host `dns_override`, and `insecure_skip_verify` for test environments.
-- **Reliability controls** — configurable `timeout`, automatic retry with exponential backoff (`auto_retry`, `max_retry_time`), plus `ignore_error_codes` / `retry_error_codes` overrides.
+- **Reliability controls** — configurable `timeout` and `max_retry` (automatic retry with exponential backoff on network failures and rate limit errors), plus `ignore_error_codes` / `retry_error_codes` overrides.
 - **CVM monitoring metrics** — 7 metrics (CPU, memory, disk, LAN/WAN in/out) × 2 granularities (daily 30 days, hourly 24 hours) via the `GetMonitorData` API.

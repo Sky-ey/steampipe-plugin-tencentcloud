@@ -8,19 +8,23 @@ folder: "CVM"
 
 Tencent Cloud Monitor (Cloud Monitor) collects per-instance public network inbound bandwidth for every CVM instance. The `tencentcloud_cvm_metric_wan_in_daily` table uses the `GetMonitorData` API (namespace `QCE/CVM`, metric `WanIntraffic`, period 86400 seconds) and returns one row per instance per day over the last 30 days, across all regions or a single region when the `region` column is filtered.
 
-Each row represents a single daily data point of one instance: the instance ID, the timestamp of the data point, and the public network inbound bandwidth value (in Mbps). The public bandwidth values are the combined outbound/inbound traffic of the instance together with its associated EIP and CLB.
+Each row represents a single daily data point of one instance: the instance ID, the timestamp of the data point, and the public network inbound bandwidth value (in Mbps). The values are the inbound traffic of the instance together with its associated EIP and CLB.
 
 ## Table Usage Guide
 
 Use this table to spot long-running public network inbound bandwidth trends, find consistently saturated or idle instances, and feed capacity-planning reports. Because daily granularity is retained for 186 days, this table is suited to month-scale analysis. For finer-grained, recent troubleshooting use `tencentcloud_cvm_metric_wan_in_hourly`.
 
-Filtering by `instance_id` queries only that instance; omitting it fans out across every instance in the region.
+Filtering by `instance_id` queries only that instance; omitting it fans out across every instance in the region. Only instances with a public IP address are included in the fan-out; instances without one are skipped, because the `GetMonitorData` API rejects an entire batch with `InvalidParameterValue` when any instance in it has no public IP.
+
+When `instance_id` is omitted, the fan-out makes one paginated `DescribeInstances` pass per scanned region to enumerate the instance IDs, then calls `GetMonitorData` once per batch of up to 10 instances — so N instances in a region cost roughly N/10 `GetMonitorData` calls. This repeats in every scanned region: a single region when the `region` column is filtered (or when the connection has no `regions` list configured), or every region matched by the configured `regions` patterns (e.g. `["*"]`) otherwise.
+
+Keep call volume in mind on large accounts: the `GetMonitorData` API includes a free quota of 1 million calls per month, and calls beyond the quota are billed. Filtering by `instance_id`, or narrowing the scanned regions and the `timestamp` window, keeps usage within the free quota.
 
 By default the table reads the last 30 days. A `timestamp` predicate in the `WHERE` clause narrows the time range and is pushed down to the `GetMonitorData` API (`StartTime`/`EndTime`), so you can query any window within the 186-day retention period instead of the default lookback.
 
 ## Examples
 
-### Basic daily public network inbound bandwidth
+### Basic info
 
 ```sql+postgres
 select

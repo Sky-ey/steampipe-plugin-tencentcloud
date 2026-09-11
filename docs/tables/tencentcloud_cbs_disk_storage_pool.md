@@ -14,7 +14,7 @@ Each row represents a dedicated cloud disk cluster (storage pool). Use this tabl
 
 ## Examples
 
-### List disk storage pools
+### Basic info
 
 ```sql+postgres
 select

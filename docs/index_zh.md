@@ -1,6 +1,7 @@
 ---
 organization: TencentCloud
 category: ["public cloud"]
+engines: ["steampipe", "sqlite", "postgres", "export"]
 icon_url: "/images/plugins/tencentcloud/tencentcloud.svg"
 brand_color: "#0052D9"
 display_name: "Tencent Cloud"
@@ -12,29 +13,51 @@ og_image: "/images/plugins/tencentcloud/tencentcloud-social-graphic.png"
 
 # Tencent Cloud 插件
 
-> 使用 SQL 查询腾讯云资源的 Steampipe 插件。
+[Steampipe](https://steampipe.io) 是一个开源的零 ETL 引擎，可以使用 SQL 即时查询云 API。
 
-[English](index.md) | 简体中文
+[腾讯云](https://www.tencentcloud.com/)面向通过身份验证的客户提供按需云计算平台和 API，按用量计费。
 
-## 概述
+例如：
 
-使用 SQL 查询你腾讯云账号下的资源——单条查询即可覆盖你配置的所有地域。
+```sql
+select
+  instance_id,
+  instance_name,
+  instance_state,
+  instance_type,
+  region
+from
+  tencentcloud_cvm_instance
+```
+
+```text
++----------------+---------------+----------------+---------------+--------------+
+| instance_id    | instance_name | instance_state | instance_type | region       |
++----------------+---------------+----------------+---------------+--------------+
+| ins-2x7hq8k1   | web-server-1  | RUNNING        | S5.MEDIUM4    | ap-guangzhou |
+| ins-9mtdp3wz   | web-server-2  | RUNNING        | S5.LARGE8     | ap-guangzhou |
+| ins-4kpqvn82   | batch-worker  | STOPPED        | SA2.MEDIUM4   | ap-shanghai  |
+| ins-7rjcx5yd   | api-gateway   | RUNNING        | S5.MEDIUM8    | ap-singapore |
++----------------+---------------+----------------+---------------+--------------+
+```
+
+## 文档
+
+- [**表定义与示例 →**](https://hub.steampipe.io/plugins/tencentcloud/tencentcloud/tables)
 
 ## 快速开始
 
 ### 安装
 
-从源码构建并安装：
+下载并安装最新的腾讯云插件：
 
 ```bash
-git clone https://github.com/TencentCloud/steampipe-plugin-tencentcloud.git
-cd steampipe-plugin-tencentcloud
-make install
+steampipe plugin install tencentcloud/tencentcloud
 ```
 
-## 凭证
+### 凭证
 
-插件使用腾讯云[访问密钥](https://www.tencentcloud.com/document/product/598)进行身份认证——即 `SecretId` / `SecretKey` 密钥对。可在控制台 **访问管理 → API 密钥管理**（[CAM 控制台](https://console.tencentcloud.com/cam/capi)）中创建或管理密钥。
+插件使用腾讯云[访问密钥](https://www.tencentcloud.com/document/product/598/34227)进行身份认证——即 `SecretId` / `SecretKey` 密钥对。可在控制台 **访问管理 → API 密钥管理**（[CAM 控制台](https://console.tencentcloud.com/cam/capi)）中创建或管理密钥。
 
 凭证按以下顺序解析：
 
@@ -42,30 +65,95 @@ make install
 2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` 与 `TENCENTCLOUD_TOKEN`
 3. 在绑定了 CAM 角色的腾讯云 CVM 实例上运行时，使用 CVM 实例角色
 
-### 所需权限
+#### 所需权限
 
 所有表均为只读：每个服务只需要对应的 `Describe*` / `List*` API 权限。最简单的配置方式是给插件使用的 CAM 用户或角色绑定各服务的只读预设策略（如 `QcloudCVMReadOnlyAccess`、`QcloudCBSReadOnlyAccess`、`QcloudVPCReadOnlyAccess`）。策略管理详见 [CAM 文档](https://www.tencentcloud.com/document/product/598)。
 
-### STS 临时凭证
+#### STS 临时凭证
 
-跨账号访问时，可通过 [STS](https://www.tencentcloud.com/document/product/598) 生成临时凭证，并设置 `secret_id`、`secret_key` 与 `token`（或 `TENCENTCLOUD_TOKEN`）。临时凭证到期后不会自动刷新——一旦过期，插件的每次 API 调用都会返回 `AuthFailure` 错误。此时需获取新的临时凭证并更新配置。
+跨账号访问时，可通过 [STS](https://www.tencentcloud.com/document/product/1150) 生成临时凭证，并设置 `secret_id`、`secret_key` 与 `token`（或 `TENCENTCLOUD_TOKEN`）。临时凭证到期后不会自动刷新——一旦过期，插件的每次 API 调用都会返回 `AuthFailure` 错误。此时需获取新的临时凭证并更新配置。
 
 ### 配置
 
-创建或编辑 `~/.steampipe/config/tencentcloud.spc`：
+安装最新的腾讯云插件后，会生成一个配置文件（`~/.steampipe/config/tencentcloud.spc`），其中包含一个名为 `tencentcloud` 的连接：
 
 ```hcl
 connection "tencentcloud" {
   plugin = "tencentcloud/tencentcloud"
 
-  secret_id  = "your-secret-id"
-  secret_key = "your-secret-key"
+  # ---- 凭证 ----
+  # 插件按以下顺序解析凭证：
+  #   1. 本配置文件中的静态凭证（`secret_id`、`secret_key`，以及可选的 `token`）
+  #   2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_TOKEN`
+  #   3. SDK DefaultProviderChain：环境变量 -> 凭证文件 -> CVM 实例角色
+  # 省略 `secret_id`/`secret_key` 时由默认凭证链接管——这是生产环境的推荐模式
+  # （使用共享凭证文件或绑定的 CVM 实例角色）。
+  # secret_id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxx"
+  # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-  regions = ["ap-*"]
+  # STS 临时令牌，与 `secret_id`/`secret_key` 配合用于跨账号访问（通过 STS 角色扮演）。
+  # 也可通过 `TENCENTCLOUD_TOKEN` 环境变量设置。
+  # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+  # `regions` 指定未指定地域时要查询的地域列表。
+  # SQL 条件（如 `WHERE region = 'ap-guangzhou'`）会忽略此设置。
+  # 插件会并发查询这些地域并合并结果。
+  # 支持通配符：`*` 匹配任意数量字符，
+  # `?` 匹配单个字符，`[gs]` 匹配一组字符，
+  # `[^g]` 表示排除。
+  # 未配置 `regions` 时，插件只查询默认地域 `ap-singapore`，其他地域的资源不会显示。
+  # regions = ["*"]                           # 所有可用地域
+  # regions = ["ap-*"]                        # 所有亚太地域
+  # regions = ["ap-guangzhou", "ap-shanghai"] # 指定地域
+  # regions = ["ap-*", "eu-frankfurt"]        # 通配符与精确值可以混用
+
+  # ---- 网络 ----
+  # 自定义 API endpoint（完整域名）。
+  # 与 `base_url` 互斥；两者都设置时 `endpoint` 优先。
+  # 除非设置 `allow_insecure_endpoint = true`，否则拒绝 http:// endpoint。
+  #endpoint = "cvm.tencentcloudapi.com"
+
+  # 自定义基础域名（裸域名，如 "tencentcloudapi.com"——不含协议、不含路径）。
+  # 每个服务的 endpoint 解析为 `<service>.<base_url>`。
+  # 与 `endpoint` 互斥；两者都设置时 `endpoint` 优先。
+  #base_url = "tencentcloudapi.com"
+
+  # 设为 `true` 允许在 `endpoint` 中使用明文 http://。默认关闭，
+  # 以防止意外通过未加密连接发送凭证。
+  #allow_insecure_endpoint = false
+
+  # 设为 `true` 跳过 TLS 证书校验。使用 http:// endpoint 时也需要
+  # （与 `allow_insecure_endpoint = true` 一起）设置此项。
+  #insecure_skip_verify = false
+
+  # 为 API 主机自定义 DNS 解析。键为主机名——
+  # "module.example.com" 为精确匹配，"*.example.com" 为后缀匹配。
+  # 值必须是合法 IP 地址。
+  #dns_override = {
+  #  "cvm.tencentcloudapi.com" = "10.0.0.1"
+  #}
+
+  # ---- 超时与重试 ----
+  # 请求超时时间（秒）。默认为 SDK 内置值。
+  #timeout = 10
+
+  # 失败 API 调用的最大重试次数（>= 1）。默认为 3。
+  # 对网络失败和限流错误均生效，采用指数退避。
+  #max_retry = 5
+
+  # ---- 错误处理 ----
+  # 在插件默认忽略的 not-found 错误码（如 `ResourceNotFound`、`.NotFound`）之外，
+  # 对所有查询额外忽略的腾讯云错误码。
+  #ignore_error_codes = ["AuthFailure", "UnauthorizedOperation"]
+
+  # 在插件默认可重试错误码（如 `RequestLimitExceeded`、`InternalError`、
+  # `ServiceUnavailable`）之外，对所有查询额外重试的腾讯云错误码。
+  # 适用于内部不稳定服务返回某个业务错误码、希望自动重试的场景。
+  #retry_error_codes = ["LimitExceeded", "ResourceInUse"]
 }
 ```
 
-`regions` 参数控制每次查询的目标地域。匹配规则及省略时的行为见[多地域查询](#多地域查询)。
+默认连接中所有配置项都被注释掉，因此 Steampipe 会使用与腾讯云 SDK 相同的机制解析凭证（环境变量、默认凭证文件或绑定的 CVM 实例角色）。这可以作为快速上手的方式，但你可能希望通过[多地域查询](#多地域查询)和[多账号查询](#多账号查询)的配置选项来自定义使用体验。
 
 也可以使用环境变量：
 
@@ -74,33 +162,10 @@ export TENCENTCLOUD_SECRET_ID=your-secret-id
 export TENCENTCLOUD_SECRET_KEY=your-secret-key
 ```
 
-### 开始查询
+开始查询：
 
 ```bash
 steampipe query
-```
-
-```sql
--- 列出所有 CVM 实例
-select
-  instance_id,
-  instance_name,
-  instance_state,
-  instance_type,
-  region
-from
-  tencentcloud_cvm_instance;
-
--- 查找指定地域下运行中的实例
-select
-  instance_id,
-  instance_name,
-  instance_type
-from
-  tencentcloud_cvm_instance
-where
-  region = 'ap-guangzhou'
-  and instance_state = 'RUNNING';
 ```
 
 ## 多地域查询
@@ -223,104 +288,3 @@ where owner_uin = '100012345678';
 | `owner_app_id` | `AppId` | 数字形式的 APP ID。与 COS 存储桶名称的 `<appid>` 后缀一致（如 `my-bucket-1250000000`）。 |
 
 子账号连接与其主账号连接的 `owner_uin` 相同（都解析到同一个 `OwnerUin`）。需要区分调用方身份时使用 `caller_uin`。
-
-## 数据表
-
-表文档（英文）见各表链接：
-
-| 表名 | 描述 |
-|------|------|
-| [tencentcloud_cam_access_key](tables/tencentcloud_cam_access_key.md) | 子账号的 CAM 访问密钥。 |
-| [tencentcloud_cam_group](tables/tencentcloud_cam_group.md) | CAM 用户组。 |
-| [tencentcloud_cam_policy](tables/tencentcloud_cam_policy.md) | CAM 策略（预设策略与自定义策略）。 |
-| [tencentcloud_cam_policy_attachment](tables/tencentcloud_cam_policy_attachment.md) | CAM 策略绑定关系（策略与主体的映射）。 |
-| [tencentcloud_cam_role](tables/tencentcloud_cam_role.md) | CAM 角色。 |
-| [tencentcloud_cam_saml_provider](tables/tencentcloud_cam_saml_provider.md) | CAM SAML 身份提供商（用于企业 SSO）。 |
-| [tencentcloud_cam_user](tables/tencentcloud_cam_user.md) | CAM 子账号（IAM 用户）。 |
-| [tencentcloud_ccn](tables/tencentcloud_ccn.md) | CCN（云联网）实例。 |
-| [tencentcloud_ccn_instance](tables/tencentcloud_ccn_instance.md) | 关联到云联网的实例（VPC、专线网关等）。 |
-| [tencentcloud_ccn_route](tables/tencentcloud_ccn_route.md) | 云联网路由条目。 |
-| [tencentcloud_cbs_auto_snapshot_policy](tables/tencentcloud_cbs_auto_snapshot_policy.md) | CBS 自动快照策略。 |
-| [tencentcloud_cbs_disk](tables/tencentcloud_cbs_disk.md) | CBS 云硬盘。 |
-| [tencentcloud_cbs_disk_backup](tables/tencentcloud_cbs_disk_backup.md) | CBS 云硬盘备份点。 |
-| [tencentcloud_cbs_disk_storage_pool](tables/tencentcloud_cbs_disk_storage_pool.md) | CBS 专属集群的云硬盘存储池。 |
-| [tencentcloud_cbs_region](tables/tencentcloud_cbs_region.md) | CBS 可用地域。 |
-| [tencentcloud_cbs_snapshot](tables/tencentcloud_cbs_snapshot.md) | CBS 快照。 |
-| [tencentcloud_cbs_snapshot_group](tables/tencentcloud_cbs_snapshot_group.md) | CBS 快照组。 |
-| [tencentcloud_clb_block_ip](tables/tencentcloud_clb_block_ip.md) | CLB 封禁 IP（黑名单）条目。 |
-| [tencentcloud_clb_customized_config](tables/tencentcloud_clb_customized_config.md) | CLB 自定义配置。 |
-| [tencentcloud_clb_cross_target](tables/tencentcloud_clb_cross_target.md) | CLB 跨域后端目标（CCN 跨域 2.0）。 |
-| [tencentcloud_clb_instance](tables/tencentcloud_clb_instance.md) | CLB 负载均衡实例。 |
-| [tencentcloud_clb_listener](tables/tencentcloud_clb_listener.md) | CLB 监听器。 |
-| [tencentcloud_clb_region](tables/tencentcloud_clb_region.md) | CLB 可用地域。 |
-| [tencentcloud_clb_rewrite](tables/tencentcloud_clb_rewrite.md) | CLB URL 重写重定向规则。 |
-| [tencentcloud_clb_target](tables/tencentcloud_clb_target.md) | 监听器绑定的 CLB 后端目标。 |
-| [tencentcloud_clb_target_group](tables/tencentcloud_clb_target_group.md) | CLB 目标组。 |
-| [tencentcloud_clb_target_group_instance](tables/tencentcloud_clb_target_group_instance.md) | 目标组中注册的 CLB 后端服务器。 |
-| [tencentcloud_cls_alarm](tables/tencentcloud_cls_alarm.md) | CLS 告警策略。 |
-| [tencentcloud_cls_alarm_notice](tables/tencentcloud_cls_alarm_notice.md) | CLS 告警通知渠道。 |
-| [tencentcloud_cls_config](tables/tencentcloud_cls_config.md) | CLS 采集配置。 |
-| [tencentcloud_cls_logset](tables/tencentcloud_cls_logset.md) | CLS 日志集。 |
-| [tencentcloud_cls_machine_group](tables/tencentcloud_cls_machine_group.md) | CLS 机器组。 |
-| [tencentcloud_cls_region](tables/tencentcloud_cls_region.md) | CLS 可用地域。 |
-| [tencentcloud_cls_topic](tables/tencentcloud_cls_topic.md) | CLS 日志主题。 |
-| [tencentcloud_cos_bucket](tables/tencentcloud_cos_bucket.md) | 当前账号下的 COS 存储桶。 |
-| [tencentcloud_cos_object](tables/tencentcloud_cos_object.md) | COS 存储桶中的对象。 |
-| [tencentcloud_cos_region](tables/tencentcloud_cos_region.md) | COS 可用地域。 |
-| [tencentcloud_cvm_auto_scaling_group](tables/tencentcloud_cvm_auto_scaling_group.md) | 腾讯云弹性伸缩（AS）组。 |
-| [tencentcloud_cvm_disaster_recover_group](tables/tencentcloud_cvm_disaster_recover_group.md) | CVM 分散置放群组。 |
-| [tencentcloud_cvm_host](tables/tencentcloud_cvm_host.md) | 腾讯云专用宿主机（CDH）实例。 |
-| [tencentcloud_cvm_image](tables/tencentcloud_cvm_image.md) | CVM 镜像（公共镜像、自定义镜像与共享镜像）。 |
-| [tencentcloud_cvm_instance](tables/tencentcloud_cvm_instance.md) | 腾讯云云服务器（CVM）实例。 |
-| [tencentcloud_cvm_metric_cpu_daily](tables/tencentcloud_cvm_metric_cpu_daily.md) | CVM 实例近 30 天的每日 CPU 利用率指标。 |
-| [tencentcloud_cvm_metric_cpu_hourly](tables/tencentcloud_cvm_metric_cpu_hourly.md) | CVM 实例近 24 小时的每小时 CPU 利用率指标。 |
-| [tencentcloud_cvm_metric_disk_daily](tables/tencentcloud_cvm_metric_disk_daily.md) | CVM 实例近 30 天的每日磁盘利用率指标。 |
-| [tencentcloud_cvm_metric_disk_hourly](tables/tencentcloud_cvm_metric_disk_hourly.md) | CVM 实例近 24 小时的每小时磁盘利用率指标。 |
-| [tencentcloud_cvm_metric_lan_in_daily](tables/tencentcloud_cvm_metric_lan_in_daily.md) | CVM 实例近 30 天的每日内网入带宽指标。 |
-| [tencentcloud_cvm_metric_lan_in_hourly](tables/tencentcloud_cvm_metric_lan_in_hourly.md) | CVM 实例近 24 小时的每小时内网入带宽指标。 |
-| [tencentcloud_cvm_metric_lan_out_daily](tables/tencentcloud_cvm_metric_lan_out_daily.md) | CVM 实例近 30 天的每日内网出带宽指标。 |
-| [tencentcloud_cvm_metric_lan_out_hourly](tables/tencentcloud_cvm_metric_lan_out_hourly.md) | CVM 实例近 24 小时的每小时内网出带宽指标。 |
-| [tencentcloud_cvm_metric_mem_daily](tables/tencentcloud_cvm_metric_mem_daily.md) | CVM 实例近 30 天的每日内存利用率指标。 |
-| [tencentcloud_cvm_metric_mem_hourly](tables/tencentcloud_cvm_metric_mem_hourly.md) | CVM 实例近 24 小时的每小时内存利用率指标。 |
-| [tencentcloud_cvm_metric_wan_in_daily](tables/tencentcloud_cvm_metric_wan_in_daily.md) | CVM 实例近 30 天的每日公网入带宽指标。 |
-| [tencentcloud_cvm_metric_wan_in_hourly](tables/tencentcloud_cvm_metric_wan_in_hourly.md) | CVM 实例近 24 小时的每小时公网入带宽指标。 |
-| [tencentcloud_cvm_metric_wan_out_daily](tables/tencentcloud_cvm_metric_wan_out_daily.md) | CVM 实例近 30 天的每日公网出带宽指标。 |
-| [tencentcloud_cvm_metric_wan_out_hourly](tables/tencentcloud_cvm_metric_wan_out_hourly.md) | CVM 实例近 24 小时的每小时公网出带宽指标。 |
-| [tencentcloud_cvm_key_pair](tables/tencentcloud_cvm_key_pair.md) | 可绑定到实例的 SSH 密钥对。 |
-| [tencentcloud_cvm_launch_template](tables/tencentcloud_cvm_launch_template.md) | 实例启动模板。 |
-| [tencentcloud_cvm_region](tables/tencentcloud_cvm_region.md) | CVM 可用地域。 |
-| [tencentcloud_cvm_zone](tables/tencentcloud_cvm_zone.md) | CVM 可用区。 |
-| [tencentcloud_dc_direct_connect](tables/tencentcloud_dc_direct_connect.md) | DC 物理专线。 |
-| [tencentcloud_dc_direct_connect_tunnel](tables/tencentcloud_dc_direct_connect_tunnel.md) | DC 专用通道。 |
-| [tencentcloud_dc_gateway](tables/tencentcloud_dc_gateway.md) | DC 专线网关。 |
-| [tencentcloud_dc_gateway_ccn_route](tables/tencentcloud_dc_gateway_ccn_route.md) | 专线网关的云联网路由。 |
-| [tencentcloud_dc_internet_address](tables/tencentcloud_dc_internet_address.md) | DC 分配的互联网公网地址。 |
-| [tencentcloud_dc_region](tables/tencentcloud_dc_region.md) | DC 可用地域。 |
-| [tencentcloud_ssl_certificate](tables/tencentcloud_ssl_certificate.md) | SSL 证书。 |
-| [tencentcloud_tke_cluster](tables/tencentcloud_tke_cluster.md) | TKE 托管与独立 Kubernetes 集群。 |
-| [tencentcloud_tke_cluster_instance](tables/tencentcloud_tke_cluster_instance.md) | TKE 集群管理的 CVM 实例。 |
-| [tencentcloud_tke_region](tables/tencentcloud_tke_region.md) | TKE 可用地域。 |
-| [tencentcloud_vpc](tables/tencentcloud_vpc.md) | VPC 实例。 |
-| [tencentcloud_vpc_bandwidth_package](tables/tencentcloud_vpc_bandwidth_package.md) | VPC 带宽包。 |
-| [tencentcloud_vpc_eip](tables/tencentcloud_vpc_eip.md) | VPC 弹性公网 IP（EIP）。 |
-| [tencentcloud_vpc_eni](tables/tencentcloud_vpc_eni.md) | VPC 弹性网卡（ENI）。 |
-| [tencentcloud_vpc_nat_gateway](tables/tencentcloud_vpc_nat_gateway.md) | VPC NAT 网关。 |
-| [tencentcloud_vpc_region](tables/tencentcloud_vpc_region.md) | VPC 可用地域。 |
-| [tencentcloud_vpc_route](tables/tencentcloud_vpc_route.md) | 从路由表展开的 VPC 路由条目。 |
-| [tencentcloud_vpc_route_table](tables/tencentcloud_vpc_route_table.md) | VPC 路由表。 |
-| [tencentcloud_vpc_security_group](tables/tencentcloud_vpc_security_group.md) | VPC 安全组。 |
-| [tencentcloud_vpc_security_group_policy](tables/tencentcloud_vpc_security_group_policy.md) | VPC 安全组规则（入站与出站）。 |
-| [tencentcloud_vpc_subnet](tables/tencentcloud_vpc_subnet.md) | VPC 子网。 |
-| [tencentcloud_vpc_traffic_package](tables/tencentcloud_vpc_traffic_package.md) | VPC 流量包。 |
-| [tencentcloud_vpn_gateway](tables/tencentcloud_vpn_gateway.md) | VPN 网关。 |
-| [tencentcloud_vpn_customer_gateway](tables/tencentcloud_vpn_customer_gateway.md) | VPN 对端网关。 |
-| [tencentcloud_vpn_connection](tables/tencentcloud_vpn_connection.md) | VPN 通道（IPsec 隧道）。 |
-| [tencentcloud_vpn_gateway_route](tables/tencentcloud_vpn_gateway_route.md) | VPN 网关的路由条目。 |
-| [tencentcloud_vpn_gateway_ccn_route](tables/tencentcloud_vpn_gateway_ccn_route.md) | VPN 网关的云联网路由。 |
-| [tencentcloud_vpn_region](tables/tencentcloud_vpn_region.md) | VPN 可用地域。 |
-| [tencentcloud_waf_clb_host](tables/tencentcloud_waf_clb_host.md) | WAF CLB 型防护域名。 |
-| [tencentcloud_waf_custom_rule](tables/tencentcloud_waf_custom_rule.md) | WAF 自定义访问控制规则。 |
-| [tencentcloud_waf_domain](tables/tencentcloud_waf_domain.md) | WAF SaaS 型防护域名。 |
-| [tencentcloud_waf_instance](tables/tencentcloud_waf_instance.md) | WAF 实例。 |
-| [tencentcloud_waf_ip_access_control](tables/tencentcloud_waf_ip_access_control.md) | WAF IP 白名单/黑名单条目。 |
-| [tencentcloud_waf_object](tables/tencentcloud_waf_object.md) | WAF 防护对象。 |

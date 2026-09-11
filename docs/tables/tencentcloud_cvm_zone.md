@@ -6,7 +6,7 @@ folder: "CVM"
 
 # Table: tencentcloud_cvm_zone - Query Tencent Cloud CVM Zones using SQL
 
-Tencent Cloud CVM availability zones are physically isolated locations within a region where cloud resources are hosted. Each zone has a unique ID (e.g., ap-guangzhou-3), a description (e.g., 广州三区), a numeric zone ID (e.g., 100003), and an availability state indicating whether the zone is currently available.
+Tencent Cloud CVM availability zones are physically isolated locations within a region where cloud resources are hosted. Each zone has a unique ID (e.g., ap-guangzhou-3), a description (e.g., 广州三区, Guangzhou Zone 3), a numeric zone ID (e.g., 100003), and an availability state indicating whether the zone is currently available.
 
 ## Table Usage Guide
 

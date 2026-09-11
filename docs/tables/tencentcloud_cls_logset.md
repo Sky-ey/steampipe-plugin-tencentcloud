@@ -14,7 +14,7 @@ Use this table to inventory CLS logsets across regions, inspect their tag compli
 
 ## Examples
 
-### List all logsets in the default region
+### Basic info
 
 ```sql+postgres
 select

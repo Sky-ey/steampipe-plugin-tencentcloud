@@ -8,9 +8,13 @@ folder: "CBS"
 
 Tencent Cloud Block Storage (CBS) provides persistent block storage for cloud workloads. The `tencentcloud_cbs_disk` table uses the `DescribeDisks` API and returns disks across all regions, or a single region when the `region` column is filtered.
 
+## Table Usage Guide
+
+Use this table to inventory cloud disks across regions, track capacity and utilization, distinguish system and data disks, audit encryption and billing modes, and find disks by their attachment state. The `disk_id` qual pushes down to the `DescribeDisks` Filters for efficient single-disk lookups.
+
 ## Examples
 
-### Basic disk inventory
+### Basic info
 
 ```sql+postgres
 select

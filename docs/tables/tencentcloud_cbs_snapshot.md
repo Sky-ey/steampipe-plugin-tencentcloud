@@ -8,9 +8,13 @@ folder: "CBS"
 
 The `tencentcloud_cbs_snapshot` table uses the `DescribeSnapshots` API to query CBS snapshots and their lifecycle, sharing, encryption, and source disk information.
 
+## Table Usage Guide
+
+Use this table to inventory snapshots across regions, audit lifecycle and snapshot states, review sharing and encryption settings, and trace snapshots back to their source disks. The `snapshot_id` and `disk_id` quals push down to the `DescribeSnapshots` Filters for efficient filtered listing and single-snapshot lookups.
+
 ## Examples
 
-### Basic snapshot inventory
+### Basic info
 
 ```sql+postgres
 select

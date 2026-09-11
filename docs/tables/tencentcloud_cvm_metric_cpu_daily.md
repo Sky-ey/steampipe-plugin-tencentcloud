@@ -16,11 +16,15 @@ Use this table to spot long-running CPU trends, find consistently overloaded or 
 
 Filtering by `instance_id` queries only that instance; omitting it fans out across every instance in the region.
 
+When `instance_id` is omitted, the fan-out makes one paginated `DescribeInstances` pass per scanned region to enumerate the instance IDs, then calls `GetMonitorData` once per batch of up to 10 instances — so N instances in a region cost roughly N/10 `GetMonitorData` calls. This repeats in every scanned region: a single region when the `region` column is filtered (or when the connection has no `regions` list configured), or every region matched by the configured `regions` patterns (e.g. `["*"]`) otherwise.
+
+Keep call volume in mind on large accounts: the `GetMonitorData` API includes a free quota of 1 million calls per month, and calls beyond the quota are billed. Filtering by `instance_id`, or narrowing the scanned regions and the `timestamp` window, keeps usage within the free quota.
+
 By default the table reads the last 30 days. A `timestamp` predicate in the `WHERE` clause narrows the time range and is pushed down to the `GetMonitorData` API (`StartTime`/`EndTime`), so you can query any window within the 186-day retention period instead of the default lookback.
 
 ## Examples
 
-### Basic daily CPU utilization
+### Basic info
 
 ```sql+postgres
 select
@@ -171,29 +175,51 @@ order by
 ### Count instances by average daily CPU band
 
 ```sql+postgres
+with instance_avg as (
+  select
+    instance_id,
+    avg(value) as avg_cpu
+  from
+    tencentcloud_cvm_metric_cpu_daily
+  group by
+    instance_id
+)
 select
   case
-    when avg(value) >= 80 then 'high (>=80)'
-    when avg(value) >= 50 then 'medium (50-80)'
+    when avg_cpu >= 80 then 'high (>=80)'
+    when avg_cpu >= 50 then 'medium (50-80)'
     else 'low (<50)'
   end as cpu_band,
-  count(distinct instance_id) as instance_count
+  count(*) as instance_count
 from
-  tencentcloud_cvm_metric_cpu_daily
+  instance_avg
 group by
-  instance_id;
+  cpu_band
+order by
+  cpu_band;
 ```
 
 ```sql+sqlite
+with instance_avg as (
+  select
+    instance_id,
+    avg(value) as avg_cpu
+  from
+    tencentcloud_cvm_metric_cpu_daily
+  group by
+    instance_id
+)
 select
   case
-    when avg(value) >= 80 then 'high (>=80)'
-    when avg(value) >= 50 then 'medium (50-80)'
+    when avg_cpu >= 80 then 'high (>=80)'
+    when avg_cpu >= 50 then 'medium (50-80)'
     else 'low (<50)'
   end as cpu_band,
-  count(distinct instance_id) as instance_count
+  count(*) as instance_count
 from
-  tencentcloud_cvm_metric_cpu_daily
+  instance_avg
 group by
-  instance_id;
+  cpu_band
+order by
+  cpu_band;
 ```

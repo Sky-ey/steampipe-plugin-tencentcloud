@@ -14,7 +14,7 @@ The `tencentcloud_clb_customized_config` table in Steampipe provides information
 
 ## Examples
 
-### Basic configuration inventory
+### Basic info
 
 Get an overview of all customized configurations.
 

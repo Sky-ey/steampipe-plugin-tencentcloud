@@ -6,7 +6,7 @@ folder: "CVM"
 
 # Table: tencentcloud_cvm_region - Query Tencent Cloud CVM Regions using SQL
 
-Tencent Cloud CVM regions are physically isolated geographic locations where cloud resources are hosted. Each region has a unique ID (e.g., ap-guangzhou), a description (e.g., 华南地区(广州)), and an availability state indicating whether the region is currently available.
+Tencent Cloud CVM regions are physically isolated geographic locations where cloud resources are hosted. Each region has a unique ID (e.g., ap-guangzhou), a description (e.g., 华南地区(广州), South China (Guangzhou)), and an availability state indicating whether the region is currently available.
 
 ## Table Usage Guide
 

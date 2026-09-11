@@ -14,7 +14,7 @@ The `tencentcloud_clb_block_ip` table in Steampipe provides information about th
 
 ## Examples
 
-### Basic blocked IP inventory
+### Basic info
 
 Get an overview of all blocked IP entries across load balancers.
 

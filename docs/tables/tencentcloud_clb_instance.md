@@ -14,7 +14,7 @@ The `tencentcloud_clb_instance` table in Steampipe provides detailed information
 
 ## Examples
 
-### Basic instance inventory
+### Basic info
 
 Get an overview of all load balancers in your account, including their names, network types, VIP addresses, and running status.
 

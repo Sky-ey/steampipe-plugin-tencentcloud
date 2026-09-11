@@ -15,58 +15,55 @@ connection "tencentcloud" {
   # access (assuming a role via STS). Also set with the `TENCENTCLOUD_TOKEN` env var.
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-  # Path to a shared Tencent Cloud credentials file, forwarded to the SDK
-  # ProfileProvider via `TENCENTCLOUD_CREDENTIALS_FILE`. Defaults to
-  # `~/.tencentcloud/credentials` (INI format with a `[default]` section holding
-  # `secret_id` and `secret_key`).
-  # credentials_file = "~/.tencentcloud/credentials"
-
   # `regions` specifies the list of regions to query when no region is specified.
-  # Use SQL conditions like `WHERE region = 'ap-guangzhou'` will ignore this setting.
+  # SQL conditions like `WHERE region = 'ap-guangzhou'` ignore this setting.
   # The plugin queries these regions concurrently and merges the results.
-  # Wildcards are supported: `*` matches any number of characters
-  # `?` matches a single character, `[gs]` matches a set of characters
-  # and `[^g]` means exclusion (note: use `^` instead of `!`). Brace expansion like `{a,b}` is not supported.
+  # Wildcards are supported: `*` matches any number of characters,
+  # `?` matches a single character, `[gs]` matches a set of characters,
+  # and `[^g]` means exclusion (note: use `^` instead of `!`).
+  # Brace expansion like `{a,b}` is not supported.
   #
-  # When `regions` is not configured, the plugin only queries the default region `ap-singapore`;
-  # resources in other regions will not displayed in the query results.
+  # When `regions` is not configured, the plugin only queries the default region
+  # `ap-singapore`; resources in other regions will not appear in query results.
   #
-  #regions = ["*"]                           # all available regions
-  #regions = ["ap-*"]                        # all Asia Pacific regions
-  #regions = ["ap-guangzhou", "ap-shanghai"] # specific regions
-  #regions = ["ap-*", "eu-frankfurt"]        # mix wildcards with exact values
+  # regions = ["*"]                           # all available regions
+  # regions = ["ap-*"]                        # all Asia Pacific regions
+  # regions = ["ap-guangzhou", "ap-shanghai"] # specific regions
+  # regions = ["ap-*", "eu-frankfurt"]        # mix wildcards with exact values
 
-  # Custom API endpoint
-  #endpoint = "cvm.internal.tencentcloudapi.com"
+  # ---- Networking ----
+  # Custom API endpoint (a full domain).
+  # Mutually exclusive with `base_url`; when both are set, `endpoint` takes precedence.
+  # http:// endpoints are rejected unless `allow_insecure_endpoint = true`
+  #endpoint = "cvm.tencentcloudapi.com"
 
-  # DNS overrides: keep requesting the default API domains but resolve them to a
-  # specific address (e.g. a local mock or an internal gateway). The request URL,
-  # Host header and TC3 signature all keep the original domain — only the
-  # connection target address is replaced.
-  # Keys can be an exact domain or a `*.` wildcard prefix. When multiple wildcards
-  # match, the longest suffix wins. Connection config overrides the env var
-  # TENCENTCLOUD_DNS_OVERRIDE (format: host=ip,host=ip).
+  # Custom base domain (a bare domain, e.g. "tencentcloudapi.com" — no scheme, no path).
+  # Each service resolves its endpoint as `<service>.<base_url>`.
+  # Mutually exclusive with `endpoint`; `endpoint` takes precedence when both are set.
+  #base_url = "tencentcloudapi.com"
+
+  # Set to `true` to allow plain `http://` endpoints in `endpoint`. Off by default
+  # to prevent accidentally sending credentials over an unencrypted connection.
+  #allow_insecure_endpoint = false
+
+  # Set to `true` to skip TLS certificate verification. Also required (together
+  # with `allow_insecure_endpoint = true`) when using an `http://` endpoint.
+  #insecure_skip_verify = false
+
+  # Custom DNS resolution for API hosts. Keys are hostnames
+  # "module.example.com" for an exact match, "*.example.com" for suffix matching
+  # Values must be valid IP addresses.
   #dns_override = {
-  #  "clb.tencentcloudapi.com" = "127.0.0.1",
-  #  "*.tencentcloudapi.com"   = "10.0.0.5",
+  #  "cvm.tencentcloudapi.com" = "10.0.0.1"
   #}
-
-  # Skip TLS certificate verification. Only needed when the target site's
-  # certificate does not match the requested domain (e.g. IP direct connection
-  # to a test environment). Only do this for trusted test environments.
-  #insecure_skip_verify = true
 
   # ---- Timeout & retry ----
   # Request timeout in seconds. Defaults to the SDK built-in value.
   #timeout = 10
 
-  # Enable automatic retries on network failures and rate limit errors (true/false).
-  # Defaults to true. Set to `false` to disable retries entirely.
-  #auto_retry = true
-
   # Maximum number of retry attempts for failing API calls (>= 1). Defaults to 3.
   # Applied to both network failures and rate limit errors with exponential backoff.
-  #max_retry_time = 5
+  #max_retry = 5
 
   # ---- Error handling ----
   # Additional Tencent Cloud error codes to ignore for all queries, on top of the
@@ -80,9 +77,7 @@ connection "tencentcloud" {
   #retry_error_codes = ["LimitExceeded", "ResourceInUse"]
 }
 
-# ---------------------------------------------------------------------------
-# Multi-account configuration (optional)
-# ---------------------------------------------------------------------------
+# ---- Multi-account configuration (optional) ----
 # Define one connection per account, then an aggregator that merges them.
 # Every table exposes `owner_uin` (OwnerUin) as a connection key column, so
 # filtering an aggregator query by `where owner_uin = '...'` skips the
@@ -113,4 +108,3 @@ connection "tencentcloud" {
 #   select owner_uin, region, count(*)
 #   from tencentcloud_all.tencentcloud_cvm_instance
 #   group by owner_uin, region;
-

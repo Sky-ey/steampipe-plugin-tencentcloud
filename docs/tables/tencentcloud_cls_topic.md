@@ -14,7 +14,7 @@ Use this table to inventory CLS topics across regions, audit lifecycle and stora
 
 ## Examples
 
-### List all topics in the default region
+### Basic info
 
 ```sql+postgres
 select

@@ -14,7 +14,7 @@ The `tencentcloud_clb_cross_target` table in Steampipe provides information abou
 
 ## Examples
 
-### Basic cross target inventory
+### Basic info
 
 Get an overview of all cross-VPC backend candidates.
 

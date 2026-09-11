@@ -14,7 +14,7 @@ The `tencentcloud_clb_target_group_instance` table in Steampipe provides informa
 
 ## Examples
 
-### Basic target group instance inventory
+### Basic info
 
 Get an overview of all backend servers registered in target groups.
 

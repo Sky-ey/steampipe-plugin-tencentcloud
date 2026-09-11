@@ -14,7 +14,7 @@ Use this table to inventory CLS collection configurations across regions, inspec
 
 ## Examples
 
-### List all collection configs in the default region
+### Basic info
 
 ```sql+postgres
 select

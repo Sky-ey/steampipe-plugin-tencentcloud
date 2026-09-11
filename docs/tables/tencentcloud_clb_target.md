@@ -14,7 +14,7 @@ The `tencentcloud_clb_target` table in Steampipe provides detailed information a
 
 ## Examples
 
-### Basic target inventory
+### Basic info
 
 Get an overview of all backend targets, including their bound load balancers, listeners, instance IDs, and ports.
 

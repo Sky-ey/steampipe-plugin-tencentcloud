@@ -14,7 +14,7 @@ The `tencentcloud_clb_listener` table in Steampipe provides detailed information
 
 ## Examples
 
-### Basic listener inventory
+### Basic info
 
 Get an overview of all listeners, including their protocols, ports, and owning load balancers.
 

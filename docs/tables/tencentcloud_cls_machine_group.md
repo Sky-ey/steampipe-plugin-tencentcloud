@@ -14,7 +14,7 @@ Use this table to inventory CLS machine groups across regions, inspect group mem
 
 ## Examples
 
-### List all machine groups in the default region
+### Basic info
 
 ```sql+postgres
 select

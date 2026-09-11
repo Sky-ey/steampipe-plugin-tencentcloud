@@ -14,7 +14,7 @@ The `tencentcloud_clb_target_group` table in Steampipe provides detailed informa
 
 ## Examples
 
-### Basic target group inventory
+### Basic info
 
 Get an overview of all target groups, including their names, backend protocols, ports, and VPCs.
 

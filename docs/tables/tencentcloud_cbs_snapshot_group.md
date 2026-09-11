@@ -8,9 +8,13 @@ folder: "CBS"
 
 The `tencentcloud_cbs_snapshot_group` table uses the `DescribeSnapshotGroups` API to query groups of related CBS snapshots.
 
+## Table Usage Guide
+
+Use this table to work with snapshot groups, which tie together the snapshots of all disks attached to an instance at a point in time — useful for auditing consistent multi-disk backups and planning instance-level restores. The `snapshot_group_id` and `snapshot_id` quals push down to the `DescribeSnapshotGroups` Filters for efficient filtered listing and single-group lookups.
+
 ## Examples
 
-### List snapshot groups
+### Basic info
 
 ```sql+postgres
 select

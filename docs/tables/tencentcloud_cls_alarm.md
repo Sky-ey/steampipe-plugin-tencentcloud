@@ -14,7 +14,7 @@ Use this table to inventory CLS alarm policies across regions, inspect their tri
 
 ## Examples
 
-### List all alarm policies in the default region
+### Basic info
 
 ```sql+postgres
 select

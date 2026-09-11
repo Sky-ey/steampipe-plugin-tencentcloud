@@ -14,7 +14,7 @@ The `tencentcloud_clb_rewrite` table in Steampipe provides information about the
 
 ## Examples
 
-### Basic rewrite rule inventory
+### Basic info
 
 Get an overview of all rewrite rules across load balancers.
 

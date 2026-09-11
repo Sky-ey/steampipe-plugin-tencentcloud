@@ -8,9 +8,13 @@ folder: "CBS"
 
 The `tencentcloud_cbs_auto_snapshot_policy` table uses the `DescribeAutoSnapshotPolicies` API to query scheduled snapshot policies and their retention and resource bindings.
 
+## Table Usage Guide
+
+Use this table to inventory auto snapshot policies across regions, audit activation status and retention settings, review execution schedules, and find policies that are inactive or not bound to any disks or instances. The `auto_snapshot_policy_id` qual pushes down to the `DescribeAutoSnapshotPolicies` Filters for efficient single-policy lookups.
+
 ## Examples
 
-### List auto snapshot policies
+### Basic info
 
 ```sql+postgres
 select

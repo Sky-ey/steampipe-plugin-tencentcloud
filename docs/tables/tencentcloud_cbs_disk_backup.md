@@ -8,9 +8,13 @@ folder: "CBS"
 
 The `tencentcloud_cbs_disk_backup` table uses the `DescribeDiskBackups` API to query CBS disk backup points.
 
+## Table Usage Guide
+
+Use this table to audit CBS disk backup points: verify backup coverage per disk, check backup sizes and states, and trace each backup point back to its source disk. The `disk_backup_id` and `disk_id` quals push down to the `DescribeDiskBackups` Filters for efficient filtered listing and single-backup lookups.
+
 ## Examples
 
-### List disk backup points
+### Basic info
 
 ```sql+postgres
 select

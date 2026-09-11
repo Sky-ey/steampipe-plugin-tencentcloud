@@ -14,7 +14,7 @@ Use this table to inventory CLS alarm notification channel groups across regions
 
 ## Examples
 
-### List all alarm notification channel groups in the default region
+### Basic info
 
 ```sql+postgres
 select
