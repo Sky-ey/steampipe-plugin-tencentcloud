@@ -106,7 +106,7 @@ func listCamRoles(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 
 func getCamRole(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	roleName := d.EqualsQuals["role_name"].GetStringValue()
-	plugin.Logger(ctx).Info("getCamRole", "role_name", roleName)
+	plugin.Logger(ctx).Debug("getCamRole", "role_name", roleName)
 
 	client := &cam.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

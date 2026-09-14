@@ -130,7 +130,7 @@ func buildCcnFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc.Filter {
 
 func getCcn(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	ccnId := d.EqualsQuals["ccn_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCcn", "ccn_id", ccnId)
+	plugin.Logger(ctx).Debug("getCcn", "ccn_id", ccnId)
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

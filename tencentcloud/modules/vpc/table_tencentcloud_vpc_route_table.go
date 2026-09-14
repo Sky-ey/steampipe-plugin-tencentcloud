@@ -136,7 +136,7 @@ func buildVpcRouteTableFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc
 
 func getVpcRouteTable(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	routeTableId := d.EqualsQuals["route_table_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcRouteTable", "route_table_id", routeTableId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcRouteTable", "route_table_id", routeTableId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

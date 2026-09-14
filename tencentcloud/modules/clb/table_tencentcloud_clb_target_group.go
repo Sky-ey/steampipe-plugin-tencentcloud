@@ -127,7 +127,7 @@ func listClbTargetGroups(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 
 func getClbTargetGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	targetGroupID := d.EqualsQualString("target_group_id")
-	plugin.Logger(ctx).Info("getClbTargetGroup", "target_group_id", targetGroupID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClbTargetGroup", "target_group_id", targetGroupID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &clb.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

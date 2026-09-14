@@ -146,7 +146,7 @@ func buildVpcEniFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc.Filter
 
 func getVpcEni(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	eniId := d.EqualsQuals["network_interface_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcEni", "network_interface_id", eniId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcEni", "network_interface_id", eniId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

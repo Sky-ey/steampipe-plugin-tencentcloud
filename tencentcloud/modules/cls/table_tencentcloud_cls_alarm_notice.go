@@ -126,7 +126,7 @@ func buildClsAlarmNoticeFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cl
 
 func getClsAlarmNotice(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	alarmNoticeId := d.EqualsQuals["alarm_notice_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getClsAlarmNotice", "alarm_notice_id", alarmNoticeId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClsAlarmNotice", "alarm_notice_id", alarmNoticeId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cls.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

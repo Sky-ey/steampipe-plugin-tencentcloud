@@ -137,7 +137,7 @@ func buildVpcBandwidthPackageFilters(equalsQuals plugin.KeyColumnEqualsQualMap) 
 
 func getVpcBandwidthPackage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	bandwidthPackageId := d.EqualsQuals["bandwidth_package_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcBandwidthPackage", "bandwidth_package_id", bandwidthPackageId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcBandwidthPackage", "bandwidth_package_id", bandwidthPackageId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

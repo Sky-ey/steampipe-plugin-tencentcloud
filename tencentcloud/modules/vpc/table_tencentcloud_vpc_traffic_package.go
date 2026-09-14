@@ -127,7 +127,7 @@ func buildVpcTrafficPackageFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []
 
 func getVpcTrafficPackage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	trafficPackageId := d.EqualsQuals["traffic_package_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcTrafficPackage", "traffic_package_id", trafficPackageId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcTrafficPackage", "traffic_package_id", trafficPackageId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

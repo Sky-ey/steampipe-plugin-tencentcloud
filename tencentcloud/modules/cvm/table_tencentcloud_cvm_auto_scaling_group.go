@@ -78,7 +78,7 @@ func TableTencentcloudCvmAutoScalingGroup() *plugin.Table {
 // List Function
 
 func listCvmAutoScalingGroups(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
-	plugin.Logger(ctx).Info("listCvmAutoScalingGroups", "region", d.EqualsQualString(utils.MatrixKeyRegion), "quals", d.EqualsQuals)
+	plugin.Logger(ctx).Debug("listCvmAutoScalingGroups", "region", d.EqualsQualString(utils.MatrixKeyRegion), "quals", d.EqualsQuals)
 
 	client := &as.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {
@@ -185,7 +185,7 @@ func buildAutoScalingGroupFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*
 
 func getCvmAutoScalingGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	groupId := d.EqualsQuals["auto_scaling_group_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmAutoScalingGroup", "auto_scaling_group_id", groupId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmAutoScalingGroup", "auto_scaling_group_id", groupId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &as.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

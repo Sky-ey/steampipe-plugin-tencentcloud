@@ -52,7 +52,7 @@ func TableTencentcloudCvmDisasterRecoverGroup() *plugin.Table {
 // List Function
 
 func listCvmDisasterRecoverGroups(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
-	plugin.Logger(ctx).Info("listCvmDisasterRecoverGroups", "region", d.EqualsQualString(utils.MatrixKeyRegion), "quals", d.EqualsQuals)
+	plugin.Logger(ctx).Debug("listCvmDisasterRecoverGroups", "region", d.EqualsQualString(utils.MatrixKeyRegion), "quals", d.EqualsQuals)
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {
@@ -133,7 +133,7 @@ func disasterRecoverGroupIdsFromQuals(equalsQuals plugin.KeyColumnEqualsQualMap)
 
 func getCvmDisasterRecoverGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	groupId := d.EqualsQuals["disaster_recover_group_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmDisasterRecoverGroup", "disaster_recover_group_id", groupId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmDisasterRecoverGroup", "disaster_recover_group_id", groupId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

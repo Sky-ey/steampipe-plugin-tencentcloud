@@ -132,7 +132,7 @@ func buildCvmLaunchTemplateFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []
 
 func getCvmLaunchTemplate(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	launchTemplateId := d.EqualsQuals["launch_template_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmLaunchTemplate", "launch_template_id", launchTemplateId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmLaunchTemplate", "launch_template_id", launchTemplateId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

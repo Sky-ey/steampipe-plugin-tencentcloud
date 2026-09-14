@@ -147,7 +147,7 @@ func buildVpnConnectionFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc
 
 func getVpnConnection(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	vpnConnectionId := d.EqualsQuals["vpn_connection_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpnConnection", "vpn_connection_id", vpnConnectionId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpnConnection", "vpn_connection_id", vpnConnectionId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

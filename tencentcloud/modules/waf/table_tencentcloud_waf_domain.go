@@ -141,7 +141,7 @@ func listWafDomains(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 
 func getWafDomain(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	domainId := d.EqualsQuals["domain_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getWafDomain", "domain_id", domainId)
+	plugin.Logger(ctx).Debug("getWafDomain", "domain_id", domainId)
 
 	client := &waf.Client{}
 	if err := utils.InitClientInRegion(ctx, d, client, wafRequestRegion(d)); err != nil {

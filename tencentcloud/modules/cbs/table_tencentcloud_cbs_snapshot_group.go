@@ -114,7 +114,7 @@ func buildCbsSnapshotGroupFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*
 
 func getCbsSnapshotGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	id := d.EqualsQualString("snapshot_group_id")
-	plugin.Logger(ctx).Info("getCbsSnapshotGroup", "snapshot_group_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCbsSnapshotGroup", "snapshot_group_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cbs.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

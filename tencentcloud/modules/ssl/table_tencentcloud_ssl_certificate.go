@@ -171,7 +171,7 @@ func applySslCertificateQuals(req *ssl.DescribeCertificatesRequest, equalsQuals 
 
 func getSslCertificate(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	certId := d.EqualsQuals["certificate_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getSslCertificate", "certificate_id", certId)
+	plugin.Logger(ctx).Debug("getSslCertificate", "certificate_id", certId)
 
 	client := &ssl.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

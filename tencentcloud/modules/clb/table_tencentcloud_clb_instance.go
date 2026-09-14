@@ -183,7 +183,7 @@ func listClbLoadBalancers(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 
 func getClbLoadBalancer(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	loadBalancerID := d.EqualsQualString("load_balancer_id")
-	plugin.Logger(ctx).Info("getClbLoadBalancer", "load_balancer_id", loadBalancerID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClbLoadBalancer", "load_balancer_id", loadBalancerID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &clb.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

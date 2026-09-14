@@ -130,7 +130,7 @@ func listCamPolicyRows(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 
 func getCamPolicy(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	policyID := d.EqualsQuals["policy_id"].GetInt64Value()
-	plugin.Logger(ctx).Info("getCamPolicy", "policy_id", policyID)
+	plugin.Logger(ctx).Debug("getCamPolicy", "policy_id", policyID)
 
 	client := &cam.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

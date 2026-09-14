@@ -120,7 +120,7 @@ func listCbsSnapshots(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrat
 
 func getCbsSnapshot(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	id := d.EqualsQualString("snapshot_id")
-	plugin.Logger(ctx).Info("getCbsSnapshot", "snapshot_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCbsSnapshot", "snapshot_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cbs.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

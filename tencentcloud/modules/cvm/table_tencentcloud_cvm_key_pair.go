@@ -143,7 +143,7 @@ func buildKeyPairFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cvm.Filte
 
 func getCvmKeyPair(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	keyId := d.EqualsQuals["key_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmKeyPair", "key_id", keyId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmKeyPair", "key_id", keyId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

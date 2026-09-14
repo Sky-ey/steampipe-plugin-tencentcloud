@@ -112,7 +112,7 @@ func listCbsAutoSnapshotPolicies(ctx context.Context, d *plugin.QueryData, _ *pl
 
 func getCbsAutoSnapshotPolicy(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	id := d.EqualsQualString("auto_snapshot_policy_id")
-	plugin.Logger(ctx).Info("getCbsAutoSnapshotPolicy", "auto_snapshot_policy_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCbsAutoSnapshotPolicy", "auto_snapshot_policy_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cbs.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

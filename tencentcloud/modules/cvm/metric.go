@@ -52,7 +52,7 @@ func cvmMetricTable(name, description, metricName, valueDescription string, peri
 // List Function
 
 func listCvmMetric(ctx context.Context, d *plugin.QueryData, metricName string, periodSeconds uint64, lookback time.Duration) (any, error) {
-	plugin.Logger(ctx).Info("listCvmMetric", "region", d.EqualsQualString(utils.MatrixKeyRegion), "metric_name", metricName, "quals", d.EqualsQuals)
+	plugin.Logger(ctx).Debug("listCvmMetric", "region", d.EqualsQualString(utils.MatrixKeyRegion), "metric_name", metricName, "quals", d.EqualsQuals)
 
 	region := d.EqualsQualString(utils.MatrixKeyRegion)
 

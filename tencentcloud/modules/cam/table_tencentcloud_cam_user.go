@@ -85,7 +85,7 @@ func listCamUserRows(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrate
 
 func getCamUser(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	name := d.EqualsQuals["name"].GetStringValue()
-	plugin.Logger(ctx).Info("getCamUser", "name", name)
+	plugin.Logger(ctx).Debug("getCamUser", "name", name)
 
 	client := &cam.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

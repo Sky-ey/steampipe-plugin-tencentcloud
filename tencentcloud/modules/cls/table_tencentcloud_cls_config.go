@@ -129,7 +129,7 @@ func buildClsConfigFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cls.Fil
 
 func getClsConfig(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	configId := d.EqualsQuals["config_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getClsConfig", "config_id", configId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClsConfig", "config_id", configId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cls.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

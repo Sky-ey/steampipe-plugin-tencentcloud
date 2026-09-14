@@ -93,7 +93,7 @@ func getCamSamlProvider(ctx context.Context, d *plugin.QueryData, h *plugin.Hydr
 	} else {
 		name = d.EqualsQuals["name"].GetStringValue()
 	}
-	plugin.Logger(ctx).Info("getCamSamlProvider", "name", name, "supplement", isSupplement)
+	plugin.Logger(ctx).Debug("getCamSamlProvider", "name", name, "supplement", isSupplement)
 
 	if name == "" {
 		return nil, nil

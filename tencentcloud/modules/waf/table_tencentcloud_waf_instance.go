@@ -145,7 +145,7 @@ func listWafInstances(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrat
 
 func getWafInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	instanceId := d.EqualsQuals["instance_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getWafInstance", "instance_id", instanceId)
+	plugin.Logger(ctx).Debug("getWafInstance", "instance_id", instanceId)
 
 	client := &waf.Client{}
 	if err := utils.InitClientInRegion(ctx, d, client, wafRequestRegion(d)); err != nil {

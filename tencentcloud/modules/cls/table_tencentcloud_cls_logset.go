@@ -123,7 +123,7 @@ func buildClsLogsetFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cls.Fil
 
 func getClsLogset(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	logsetId := d.EqualsQuals["logset_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getClsLogset", "logset_id", logsetId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClsLogset", "logset_id", logsetId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cls.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

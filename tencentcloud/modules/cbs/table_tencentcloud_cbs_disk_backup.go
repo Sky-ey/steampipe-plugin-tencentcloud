@@ -104,7 +104,7 @@ func listCbsDiskBackups(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydr
 
 func getCbsDiskBackup(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	id := d.EqualsQualString("disk_backup_id")
-	plugin.Logger(ctx).Info("getCbsDiskBackup", "disk_backup_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCbsDiskBackup", "disk_backup_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cbs.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

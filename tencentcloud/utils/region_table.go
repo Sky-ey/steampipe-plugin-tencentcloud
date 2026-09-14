@@ -82,7 +82,7 @@ func listRegions(product, service string) plugin.HydrateFunc {
 func getRegion(product, service string) plugin.HydrateFunc {
 	return func(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 		regionQual := d.EqualsQualString("region")
-		plugin.Logger(ctx).Info("getRegion", "service", service, "region", regionQual)
+		plugin.Logger(ctx).Debug("getRegion", "service", service, "region", regionQual)
 
 		if regionQual == "" {
 			return nil, nil

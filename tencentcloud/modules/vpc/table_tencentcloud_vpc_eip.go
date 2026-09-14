@@ -147,7 +147,7 @@ func buildVpcEipFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc.Filter
 
 func getVpcEip(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	addressId := d.EqualsQuals["address_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcEip", "address_id", addressId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcEip", "address_id", addressId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

@@ -148,7 +148,7 @@ func buildVpcSubnetFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc.Fil
 
 func getVpcSubnet(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	subnetId := d.EqualsQuals["subnet_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcSubnet", "subnet_id", subnetId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcSubnet", "subnet_id", subnetId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

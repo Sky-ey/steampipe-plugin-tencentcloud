@@ -119,7 +119,7 @@ func buildWafObjectFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*waf.Fil
 
 func getWafObject(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	objectId := d.EqualsQuals["object_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getWafObject", "object_id", objectId)
+	plugin.Logger(ctx).Debug("getWafObject", "object_id", objectId)
 
 	client := &waf.Client{}
 	if err := utils.InitClientInRegion(ctx, d, client, wafRequestRegion(d)); err != nil {

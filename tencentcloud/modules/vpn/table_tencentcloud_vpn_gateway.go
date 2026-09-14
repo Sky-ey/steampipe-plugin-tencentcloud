@@ -145,7 +145,7 @@ func buildVpnGatewayFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc.Fi
 
 func getVpnGateway(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	vpnGatewayId := d.EqualsQuals["vpn_gateway_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpnGateway", "vpn_gateway_id", vpnGatewayId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpnGateway", "vpn_gateway_id", vpnGatewayId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

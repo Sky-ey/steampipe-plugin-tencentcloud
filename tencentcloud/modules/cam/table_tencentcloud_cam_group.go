@@ -114,7 +114,7 @@ func getCamGroup(ctx context.Context, d *plugin.QueryData, h *plugin.HydrateData
 	} else {
 		groupID = uint64(d.EqualsQuals["group_id"].GetInt64Value())
 	}
-	plugin.Logger(ctx).Info("getCamGroup", "group_id", groupID, "supplement", isSupplement)
+	plugin.Logger(ctx).Debug("getCamGroup", "group_id", groupID, "supplement", isSupplement)
 
 	if groupID == 0 {
 		return nil, nil

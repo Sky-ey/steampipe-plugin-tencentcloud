@@ -134,7 +134,7 @@ func listVpcNatGateways(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydr
 
 func getVpcNatGateway(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	natId := d.EqualsQuals["nat_gateway_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcNatGateway", "nat_gateway_id", natId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcNatGateway", "nat_gateway_id", natId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

@@ -123,7 +123,7 @@ func buildClsMachineGroupFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*c
 
 func getClsMachineGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	groupId := d.EqualsQuals["machine_group_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getClsMachineGroup", "machine_group_id", groupId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClsMachineGroup", "machine_group_id", groupId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cls.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

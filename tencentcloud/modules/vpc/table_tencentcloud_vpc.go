@@ -142,7 +142,7 @@ func buildVpcFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc.Filter {
 
 func getVpcVpc(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	vpcId := d.EqualsQuals["vpc_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcVpc", "vpc_id", vpcId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcVpc", "vpc_id", vpcId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

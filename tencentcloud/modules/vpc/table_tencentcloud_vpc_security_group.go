@@ -133,7 +133,7 @@ func buildVpcSecurityGroupFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*
 
 func getVpcSecurityGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	sgId := d.EqualsQuals["security_group_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getVpcSecurityGroup", "security_group_id", sgId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getVpcSecurityGroup", "security_group_id", sgId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

@@ -166,7 +166,7 @@ func buildCvmHostFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cvm.Filte
 
 func getCvmHost(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	hostId := d.EqualsQuals["host_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmHost", "host_id", hostId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmHost", "host_id", hostId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

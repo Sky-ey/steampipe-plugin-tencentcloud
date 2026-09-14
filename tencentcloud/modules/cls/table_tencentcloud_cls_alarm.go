@@ -139,7 +139,7 @@ func buildClsAlarmFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cls.Filt
 
 func getClsAlarm(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	alarmId := d.EqualsQuals["alarm_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getClsAlarm", "alarm_id", alarmId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClsAlarm", "alarm_id", alarmId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cls.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

@@ -150,7 +150,7 @@ func buildImageFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cvm.Filter 
 
 func getCvmImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	imageId := d.EqualsQuals["image_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmImage", "image_id", imageId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmImage", "image_id", imageId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

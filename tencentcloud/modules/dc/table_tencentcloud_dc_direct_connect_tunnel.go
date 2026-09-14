@@ -144,7 +144,7 @@ func listDcDirectConnectTunnels(ctx context.Context, d *plugin.QueryData, _ *plu
 
 func getDcDirectConnectTunnel(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	tunnelId := d.EqualsQuals["direct_connect_tunnel_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getDcDirectConnectTunnel", "direct_connect_tunnel_id", tunnelId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getDcDirectConnectTunnel", "direct_connect_tunnel_id", tunnelId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &dc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

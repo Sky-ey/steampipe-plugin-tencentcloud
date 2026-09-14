@@ -149,7 +149,7 @@ func streamClbCustomizedConfigs(ctx context.Context, d *plugin.QueryData, client
 
 func getClbCustomizedConfig(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	uconfigID := d.EqualsQualString("uconfig_id")
-	plugin.Logger(ctx).Info("getClbCustomizedConfig", "uconfig_id", uconfigID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClbCustomizedConfig", "uconfig_id", uconfigID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &clb.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

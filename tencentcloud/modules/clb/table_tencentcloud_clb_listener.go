@@ -132,7 +132,7 @@ func listClbListeners(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrat
 func getClbListener(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	loadBalancerID := d.EqualsQualString("load_balancer_id")
 	listenerID := d.EqualsQualString("listener_id")
-	plugin.Logger(ctx).Info("getClbListener", "load_balancer_id", loadBalancerID, "listener_id", listenerID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClbListener", "load_balancer_id", loadBalancerID, "listener_id", listenerID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &clb.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

@@ -86,7 +86,7 @@ func listCvmZones(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDat
 
 func getCvmZone(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	zone := d.EqualsQuals["zone"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmZone", "zone", zone, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmZone", "zone", zone, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

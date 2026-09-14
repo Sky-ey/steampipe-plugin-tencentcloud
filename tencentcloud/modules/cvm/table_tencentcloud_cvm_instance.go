@@ -226,7 +226,7 @@ func buildInstanceFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cvm.Filt
 
 func getCvmInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	instanceId := d.EqualsQuals["instance_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getCvmInstance", "instance_id", instanceId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCvmInstance", "instance_id", instanceId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cvm.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

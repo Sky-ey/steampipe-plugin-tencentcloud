@@ -144,7 +144,7 @@ func buildClsTopicFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cls.Filt
 
 func getClsTopic(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	topicId := d.EqualsQuals["topic_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getClsTopic", "topic_id", topicId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getClsTopic", "topic_id", topicId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cls.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

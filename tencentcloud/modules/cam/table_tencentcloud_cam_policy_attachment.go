@@ -83,7 +83,7 @@ func resolveCamAttachmentPolicies(ctx context.Context, d *plugin.QueryData, clie
 		if policyID <= 0 {
 			return nil, nil
 		}
-		plugin.Logger(ctx).Info("resolveCamAttachmentPolicies", "policy_id", policyID)
+		plugin.Logger(ctx).Debug("resolveCamAttachmentPolicies", "policy_id", policyID)
 
 		d.WaitForListRateLimit(ctx)
 		req := cam.NewGetPolicyRequest()
@@ -130,7 +130,7 @@ func isCamPolicyNotFoundError(err error) bool {
 }
 
 func listCamPolicyAttachmentsForPolicy(ctx context.Context, d *plugin.QueryData, client *cam.Client, policy *cam.StrategyInfo) error {
-	plugin.Logger(ctx).Info("listCamPolicyAttachmentsForPolicy", "policy_id", *policy.PolicyId)
+	plugin.Logger(ctx).Debug("listCamPolicyAttachmentsForPolicy", "policy_id", *policy.PolicyId)
 
 	pageSize := uint64(utils.PageSizeFromLimit(d, int64(camDefaultPageSize), 1))
 	var page uint64 = 1

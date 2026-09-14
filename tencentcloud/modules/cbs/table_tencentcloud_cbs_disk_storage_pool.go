@@ -114,7 +114,7 @@ func buildDiskStoragePoolFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*c
 
 func getCbsDiskStoragePool(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	id := d.EqualsQualString("cdc_id")
-	plugin.Logger(ctx).Info("getCbsDiskStoragePool", "cdc_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCbsDiskStoragePool", "cdc_id", id, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cbs.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

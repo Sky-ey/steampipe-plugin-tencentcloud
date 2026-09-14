@@ -45,7 +45,7 @@ func listCamAccessKeys(ctx context.Context, d *plugin.QueryData, h *plugin.Hydra
 	}
 	userUin := *user.Uin
 
-	plugin.Logger(ctx).Info("listCamAccessKeys", "user_uin", userUin)
+	plugin.Logger(ctx).Debug("listCamAccessKeys", "user_uin", userUin)
 
 	client := &cam.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

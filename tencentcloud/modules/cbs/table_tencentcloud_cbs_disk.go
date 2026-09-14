@@ -180,7 +180,7 @@ func buildCbsDiskFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*cbs.Filte
 
 func getCbsDisk(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	diskID := d.EqualsQualString("disk_id")
-	plugin.Logger(ctx).Info("getCbsDisk", "disk_id", diskID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getCbsDisk", "disk_id", diskID, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &cbs.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

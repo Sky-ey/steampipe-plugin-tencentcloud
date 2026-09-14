@@ -162,7 +162,7 @@ func buildDcGatewayFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*vpc.Fil
 
 func getDcGateway(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	gatewayId := d.EqualsQuals["direct_connect_gateway_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getDcGateway", "direct_connect_gateway_id", gatewayId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getDcGateway", "direct_connect_gateway_id", gatewayId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &vpc.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {

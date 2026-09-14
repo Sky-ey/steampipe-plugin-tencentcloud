@@ -156,7 +156,7 @@ func buildTkeClusterFilters(equalsQuals plugin.KeyColumnEqualsQualMap) []*tke.Fi
 
 func getTkeCluster(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData) (any, error) {
 	clusterId := d.EqualsQuals["cluster_id"].GetStringValue()
-	plugin.Logger(ctx).Info("getTkeCluster", "cluster_id", clusterId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
+	plugin.Logger(ctx).Debug("getTkeCluster", "cluster_id", clusterId, "region", d.EqualsQualString(utils.MatrixKeyRegion))
 
 	client := &tke.Client{}
 	if err := utils.InitClient(ctx, d, client); err != nil {
