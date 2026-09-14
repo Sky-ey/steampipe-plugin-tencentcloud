@@ -15,7 +15,8 @@ connection "tencentcloud" {
   # access (assuming a role via STS). Also set with the `TENCENTCLOUD_TOKEN` env var.
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-  # `regions` specifies the list of regions to query when no region is specified.
+  # ---- Regions ----
+  # `regions` specifies the list of regions to query.
   # SQL conditions like `WHERE region = 'ap-guangzhou'` ignore this setting.
   # The plugin queries these regions concurrently and merges the results.
   # Wildcards are supported: `*` matches any number of characters,
@@ -23,8 +24,10 @@ connection "tencentcloud" {
   # and `[^g]` means exclusion (note: use `^` instead of `!`).
   # Brace expansion like `{a,b}` is not supported.
   #
-  # When `regions` is not configured, the plugin only queries the default region
-  # `ap-singapore`; resources in other regions will not appear in query results.
+  # The plugin resolves the region in this order:
+  #   1. The `regions` list in the connection config
+  #   2. The `TENCENTCLOUD_REGION` environment variable
+  #   3. The default region `ap-singapore`, resources in other regions will not appear in query results
   #
   # regions = ["*"]                           # all available regions
   # regions = ["ap-*"]                        # all Asia Pacific regions

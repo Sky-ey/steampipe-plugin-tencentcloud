@@ -119,10 +119,26 @@ func TestBuildRegionListNormalizesProvidedRegion(t *testing.T) {
 	}
 }
 
-// 未配置 regions 时退化为兜底地域,且不应触发地域发现
+func TestBuildRegionListUsesRegionEnvironmentVariable(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_REGION", "AP-Shanghai")
+	d := queryDataWithCachedRegions(t,
+		TencentcloudConfig{},
+		"cvm",
+		[]string{"ap-guangzhou", "ap-shanghai"},
+	)
+
+	matrix := BuildRegionList(testContext(), d, "cvm")
+
+	if got := matrixRegions(matrix); !equalStringSlices(got, []string{"ap-shanghai"}) {
+		t.Fatalf("expected only ap-shanghai, got %v", got)
+	}
+}
+
+// 未配置 regions 和 TENCENTCLOUD_REGION 时退化为兜底地域,且不应触发地域发现
 func TestBuildRegionListDefaultsToSingapore(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
+	t.Setenv("TENCENTCLOUD_REGION", "")
 
 	d := queryDataWithConfig(TencentcloudConfig{})
 	d.QueryContext = &plugin.QueryContext{}

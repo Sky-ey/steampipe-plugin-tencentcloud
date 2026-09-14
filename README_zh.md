@@ -25,8 +25,7 @@ connection "tencentcloud" {
   secret_id  = "your-secret-id"
   secret_key = "your-secret-key"
 
-  # 未指定 region 时要查询的地域列表。支持通配符（`*`、`?`、`[gs]`）。
-  # 若省略该项，SQL 中未指定 region 时仅查询默认地域 `ap-singapore`。
+  # 未指定 region 时要查询的地域列表。支持通配符（`*`、`?`、`[gs]`）
   regions = ["ap-*"]
 }
 ```
@@ -36,6 +35,7 @@ connection "tencentcloud" {
 ```bash
 export TENCENTCLOUD_SECRET_ID=your-secret-id
 export TENCENTCLOUD_SECRET_KEY=your-secret-key
+export TENCENTCLOUD_REGION=ap-guangzhou
 ```
 
 运行查询：
@@ -62,7 +62,7 @@ from
 +----------------+---------------+----------------+---------------+--------------+
 ```
 
-区域表会查询 `regions` 匹配到的所有地域。可以通过 `where region = 'ap-guangzhou'` 这类 SQL 条件直接定位单个地域，跳过地域发现流程。完整的匹配规则、凭证解析与多账号（聚合连接）支持见 [docs/index.md](docs/index_zh.md#多地域查询)。
+区域表会查询 `regions` 匹配到的所有地域。地域配置优先级为：连接配置中的 `regions` > `TENCENTCLOUD_REGION` > `ap-singapore`。可以通过 `where region = 'ap-guangzhou'` 这类 SQL 条件直接定位单个地域，跳过地域发现流程。完整的匹配规则、凭证解析与多账号（聚合连接）支持见 [docs/index.md](docs/index_zh.md#多地域查询)。
 
 ## 开发
 
@@ -94,4 +94,6 @@ make test-query
 
 本仓库基于 [Apache 2.0 许可证](LICENSE)发布。
 
-欢迎贡献——issue 反馈、文档改进与代码提交都非常感谢。入门请参阅[贡献指南](https://steampipe.io/community/contribute)，参与前请阅读[行为准则](https://steampipe.io/community/code-of-conduct)。
+欢迎各种形式的贡献（issue 反馈、文档改进或代码提交）
+
+请参阅[贡献指南](https://steampipe.io/community/contribute)，参与前请阅读[行为准则](https://steampipe.io/community/code-of-conduct)。

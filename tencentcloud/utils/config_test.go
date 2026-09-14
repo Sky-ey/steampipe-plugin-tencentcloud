@@ -45,13 +45,42 @@ func TestGetConfigNormalizesRegions(t *testing.T) {
 }
 
 func TestGetConfigKeepsNilRegions(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_REGION", "")
 	connection := &plugin.Connection{
 		Name:   "tencentcloud",
 		Config: TencentcloudConfig{},
 	}
 
 	if got := GetConfig(connection).Regions; got != nil {
-		t.Fatalf("expected nil regions when the argument is omitted, got %v", got)
+		t.Fatalf("expected nil regions when both the argument and environment variable are omitted, got %v", got)
+	}
+}
+
+func TestGetConfigUsesRegionEnvironmentVariable(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_REGION", " AP-Shanghai ")
+	connection := &plugin.Connection{
+		Name:   "tencentcloud",
+		Config: TencentcloudConfig{},
+	}
+
+	got := GetConfig(connection).Regions
+	expected := []string{"ap-shanghai"}
+	if len(got) != len(expected) || got[0] != expected[0] {
+		t.Fatalf("expected %v, got %v", expected, got)
+	}
+}
+
+func TestGetConfigRegionsTakePrecedenceOverEnvironment(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_REGION", "ap-shanghai")
+	connection := &plugin.Connection{
+		Name:   "tencentcloud",
+		Config: TencentcloudConfig{Regions: []string{"ap-guangzhou"}},
+	}
+
+	got := GetConfig(connection).Regions
+	expected := []string{"ap-guangzhou"}
+	if len(got) != len(expected) || got[0] != expected[0] {
+		t.Fatalf("expected %v, got %v", expected, got)
 	}
 }
 
@@ -111,6 +140,7 @@ func TestConfigInstance(t *testing.T) {
 }
 
 func TestGetConfig(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_REGION", "")
 	secretID := "sid"
 	secretKey := "skey"
 	endpoint := "cvm.tencentcloudapi.com"

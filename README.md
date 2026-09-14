@@ -24,7 +24,6 @@ connection "tencentcloud" {
   secret_key = "your-secret-key"
 
   # Regions to query when no region is specified. Supports wildcards (`*`, `?`, `[gs]`).
-  # If omitted, only the default region `ap-singapore` is queried when no region specified in SQL.
   regions = ["ap-*"]
 }
 ```
@@ -85,4 +84,4 @@ The contract suite uses an isolated temporary Steampipe install directory and ne
 
 This repository is published under the [Apache 2.0 license](LICENSE).
 
-We welcome contributions — bug reports, documentation improvements, and code are all appreciated. To get started, see our [contributing guidelines](https://steampipe.io/community/contribute). Please read the [code of conduct](https://steampipe.io/community/code-of-conduct) before participating.
+We welcome contributions — bug reports, documentation improvements, and code are all appreciated. To get started, see [contributing guidelines](https://steampipe.io/community/contribute). Please read the [code of conduct](https://steampipe.io/community/code-of-conduct) before participating.

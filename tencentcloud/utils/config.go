@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"net"
+	"os"
 	"path"
 	"strings"
 
@@ -44,6 +45,12 @@ func GetConfig(connection *plugin.Connection) TencentcloudConfig {
 		return TencentcloudConfig{}
 	}
 	config, _ := connection.Config.(TencentcloudConfig)
+
+	if config.Regions == nil {
+		if region := NormalizeRegion(os.Getenv("TENCENTCLOUD_REGION")); region != "" {
+			config.Regions = []string{region}
+		}
+	}
 
 	if config.Regions != nil {
 		if len(config.Regions) == 0 {

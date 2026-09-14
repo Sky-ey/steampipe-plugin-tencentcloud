@@ -83,7 +83,7 @@ connection "tencentcloud" {
 
   # ---- 凭证 ----
   # 插件按以下顺序解析凭证：
-  #   1. 本配置文件中的静态凭证（`secret_id`、`secret_key`，以及可选的 `token`）
+  #   1. 配置文件中的静态凭证（`secret_id`、`secret_key`，以及可选的 `token`）
   #   2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_TOKEN`
   #   3. SDK DefaultProviderChain：环境变量 -> 凭证文件 -> CVM 实例角色
   # 省略 `secret_id`/`secret_key` 时由默认凭证链接管——这是生产环境的推荐模式
@@ -95,13 +95,19 @@ connection "tencentcloud" {
   # 也可通过 `TENCENTCLOUD_TOKEN` 环境变量设置。
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-  # `regions` 指定未指定地域时要查询的地域列表。
+  # ---- 地域 ----
+  # `regions` 指定需要查询的地域列表。
   # SQL 条件（如 `WHERE region = 'ap-guangzhou'`）会忽略此设置。
   # 插件会并发查询这些地域并合并结果。
   # 支持通配符：`*` 匹配任意数量字符，
   # `?` 匹配单个字符，`[gs]` 匹配一组字符，
   # `[^g]` 表示排除。
-  # 未配置 `regions` 时，插件只查询默认地域 `ap-singapore`，其他地域的资源不会显示。
+  #
+  # 插件按以下顺序解析凭证：
+  #   1. 配置文件中的 `regions` 列表
+  #   2. `TENCENTCLOUD_REGION` 环境变量
+  #   3. 默认地域 `ap-singapore`, 其他地域的资源不会显示
+  #
   # regions = ["*"]                           # 所有可用地域
   # regions = ["ap-*"]                        # 所有亚太地域
   # regions = ["ap-guangzhou", "ap-shanghai"] # 指定地域
@@ -160,6 +166,7 @@ connection "tencentcloud" {
 ```bash
 export TENCENTCLOUD_SECRET_ID=your-secret-id
 export TENCENTCLOUD_SECRET_KEY=your-secret-key
+export TENCENTCLOUD_REGION=ap-guangzhou
 ```
 
 开始查询：
