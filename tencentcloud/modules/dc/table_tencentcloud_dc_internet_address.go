@@ -37,7 +37,7 @@ func TableTencentcloudDcInternetAddress() *plugin.Table {
 			{Name: "addr_proto", Type: proto.ColumnType_INT, Description: "The address protocol (0: IPv4, 1: IPv6).", Transform: transform.FromField("AddrProto")},
 			{Name: "status", Type: proto.ColumnType_INT, Description: "The address status (0: in use, 1: disabled, 2: returned).", Transform: transform.FromField("Status")},
 			{Name: "resource_region", Type: proto.ColumnType_STRING, Description: "The region of the internet address as reported by the API.", Transform: transform.FromField("ResourceRegion")},
-			{Name: "app_id", Type: proto.ColumnType_INT, Description: "The user (app) ID that owns the address.", Transform: transform.FromField("AppId")},
+			{Name: "app_id", Type: proto.ColumnType_STRING, Description: "The user (app) ID that owns the address.", Transform: transform.FromField("AppId")},
 			{Name: "reserve_time", Type: proto.ColumnType_INT, Description: "The retention period (in days) of a released IP address.", Transform: transform.FromField("ReserveTime")},
 			{Name: "apply_time", Type: proto.ColumnType_TIMESTAMP, Description: "The time the address was applied for.", Transform: transform.FromField("ApplyTime").NullIfZero()},
 			{Name: "stop_time", Type: proto.ColumnType_TIMESTAMP, Description: "The time the address was disabled.", Transform: transform.FromField("StopTime").NullIfZero()},

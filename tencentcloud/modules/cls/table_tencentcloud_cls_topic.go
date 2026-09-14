@@ -53,7 +53,7 @@ func TableTencentcloudClsTopic() *plugin.Table {
 			{Name: "topic_async_task_id", Type: proto.ColumnType_STRING, Description: "The async migration task ID, if any.", Transform: transform.FromField("TopicAsyncTaskID")},
 			{Name: "effective_date", Type: proto.ColumnType_TIMESTAMP, Description: "The expected effective date after async migration.", Transform: transform.FromField("EffectiveDate").NullIfZero()},
 			{Name: "key_id", Type: proto.ColumnType_STRING, Description: "The kms-cls service key ID used by the topic.", Transform: transform.FromField("KeyId")},
-			{Name: "assumer_uin", Type: proto.ColumnType_INT, Description: "The Uin of the service provider that created the topic, if any.", Transform: transform.FromField("AssumerUin")},
+			{Name: "assumer_uin", Type: proto.ColumnType_STRING, Description: "The Uin of the service provider that created the topic, if any.", Transform: transform.FromField("AssumerUin")},
 			{Name: "assumer_name", Type: proto.ColumnType_STRING, Description: "The cloud product identifier that created the topic (e.g., CDN, TKE), if any.", Transform: transform.FromField("AssumerName")},
 			{Name: "sub_assumer_name", Type: proto.ColumnType_STRING, Description: "The cloud product sub-identifier (e.g., TKE-Audit, TKE-Event), if any.", Transform: transform.FromField("SubAssumerName")},
 			{Name: "role_name", Type: proto.ColumnType_STRING, Description: "The role used by the service provider that created the topic, if any.", Transform: transform.FromField("RoleName")},

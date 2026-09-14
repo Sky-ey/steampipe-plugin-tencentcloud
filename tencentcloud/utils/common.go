@@ -62,12 +62,11 @@ func PtrStringSlice(s []*string) []string {
 	return out
 }
 
-func ToUint64(p *string) uint64 {
+func Uint64ToString(p *uint64) string {
 	if p == nil {
-		return 0
+		return ""
 	}
-	i, _ := strconv.ParseUint(*p, 10, 64)
-	return i
+	return strconv.FormatUint(*p, 10)
 }
 
 // UnixSecondsToTime converts a Unix-seconds timestamp (*uint64) to *time.Time.

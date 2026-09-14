@@ -2,6 +2,7 @@ package cam
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	cam "github.com/tencentcloud/tencentcloud-sdk-go-intl-en/tencentcloud/cam/v20190116"
@@ -26,7 +27,7 @@ func TableTencentcloudCamAccessKey() *plugin.Table {
 		Columns: utils.WithCommonColumns([]*plugin.Column{
 			{Name: "access_key_id", Type: proto.ColumnType_STRING, Description: "The access key ID (SecretId).", Transform: transform.FromField("AccessKeyId")},
 			{Name: "user_name", Type: proto.ColumnType_STRING, Description: "The username of the sub-account that owns the key.", Transform: transform.FromField("UserName")},
-			{Name: "user_uin", Type: proto.ColumnType_INT, Description: "The UIN of the sub-account that owns the key.", Transform: transform.FromField("UserUin")},
+			{Name: "user_uin", Type: proto.ColumnType_STRING, Description: "The UIN of the sub-account that owns the key.", Transform: transform.FromField("UserUin").NullIfZero()},
 			{Name: "status", Type: proto.ColumnType_STRING, Description: "The status of the key (Active, Inactive).", Transform: transform.FromField("Status")},
 			{Name: "create_time", Type: proto.ColumnType_TIMESTAMP, Description: "The time the key was created.", Transform: transform.FromField("CreateTime").NullIfZero()},
 			{Name: "last_used_date", Type: proto.ColumnType_STRING, Description: "The date the key was last used (YYYY-MM-DD, reported with a one-day delay).", Transform: transform.FromField("LastUsedDate")},
@@ -122,7 +123,7 @@ func listCamAccessKeys(ctx context.Context, d *plugin.QueryData, h *plugin.Hydra
 type camAccessKeyRow struct {
 	AccessKeyId  string
 	UserName     string
-	UserUin      int64
+	UserUin      string
 	Status       string
 	CreateTime   *time.Time
 	LastUsedDate string
@@ -134,7 +135,7 @@ func toCamAccessKeyRow(userUin uint64, userName string, k *cam.AccessKey) camAcc
 	row := camAccessKeyRow{
 		AccessKeyId: utils.PtrString(k.AccessKeyId),
 		UserName:    userName,
-		UserUin:     int64(userUin),
+		UserUin:     strconv.FormatUint(userUin, 10),
 		Status:      utils.PtrString(k.Status),
 		CreateTime:  utils.ParseTimestamp(k.CreateTime),
 	}

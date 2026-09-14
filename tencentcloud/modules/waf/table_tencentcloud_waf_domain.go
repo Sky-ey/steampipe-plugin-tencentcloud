@@ -61,7 +61,7 @@ func TableTencentcloudWafDomain() *plugin.Table {
 			{Name: "cdc_clusters", Type: proto.ColumnType_STRING, Description: "The CDC cluster information accessed by the CDC instance domain (ignored for non-CDC instances).", Transform: transform.FromField("CdcClusters")},
 			{Name: "note", Type: proto.ColumnType_STRING, Description: "The domain remarks.", Transform: transform.FromField("Note")},
 			{Name: "create_time", Type: proto.ColumnType_TIMESTAMP, Description: "The creation time.", Transform: transform.FromField("CreateTime").NullIfZero()},
-			{Name: "app_id", Type: proto.ColumnType_INT, Description: "The user AppId.", Transform: transform.FromField("AppId")},
+			{Name: "app_id", Type: proto.ColumnType_STRING, Description: "The user AppId.", Transform: transform.FromField("AppId")},
 			{Name: "cc_list", Type: proto.ColumnType_JSON, Description: "The sandbox cluster origin-pull outbound IP list.", Transform: transform.FromField("CCList")},
 			{Name: "rs_list", Type: proto.ColumnType_JSON, Description: "The production cluster origin-pull outbound IP list.", Transform: transform.FromField("RsList")},
 			{Name: "src_list", Type: proto.ColumnType_JSON, Description: "The SaaS WAF origin server IP list.", Transform: transform.FromField("SrcList")},

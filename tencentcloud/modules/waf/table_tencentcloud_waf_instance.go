@@ -51,7 +51,7 @@ func TableTencentcloudWafInstance() *plugin.Table {
 			{Name: "max_qps", Type: proto.ColumnType_INT, Description: "The instance QPS peak within the last 30 days.", Transform: transform.FromField("MaxQPS")},
 			{Name: "qps", Type: proto.ColumnType_JSON, Description: "The QPS expansion package information (QPSPackageNew).", Transform: transform.FromField("QPS")},
 			{Name: "domain_pkg", Type: proto.ColumnType_JSON, Description: "The domain extension package information (DomainPackageNew).", Transform: transform.FromField("DomainPkg")},
-			{Name: "app_id", Type: proto.ColumnType_INT, Description: "The user AppId.", Transform: transform.FromField("AppId")},
+			{Name: "app_id", Type: proto.ColumnType_STRING, Description: "The user AppId.", Transform: transform.FromField("AppId")},
 			{Name: "elastic_billing", Type: proto.ColumnType_INT, Description: "The QPS elastic billing cap.", Transform: transform.FromField("ElasticBilling")},
 			{Name: "attack_log_post", Type: proto.ColumnType_INT, Description: "The attack log shipping switch.", Transform: transform.FromField("AttackLogPost")},
 			{Name: "max_bandwidth", Type: proto.ColumnType_INT, Description: "The peak bandwidth in B/s (bytes per second).", Transform: transform.FromField("MaxBandwidth")},

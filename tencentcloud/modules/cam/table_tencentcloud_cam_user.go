@@ -30,7 +30,7 @@ func TableTencentcloudCamUser() *plugin.Table {
 			Tags:       map[string]string{"service": "cam", "action": "GetUser"},
 		},
 		Columns: utils.WithCommonColumns([]*plugin.Column{
-			{Name: "uin", Type: proto.ColumnType_INT, Description: "The unique UIN of the sub-account.", Transform: transform.FromField("Uin")},
+			{Name: "uin", Type: proto.ColumnType_STRING, Description: "The unique UIN of the sub-account.", Transform: transform.FromField("Uin")},
 			{Name: "name", Type: proto.ColumnType_STRING, Description: "The username of the sub-account.", Transform: transform.FromField("Name")},
 			{Name: "uid", Type: proto.ColumnType_INT, Description: "The UID of the sub-account, unique among users who are message recipients.", Transform: transform.FromField("Uid")},
 			{Name: "remark", Type: proto.ColumnType_STRING, Description: "The remark of the sub-account.", Transform: transform.FromField("Remark")},

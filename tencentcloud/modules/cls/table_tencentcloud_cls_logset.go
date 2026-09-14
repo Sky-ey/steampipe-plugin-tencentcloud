@@ -36,7 +36,7 @@ func TableTencentcloudClsLogset() *plugin.Table {
 			{Name: "logset_name", Type: proto.ColumnType_STRING, Description: "The name of the logset.", Transform: transform.FromField("LogsetName")},
 			{Name: "topic_count", Type: proto.ColumnType_INT, Description: "The number of log topics in the logset.", Transform: transform.FromField("TopicCount")},
 			{Name: "metric_topic_count", Type: proto.ColumnType_INT, Description: "The number of metric topics under the logset.", Transform: transform.FromField("MetricTopicCount")},
-			{Name: "assumer_uin", Type: proto.ColumnType_INT, Description: "The Uin of the service provider that created the logset, if any.", Transform: transform.FromField("AssumerUin")},
+			{Name: "assumer_uin", Type: proto.ColumnType_STRING, Description: "The Uin of the service provider that created the logset, if any.", Transform: transform.FromField("AssumerUin")},
 			{Name: "assumer_name", Type: proto.ColumnType_STRING, Description: "The cloud product identifier that created the logset (e.g., CDN, TKE), if created by another cloud product.", Transform: transform.FromField("AssumerName")},
 			{Name: "role_name", Type: proto.ColumnType_STRING, Description: "The role name of the service provider that created the logset, if any.", Transform: transform.FromField("RoleName")},
 			{Name: "create_time", Type: proto.ColumnType_TIMESTAMP, Description: "The creation time of the logset.", Transform: transform.FromField("CreateTime").NullIfZero()},

@@ -34,7 +34,7 @@ func TableTencentcloudCamPolicyAttachment() *plugin.Table {
 			{Name: "policy_name", Type: proto.ColumnType_STRING, Description: "The name of the policy.", Transform: transform.FromField("PolicyName")},
 			{Name: "entity_id", Type: proto.ColumnType_STRING, Description: "The ID of the attached entity (sub-account ID or user group ID).", Transform: transform.FromField("EntityId")},
 			{Name: "entity_name", Type: proto.ColumnType_STRING, Description: "The name of the attached entity.", Transform: transform.FromField("EntityName")},
-			{Name: "entity_uin", Type: proto.ColumnType_INT, Description: "The UIN of the attached entity.", Transform: transform.FromField("EntityUin")},
+			{Name: "entity_uin", Type: proto.ColumnType_STRING, Description: "The UIN of the attached entity.", Transform: transform.FromField("EntityUin").NullIfZero()},
 			{Name: "related_type", Type: proto.ColumnType_INT, Description: "The type of the attached entity (1 = sub-account, 2 = user group).", Transform: transform.FromField("RelatedType")},
 			{Name: "attachment_time", Type: proto.ColumnType_TIMESTAMP, Description: "The time the policy was attached to the entity.", Transform: transform.FromField("AttachmentTime").NullIfZero()},
 			{Name: "title", Type: proto.ColumnType_STRING, Description: "Title of the resource.", Transform: transform.FromField("Title")},
@@ -184,7 +184,7 @@ type camPolicyAttachmentRow struct {
 	PolicyName     string
 	EntityId       string
 	EntityName     string
-	EntityUin      uint64
+	EntityUin      string
 	RelatedType    uint64
 	AttachmentTime *time.Time
 	Title          string
@@ -197,7 +197,7 @@ func toCamPolicyAttachmentRow(p *cam.StrategyInfo, e *cam.AttachEntityOfPolicy) 
 		PolicyName:     utils.PtrString(p.PolicyName),
 		EntityId:       utils.PtrString(e.Id),
 		EntityName:     utils.PtrString(e.Name),
-		EntityUin:      utils.PtrUint64(e.Uin),
+		EntityUin:      utils.Uint64ToString(e.Uin),
 		RelatedType:    utils.PtrUint64(e.RelatedType),
 		AttachmentTime: utils.ParseTimestamp(e.AttachmentTime),
 	}

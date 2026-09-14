@@ -9,10 +9,11 @@ import (
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin/transform"
 )
 
+// CommonColumnData holds the caller's account identity.
 type CommonColumnData struct {
-	OwnerUin uint64
-	Uin      uint64
-	AppId    uint64
+	OwnerUin string
+	Uin      string
+	AppId    string
 }
 
 var GetCallerIdentityMemoized = plugin.HydrateFunc(getCallerIdentityUncached).Memoize()
@@ -48,9 +49,9 @@ func GetCommonColumns(ctx context.Context, d *plugin.QueryData, h *plugin.Hydrat
 	}
 	resp := data.(*cam.GetUserAppIdResponseParams)
 	return &CommonColumnData{
-		OwnerUin: ToUint64(resp.OwnerUin),
-		Uin:      ToUint64(resp.Uin),
-		AppId:    PtrUint64(resp.AppId),
+		OwnerUin: PtrString(resp.OwnerUin),
+		Uin:      PtrString(resp.Uin),
+		AppId:    Uint64ToString(resp.AppId),
 	}, nil
 }
 
@@ -66,24 +67,24 @@ func CommonColumns() []*plugin.Column {
 	return []*plugin.Column{
 		{
 			Name:        "owner_uin",
-			Type:        proto.ColumnType_INT,
+			Type:        proto.ColumnType_STRING,
 			Description: "The Tencent Cloud owner account UIN (OwnerUin) that owns the resource. Used as the connection key column for multi-account aggregator queries.",
 			Hydrate:     GetCommonColumns,
-			Transform:   transform.FromField("OwnerUin"),
+			Transform:   transform.FromField("OwnerUin").NullIfZero(),
 		},
 		{
 			Name:        "caller_uin",
-			Type:        proto.ColumnType_INT,
+			Type:        proto.ColumnType_STRING,
 			Description: "The UIN of the calling identity — the master account itself when called with root credentials, or the sub-account/role UIN when called via CAM.",
 			Hydrate:     GetCommonColumns,
-			Transform:   transform.FromField("Uin"),
+			Transform:   transform.FromField("Uin").NullIfZero(),
 		},
 		{
 			Name:        "owner_app_id",
-			Type:        proto.ColumnType_INT,
-			Description: "The numeric AppId of the account — the <appid> suffix of COS bucket names and the resource owner in CAM.",
+			Type:        proto.ColumnType_STRING,
+			Description: "The AppId of the account — the <appid> suffix of COS bucket names and the resource owner in CAM.",
 			Hydrate:     GetCommonColumns,
-			Transform:   transform.FromField("AppId"),
+			Transform:   transform.FromField("AppId").NullIfZero(),
 		},
 	}
 }
