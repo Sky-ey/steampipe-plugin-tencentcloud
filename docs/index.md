@@ -61,9 +61,11 @@ The plugin authenticates with a Tencent Cloud [access key](https://www.tencentcl
 
 Credentials are resolved in this order:
 
-1. Static credentials in the connection config (`secret_id` / `secret_key`, plus optional `token` for STS temporary credentials)
+1. Static credentials in config file (`secret_id` / `secret_key`, plus optional `token` for STS temporary credentials)
 2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY` and `TENCENTCLOUD_SECURITY_TOKEN` environment variables
-3. CVM instance role when running on a Tencent Cloud CVM with an attached CAM role
+3. The TCCLI credential file `~/.tccli/default.credential`
+4. The credential profile `~/.tencentcloud/credentials`
+5. CVM instance role when running on a Tencent Cloud CVM with an attached CAM role
 
 #### Required permissions
 
@@ -89,9 +91,9 @@ connection "tencentcloud" {
   # The plugin resolves credentials in this order:
   #   1. Static credentials in this file (`secret_id`, `secret_key`, plus optional `token`)
   #   2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY`, `TENCENTCLOUD_SECURITY_TOKEN` env vars
-  #   3. The SDK DefaultProviderChain: env vars -> credentials file -> CVM instance role
-  # When `secret_id`/`secret_key` are omitted, the default chain takes over — the
-  # recommended mode for production (a shared credentials file or an attached CVM role).
+  #   3. The TCCLI credential file `~/.tccli/default.credential`
+  #   4. The credential profile `~/.tencentcloud/credentials`
+  #   5. CVM instance role
   # secret_id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxx"
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
@@ -170,7 +172,7 @@ connection "tencentcloud" {
 }
 ```
 
-By default, all options are commented out in the default connection, so Steampipe will resolve your credentials using the same mechanism as the Tencent Cloud SDK (environment variables, the default credentials file, or an attached CVM instance role). This provides a quick way to get started, but you will probably want to customize your experience using the configuration options for [querying multiple regions](#multi-region-connections) and [querying multiple accounts](#multi-account-connections).
+By default, all options are commented out in the default connection, so Steampipe will resolve your credentials from environment variables, the TCCLI credential file, the SDK credentials file, or an attached CVM instance role. This provides a quick way to get started, but you will probably want to customize your experience using the configuration options for [querying multiple regions](#multi-region-connections) and [querying multiple accounts](#multi-account-connections).
 
 Alternatively, use environment variables:
 

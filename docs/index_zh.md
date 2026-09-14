@@ -61,9 +61,11 @@ steampipe plugin install tencentcloud/tencentcloud
 
 凭证按以下顺序解析：
 
-1. 连接配置中的静态凭证（`secret_id` / `secret_key`，以及用于 STS 临时凭证的可选 `token`）
+1. 配置文件中的静态凭证（`secret_id` / `secret_key`，以及用于 STS 临时凭证的 `token`）
 2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` 与 `TENCENTCLOUD_SECURITY_TOKEN`
-3. 在绑定了 CAM 角色的腾讯云 CVM 实例上运行时，使用 CVM 实例角色
+3. TCCLI 凭证文件 `~/.tccli/default.credential`
+4. 凭证配置文件 `~/.tencentcloud/credentials`
+5. 在绑定了 CAM 角色的腾讯云 CVM 实例上运行时，使用 CVM 实例角色
 
 #### 所需权限
 
@@ -89,9 +91,9 @@ connection "tencentcloud" {
   # 插件按以下顺序解析凭证：
   #   1. 配置文件中的静态凭证（`secret_id`、`secret_key`，以及可选的 `token`）
   #   2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_SECURITY_TOKEN`
-  #   3. SDK DefaultProviderChain：环境变量 -> 凭证文件 -> CVM 实例角色
-  # 省略 `secret_id`/`secret_key` 时由默认凭证链接管——这是生产环境的推荐模式
-  # （使用共享凭证文件或绑定的 CVM 实例角色）。
+  #   3. TCCLI 凭证文件 `~/.tccli/default.credential`
+  #   4. 凭证配置文件 `~/.tencentcloud/credentials`
+  #   5. CVM 实例角色
   # secret_id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxx"
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
@@ -168,7 +170,7 @@ connection "tencentcloud" {
 }
 ```
 
-默认连接中所有配置项都被注释掉，因此 Steampipe 会使用与腾讯云 SDK 相同的机制解析凭证（环境变量、默认凭证文件或绑定的 CVM 实例角色）。这可以作为快速上手的方式，但你可能希望通过[多地域查询](#多地域查询)和[多账号查询](#多账号查询)的配置选项来自定义使用体验。
+默认连接中所有配置项都被注释掉，因此 Steampipe 会依次从环境变量、TC CLI 凭证文件、SDK 凭证文件或绑定的 CVM 实例角色解析凭证。这可以作为快速上手的方式，但你可能希望通过[多地域查询](#多地域查询)和[多账号查询](#多账号查询)的配置选项来自定义使用体验。
 
 也可以使用环境变量：
 

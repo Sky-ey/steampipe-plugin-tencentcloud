@@ -3,6 +3,8 @@ package utils
 import (
 	"context"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 	"testing"
@@ -306,6 +308,9 @@ func TestGetConfigValidatesBaseUrl(t *testing.T) {
 func TestInitClientValidatesCredentials(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
+	homeDir := t.TempDir()
+	t.Setenv("HOME", homeDir)
+	t.Setenv("USERPROFILE", homeDir)
 
 	tests := []struct {
 		name   string
@@ -392,6 +397,59 @@ func TestResolveCredentialEnvToken(t *testing.T) {
 	}
 }
 
+func TestResolveCredentialTCCLIFile(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
+	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
+	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
+	writeTCCLICredentialFile(t, `{
+		"secretId": "  tccli-id  ",
+		"secretKey": "  tccli-key  ",
+		"token": "  tccli-token  "
+	}`)
+
+	cred, err := CreateCredential(TencentcloudConfig{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	gotID, gotKey, gotToken := cred.GetCredential()
+	if gotID != "tccli-id" || gotKey != "tccli-key" || gotToken != "tccli-token" {
+		t.Fatalf("expected TC CLI credentials, got (%s,%s,%s)", gotID, gotKey, gotToken)
+	}
+}
+
+func TestResolveCredentialTCCLIFileErrors(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
+	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
+	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
+
+	tests := []struct {
+		name      string
+		contents  string
+		wantError string
+	}{
+		{
+			name:      "invalid JSON",
+			contents:  `{`,
+			wantError: "parse TC CLI credential file",
+		},
+		{
+			name:      "missing secret key",
+			contents:  `{"secretId":"tccli-id"}`,
+			wantError: `must contain non-empty "secretId" and "secretKey" fields`,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			writeTCCLICredentialFile(t, tt.contents)
+			_, err := CreateCredential(TencentcloudConfig{})
+			if err == nil || !strings.Contains(err.Error(), tt.wantError) {
+				t.Fatalf("expected error containing %q, got %v", tt.wantError, err)
+			}
+		})
+	}
+}
+
 // .spc 凭证优先于环境变量
 func TestResolveCredentialSpcOverridesEnv(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
@@ -406,6 +464,20 @@ func TestResolveCredentialSpcOverridesEnv(t *testing.T) {
 	gotID, gotKey, _ := cred.GetCredential()
 	if gotID != sid || gotKey != skey {
 		t.Fatalf("expected spc credentials to win, got (%s,%s)", gotID, gotKey)
+	}
+}
+
+func writeTCCLICredentialFile(t *testing.T, contents string) {
+	t.Helper()
+	homeDir := t.TempDir()
+	t.Setenv("HOME", homeDir)
+	t.Setenv("USERPROFILE", homeDir)
+	credentialDir := filepath.Join(homeDir, ".tccli")
+	if err := os.MkdirAll(credentialDir, 0o700); err != nil {
+		t.Fatalf("failed to create TC CLI credential directory: %v", err)
+	}
+	if err := os.WriteFile(filepath.Join(credentialDir, "default.credential"), []byte(contents), 0o600); err != nil {
+		t.Fatalf("failed to write TC CLI credential file: %v", err)
 	}
 }
 

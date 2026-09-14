@@ -145,7 +145,7 @@ CAM (Access Management) 7, CCN (Cloud Connect Network) 3, CBS (Cloud Block Stora
 
 - **Multi-region queries** — the `regions` config argument accepts exact region IDs and glob patterns (`*`, `?`, `[gs]`); matching regions are queried concurrently and results merged. A `region` filter in SQL targets a single region directly.
 - **Multi-account queries** — every table exposes `owner_uin` / `caller_uin` / `owner_app_id` account columns; `owner_uin` is registered as the connection key column so aggregator connections prune child connections on account filters.
-- **Credential chain** — connection config > environment variables (`TENCENTCLOUD_SECRET_ID` / `TENCENTCLOUD_SECRET_KEY` / `TENCENTCLOUD_SECURITY_TOKEN`) > SDK default provider chain (shared credentials file `~/.tencentcloud/credentials`, CVM instance role). STS temporary credentials supported via `token`.
+- **Credential chain** — connection config > environment variables (`TENCENTCLOUD_SECRET_ID` / `TENCENTCLOUD_SECRET_KEY` / `TENCENTCLOUD_SECURITY_TOKEN`) > TCCLI credential (`~/.tccli/default.credential`) > Credential Profile (`~/.tencentcloud/credentials`) > CVM role. STS temporary credentials supported via `token`.
 - **Network customization** — `endpoint` / `base_url` routing to custom or internal gateways, per-host `dns_override`, and `insecure_skip_verify` for test environments.
 - **Reliability controls** — configurable `timeout` and `max_retry` (automatic retry with exponential backoff on network failures and rate limit errors), plus `ignore_error_codes` / `retry_error_codes` overrides.
 - **CVM monitoring metrics** — 7 metrics (CPU, memory, disk, LAN/WAN in/out) × 2 granularities (daily 30 days, hourly 24 hours) via the `GetMonitorData` API.

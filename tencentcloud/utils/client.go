@@ -5,12 +5,15 @@ import (
 	"crypto/sha256"
 	"crypto/tls"
 	"encoding/hex"
+	"encoding/json"
 	stderrors "errors"
+	"fmt"
 	"maps"
 	"net"
 	"net/http"
 	"net/url"
 	"os"
+	"path/filepath"
 	"sort"
 	"strings"
 	"sync"
@@ -103,7 +106,7 @@ func InitClientInRegion(ctx context.Context, d *plugin.QueryData, client Client,
 }
 
 // ResolveCredentialInfo Resolve credential info from config.
-// ConfigFile > Env > Profile > CvmRole
+// ConfigFile > Env > TCCLI credential > Credential Profile > CvmRole
 func ResolveCredentialInfo(cfg TencentcloudConfig) (secretId, secretKey, token string, err error) {
 	secretId = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_ID"))
 	secretKey = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_KEY"))
@@ -123,15 +126,58 @@ func ResolveCredentialInfo(cfg TencentcloudConfig) (secretId, secretKey, token s
 		return secretId, secretKey, token, nil
 	}
 
+	secretId, secretKey, token, found, err := loadTCCLICredential()
+	if err != nil {
+		return "", "", "", err
+	}
+	if found {
+		return secretId, secretKey, token, nil
+	}
+
 	cred, err := common.DefaultProviderChain().GetCredential()
 	if err != nil {
-		return "", "", "", stderrors.New("tencentcloud: missing credentials; set secret_id/secret_key[/token] in the connection config, TENCENTCLOUD_SECRET_ID/TENCENTCLOUD_SECRET_KEY[/TENCENTCLOUD_SECURITY_TOKEN] env vars, ~/.tencentcloud/credentials, or attach a CVM role")
+		return "", "", "", stderrors.New("tencentcloud: missing credentials, set secret_id/secret_key[/token] in the connection config")
 	}
 	return cred.GetSecretId(), cred.GetSecretKey(), cred.GetToken(), nil
 }
 
+type tccliCredential struct {
+	SecretID  string `json:"secretId"`
+	SecretKey string `json:"secretKey"`
+	Token     string `json:"token"`
+}
+
+func loadTCCLICredential() (secretId, secretKey, token string, found bool, err error) {
+	homeDir, err := os.UserHomeDir()
+	if err != nil || strings.TrimSpace(homeDir) == "" {
+		return "", "", "", false, nil
+	}
+
+	path := filepath.Join(homeDir, ".tccli", "default.credential")
+	data, err := os.ReadFile(path)
+	if os.IsNotExist(err) {
+		return "", "", "", false, nil
+	}
+	if err != nil {
+		return "", "", "", false, fmt.Errorf("tencentcloud: failed to read TCCLI credential file %s: %w", path, err)
+	}
+
+	var credential tccliCredential
+	if err = json.Unmarshal(data, &credential); err != nil {
+		return "", "", "", false, fmt.Errorf("tencentcloud: failed to parse TCCLI credential file %s: %w", path, err)
+	}
+
+	secretId = strings.TrimSpace(credential.SecretID)
+	secretKey = strings.TrimSpace(credential.SecretKey)
+	token = strings.TrimSpace(credential.Token)
+	if secretId == "" || secretKey == "" {
+		return "", "", "", false, nil
+	}
+	return secretId, secretKey, token, true, nil
+}
+
 // CreateCredential Create credential with credential info.
-// ConfigFile > Env > Profile > CvmRole
+// ConfigFile > Env > TCCLI credential > Credential Profile > CvmRole
 func CreateCredential(cfg TencentcloudConfig) (common.CredentialIface, error) {
 	secretId, secretKey, token, err := ResolveCredentialInfo(cfg)
 	if err != nil {
