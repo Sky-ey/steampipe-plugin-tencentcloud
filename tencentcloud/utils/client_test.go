@@ -338,7 +338,7 @@ func TestInitClientValidatesCredentials(t *testing.T) {
 func TestResolveCredentialStaticToken(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
-	t.Setenv("TENCENTCLOUD_TOKEN", "")
+	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
 
 	sid := "static-id"
 	skey := "static-key"
@@ -361,7 +361,7 @@ func TestResolveCredentialStaticToken(t *testing.T) {
 func TestResolveCredentialEnvToken(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "env-key")
-	t.Setenv("TENCENTCLOUD_TOKEN", "env-token")
+	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "env-token")
 
 	cred, err := CreateCredential(TencentcloudConfig{})
 	if err != nil {

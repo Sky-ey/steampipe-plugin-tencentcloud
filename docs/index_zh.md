@@ -62,7 +62,7 @@ steampipe plugin install tencentcloud/tencentcloud
 凭证按以下顺序解析：
 
 1. 连接配置中的静态凭证（`secret_id` / `secret_key`，以及用于 STS 临时凭证的可选 `token`）
-2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` 与 `TENCENTCLOUD_TOKEN`
+2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` 与 `TENCENTCLOUD_SECURITY_TOKEN`
 3. 在绑定了 CAM 角色的腾讯云 CVM 实例上运行时，使用 CVM 实例角色
 
 #### 所需权限
@@ -71,7 +71,7 @@ steampipe plugin install tencentcloud/tencentcloud
 
 #### STS 临时凭证
 
-跨账号访问时，可通过 [STS](https://www.tencentcloud.com/document/product/1150) 生成临时凭证，并设置 `secret_id`、`secret_key` 与 `token`（或 `TENCENTCLOUD_TOKEN`）。临时凭证到期后不会自动刷新——一旦过期，插件的每次 API 调用都会返回 `AuthFailure` 错误。此时需获取新的临时凭证并更新配置。
+跨账号访问时，可通过 [STS](https://www.tencentcloud.com/document/product/1150) 生成临时凭证，并设置 `secret_id`、`secret_key` 与 `token`（或 `TENCENTCLOUD_SECURITY_TOKEN`）。临时凭证到期后不会自动刷新——一旦过期，插件的每次 API 调用都会返回 `AuthFailure` 错误。此时需获取新的临时凭证并更新配置。
 
 ### 配置
 
@@ -84,7 +84,7 @@ connection "tencentcloud" {
   # ---- 凭证 ----
   # 插件按以下顺序解析凭证：
   #   1. 配置文件中的静态凭证（`secret_id`、`secret_key`，以及可选的 `token`）
-  #   2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_TOKEN`
+  #   2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_SECURITY_TOKEN`
   #   3. SDK DefaultProviderChain：环境变量 -> 凭证文件 -> CVM 实例角色
   # 省略 `secret_id`/`secret_key` 时由默认凭证链接管——这是生产环境的推荐模式
   # （使用共享凭证文件或绑定的 CVM 实例角色）。
@@ -92,7 +92,7 @@ connection "tencentcloud" {
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # STS 临时令牌，与 `secret_id`/`secret_key` 配合用于跨账号访问（通过 STS 角色扮演）。
-  # 也可通过 `TENCENTCLOUD_TOKEN` 环境变量设置。
+  # 也可通过 `TENCENTCLOUD_SECURITY_TOKEN` 环境变量设置。
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # ---- 地域 ----

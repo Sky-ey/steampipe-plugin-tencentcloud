@@ -107,7 +107,7 @@ func InitClientInRegion(ctx context.Context, d *plugin.QueryData, client Client,
 func ResolveCredentialInfo(cfg TencentcloudConfig) (secretId, secretKey, token string, err error) {
 	secretId = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_ID"))
 	secretKey = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_KEY"))
-	token = strings.TrimSpace(os.Getenv("TENCENTCLOUD_TOKEN"))
+	token = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECURITY_TOKEN"))
 
 	if cfg.SecretId != nil && strings.TrimSpace(*cfg.SecretId) != "" {
 		secretId = strings.TrimSpace(*cfg.SecretId)
@@ -125,7 +125,7 @@ func ResolveCredentialInfo(cfg TencentcloudConfig) (secretId, secretKey, token s
 
 	cred, err := common.DefaultProviderChain().GetCredential()
 	if err != nil {
-		return "", "", "", stderrors.New("tencentcloud: missing credentials; set secret_id/secret_key[/token] in the connection config, TENCENTCLOUD_SECRET_ID/TENCENTCLOUD_SECRET_KEY[/TENCENTCLOUD_TOKEN] env vars, ~/.tencentcloud/credentials, or attach a CVM role")
+		return "", "", "", stderrors.New("tencentcloud: missing credentials; set secret_id/secret_key[/token] in the connection config, TENCENTCLOUD_SECRET_ID/TENCENTCLOUD_SECRET_KEY[/TENCENTCLOUD_SECURITY_TOKEN] env vars, ~/.tencentcloud/credentials, or attach a CVM role")
 	}
 	return cred.GetSecretId(), cred.GetSecretKey(), cred.GetToken(), nil
 }

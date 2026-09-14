@@ -1,7 +1,7 @@
 //go:build integration
 
 // STS 测试, 配置来源优先级:
-//  1. 环境变量 TENCENTCLOUD_SECRET_ID / TENCENTCLOUD_SECRET_KEY / TENCENTCLOUD_TOKEN
+//  1. 环境变量 TENCENTCLOUD_SECRET_ID / TENCENTCLOUD_SECRET_KEY / TENCENTCLOUD_SECURITY_TOKEN
 //     TENCENTCLOUD_BASE_URL / TENCENTCLOUD_DNS_OVERRIDE / TENCENTCLOUD_INSECURE_SKIP_VERIFY
 //  2. ~/.steampipe/config/tencentcloud.spc (或 TENCENTCLOUD_SPC 指定路径)
 
@@ -35,7 +35,7 @@ func loadSTSTestConfig(t *testing.T) stsTestConfig {
 	cfg := stsTestConfig{
 		SecretID:    strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_ID")),
 		SecretKey:   strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_KEY")),
-		Token:       strings.TrimSpace(os.Getenv("TENCENTCLOUD_TOKEN")),
+		Token:       strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECURITY_TOKEN")),
 		BaseURL:     strings.TrimSpace(os.Getenv("TENCENTCLOUD_BASE_URL")),
 		DNSOverride: parseDNSOverrides(os.Getenv("TENCENTCLOUD_DNS_OVERRIDE")),
 		InsecureSkipVerify: os.Getenv("TENCENTCLOUD_INSECURE_SKIP_VERIFY") == "1" ||

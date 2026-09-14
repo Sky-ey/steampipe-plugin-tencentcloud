@@ -4,7 +4,7 @@ connection "tencentcloud" {
   # ---- Credentials ----
   # The plugin resolves credentials in this order:
   #   1. Static credentials in this file (`secret_id`, `secret_key`, plus optional `token`)
-  #   2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY`, `TENCENTCLOUD_TOKEN` env vars
+  #   2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY`, `TENCENTCLOUD_SECURITY_TOKEN` env vars
   #   3. The SDK DefaultProviderChain: env vars -> credentials file -> CVM instance role
   # When `secret_id`/`secret_key` are omitted, the default chain takes over — the
   # recommended mode for production (a shared credentials file or an attached CVM role).
@@ -12,7 +12,7 @@ connection "tencentcloud" {
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # STS temporary token, used together with `secret_id`/`secret_key` for cross-account
-  # access (assuming a role via STS). Also set with the `TENCENTCLOUD_TOKEN` env var.
+  # access (assuming a role via STS). Also set with the `TENCENTCLOUD_SECURITY_TOKEN` env var.
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # ---- Regions ----
