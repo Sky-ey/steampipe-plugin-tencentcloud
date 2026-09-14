@@ -131,7 +131,7 @@ func getCbsAutoSnapshotPolicy(ctx context.Context, d *plugin.QueryData, _ *plugi
 		plugin.Logger(ctx).Error("getCbsAutoSnapshotPolicy", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.AutoSnapshotPolicySet) == 0 || resp.Response.AutoSnapshotPolicySet[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.AutoSnapshotPolicySet) == 0 || resp.Response.AutoSnapshotPolicySet[0] == nil {
 		return nil, nil
 	}
 	return toCbsAutoSnapshotPolicyRow(resp.Response.AutoSnapshotPolicySet[0], d.EqualsQualString(utils.MatrixKeyRegion)), nil

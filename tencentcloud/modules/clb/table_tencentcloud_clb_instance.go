@@ -204,7 +204,7 @@ func getClbLoadBalancer(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydr
 		plugin.Logger(ctx).Error("getClbLoadBalancer", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.LoadBalancerSet) == 0 || resp.Response.LoadBalancerSet[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.LoadBalancerSet) == 0 || resp.Response.LoadBalancerSet[0] == nil {
 		return nil, nil
 	}
 	return toClbLoadBalancerRow(resp.Response.LoadBalancerSet[0], d.EqualsQualString(utils.MatrixKeyRegion)), nil

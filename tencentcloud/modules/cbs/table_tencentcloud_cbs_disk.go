@@ -201,7 +201,7 @@ func getCbsDisk(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 		plugin.Logger(ctx).Error("getCbsDisk", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.DiskSet) == 0 || resp.Response.DiskSet[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.DiskSet) == 0 || resp.Response.DiskSet[0] == nil {
 		return nil, nil
 	}
 	return toCbsDiskRow(resp.Response.DiskSet[0], d.EqualsQualString(utils.MatrixKeyRegion)), nil

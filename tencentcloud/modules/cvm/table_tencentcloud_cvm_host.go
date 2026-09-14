@@ -195,11 +195,7 @@ func getCvmHost(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData)
 		return nil, err
 	}
 
-	if len(resp.Response.HostSet) == 0 {
-		return nil, nil
-	}
-
-	if resp.Response == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.HostSet) == 0 {
 		return nil, nil
 	}
 	row := toCvmHostRow(resp.Response.HostSet[0])

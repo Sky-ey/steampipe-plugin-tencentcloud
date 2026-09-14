@@ -147,7 +147,7 @@ func getClbTargetGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 		plugin.Logger(ctx).Error("getClbTargetGroup", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.TargetGroupSet) == 0 || resp.Response.TargetGroupSet[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.TargetGroupSet) == 0 || resp.Response.TargetGroupSet[0] == nil {
 		return nil, nil
 	}
 	return toClbTargetGroupRow(resp.Response.TargetGroupSet[0], d.EqualsQualString(utils.MatrixKeyRegion)), nil

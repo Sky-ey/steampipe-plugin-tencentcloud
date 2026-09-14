@@ -123,7 +123,7 @@ func getCbsDiskBackup(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydrat
 		plugin.Logger(ctx).Error("getCbsDiskBackup", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.DiskBackupSet) == 0 || resp.Response.DiskBackupSet[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.DiskBackupSet) == 0 || resp.Response.DiskBackupSet[0] == nil {
 		return nil, nil
 	}
 	return toCbsDiskBackupRow(resp.Response.DiskBackupSet[0], d.EqualsQualString(utils.MatrixKeyRegion)), nil

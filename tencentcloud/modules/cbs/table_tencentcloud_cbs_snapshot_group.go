@@ -133,7 +133,7 @@ func getCbsSnapshotGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 		plugin.Logger(ctx).Error("getCbsSnapshotGroup", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.SnapshotGroupSet) == 0 || resp.Response.SnapshotGroupSet[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.SnapshotGroupSet) == 0 || resp.Response.SnapshotGroupSet[0] == nil {
 		return nil, nil
 	}
 	return toCbsSnapshotGroupRow(resp.Response.SnapshotGroupSet[0], d.EqualsQualString(utils.MatrixKeyRegion)), nil

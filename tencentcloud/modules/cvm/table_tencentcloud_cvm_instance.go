@@ -250,11 +250,7 @@ func getCvmInstance(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 		return nil, err
 	}
 
-	if len(resp.Response.InstanceSet) == 0 {
-		return nil, nil
-	}
-
-	if resp.Response == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.InstanceSet) == 0 {
 		return nil, nil
 	}
 	row := toCvmInstanceRow(resp.Response.InstanceSet[0])

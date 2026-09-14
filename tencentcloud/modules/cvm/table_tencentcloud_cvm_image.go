@@ -174,11 +174,7 @@ func getCvmImage(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateData
 		return nil, err
 	}
 
-	if len(resp.Response.ImageSet) == 0 {
-		return nil, nil
-	}
-
-	if resp.Response == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.ImageSet) == 0 {
 		return nil, nil
 	}
 	row := toCvmImageRow(resp.Response.ImageSet[0])

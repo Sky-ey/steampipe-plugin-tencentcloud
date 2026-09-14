@@ -153,7 +153,7 @@ func getClbListener(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 		plugin.Logger(ctx).Error("getClbListener", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.Listeners) == 0 || resp.Response.Listeners[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.Listeners) == 0 || resp.Response.Listeners[0] == nil {
 		return nil, nil
 	}
 	return toClbListenerRow(resp.Response.Listeners[0], loadBalancerID, d.EqualsQualString(utils.MatrixKeyRegion)), nil

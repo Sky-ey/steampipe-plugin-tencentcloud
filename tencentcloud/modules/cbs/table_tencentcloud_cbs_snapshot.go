@@ -139,7 +139,7 @@ func getCbsSnapshot(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateD
 		plugin.Logger(ctx).Error("getCbsSnapshot", "request_error", err)
 		return nil, err
 	}
-	if len(resp.Response.SnapshotSet) == 0 || resp.Response.SnapshotSet[0] == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.SnapshotSet) == 0 || resp.Response.SnapshotSet[0] == nil {
 		return nil, nil
 	}
 	return toCbsSnapshotRow(resp.Response.SnapshotSet[0], d.EqualsQualString(utils.MatrixKeyRegion)), nil

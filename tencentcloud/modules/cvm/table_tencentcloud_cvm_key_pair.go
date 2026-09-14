@@ -167,11 +167,7 @@ func getCvmKeyPair(ctx context.Context, d *plugin.QueryData, _ *plugin.HydrateDa
 		return nil, err
 	}
 
-	if len(resp.Response.KeyPairSet) == 0 {
-		return nil, nil
-	}
-
-	if resp.Response == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.KeyPairSet) == 0 {
 		return nil, nil
 	}
 

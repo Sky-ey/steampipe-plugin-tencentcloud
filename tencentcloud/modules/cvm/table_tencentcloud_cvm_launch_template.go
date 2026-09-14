@@ -156,11 +156,7 @@ func getCvmLaunchTemplate(ctx context.Context, d *plugin.QueryData, _ *plugin.Hy
 		return nil, err
 	}
 
-	if len(resp.Response.LaunchTemplateSet) == 0 {
-		return nil, nil
-	}
-
-	if resp.Response == nil {
+	if resp == nil || resp.Response == nil || len(resp.Response.LaunchTemplateSet) == 0 {
 		return nil, nil
 	}
 	row := toCvmLaunchTemplateRow(resp.Response.LaunchTemplateSet[0])
