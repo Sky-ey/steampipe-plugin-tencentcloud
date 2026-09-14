@@ -11,9 +11,14 @@ connection "tencentcloud" {
   # secret_id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxx"
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-  # STS temporary token, used together with `secret_id`/`secret_key` for cross-account
-  # access (assuming a role via STS). Also set with the `TENCENTCLOUD_SECURITY_TOKEN` env var.
+  # STS token. Only needed when using STS temporary credentials
+  # Also set with the `TENCENTCLOUD_SECURITY_TOKEN` env var.
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+  # Role Arn. When set, the plugin calls STS AssumeRole with the source credentials resolved above
+  # and uses the returned STS temporary credentials to access resources in specified role.
+  # It can also be set with the `TENCENTCLOUD_ASSUME_ROLE_ARN` environment variable.
+  # role_arn = "qcs::cam::uin/100000000001:roleName/steampipe-read-only"
 
   # ---- Regions ----
   # `regions` specifies the list of regions to query.

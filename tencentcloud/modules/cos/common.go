@@ -16,10 +16,11 @@ import (
 func buildCosClient(ctx context.Context, d *plugin.QueryData, bucketName, region string) (*cos.Client, error) {
 	cfg := utils.GetConfig(d.Connection)
 
-	secretId, secretKey, token, err := utils.ResolveCredentialInfo(cfg)
+	credential, err := utils.CreateCredential(cfg)
 	if err != nil {
 		return nil, err
 	}
+	secretId, secretKey, token := credential.GetCredential()
 
 	overrides := utils.ParseDNSOverrides(os.Getenv("TENCENTCLOUD_DNS_OVERRIDE"))
 	if cfg.DNSOverride != nil {

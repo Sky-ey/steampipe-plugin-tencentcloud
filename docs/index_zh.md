@@ -71,7 +71,11 @@ steampipe plugin install tencentcloud/tencentcloud
 
 #### STS 临时凭证
 
-跨账号访问时，可通过 [STS](https://www.tencentcloud.com/document/product/1150) 生成临时凭证，并设置 `secret_id`、`secret_key` 与 `token`（或 `TENCENTCLOUD_SECURITY_TOKEN`）。临时凭证到期后不会自动刷新——一旦过期，插件的每次 API 调用都会返回 `AuthFailure` 错误。此时需获取新的临时凭证并更新配置。
+除永久访问密钥外，腾讯云还支持 [STS 临时凭证](https://www.tencentcloud.com/document/product/1150)（`SecretId` / `SecretKey` / `Token` 临时凭证三元组）。临时凭证具备自动过期机制：即使不慎泄露，也会在有效期结束后自动失效，从根源上减少因长期暴露带来的安全隐患。你可以自行生成临时凭证，并将其以 `secret_id`、`secret_key` 和 `token`（或环境变量 `TENCENTCLOUD_SECURITY_TOKEN`）传给插件（由外部生成的临时凭证不会被插件自动刷新）
+
+#### 角色扮演
+
+要访问其他账号的资源，可设置 `role_arn`（或环境变量 `TENCENTCLOUD_ASSUME_ROLE_ARN`）。插件会使用解析到的源凭证调用 [STS AssumeRole](https://www.tencentcloud.com/document/product/1150/47148)，并使用返回的 STS 临时凭证，腾讯云 SDK 会在需要时自动刷新该凭证（刷新机制仅对通过 `role_arn` 获取的凭证生效，对外部传入的凭证无效）
 
 ### 配置
 
@@ -91,9 +95,14 @@ connection "tencentcloud" {
   # secret_id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxx"
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-  # STS 临时令牌，与 `secret_id`/`secret_key` 配合用于跨账号访问（通过 STS 角色扮演）。
-  # 也可通过 `TENCENTCLOUD_SECURITY_TOKEN` 环境变量设置。
+  # STS Token。仅在使用 STS 临时凭证时需要
+  # 也可通过 `TENCENTCLOUD_SECURITY_TOKEN` 环境变量设置
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+  # 角色扮演。设置后，插件会使用上面解析到的源凭证调用 STS AssumeRole，
+  # 使用返回的 STS 临时凭证获取指定角色可以访问的资源。
+  # 也可通过 `TENCENTCLOUD_ASSUME_ROLE_ARN` 环境变量设置。
+  # role_arn = "qcs::cam::uin/100000000001:roleName/steampipe-read-only"
 
   # ---- 地域 ----
   # `regions` 指定需要查询的地域列表。

@@ -139,14 +139,29 @@ func TestConfigInstance(t *testing.T) {
 	}
 }
 
+func TestGetConfigNormalizesRoleArn(t *testing.T) {
+	roleArn := "  qcs::cam::uin/100000000001:roleName/steampipe-read-only  "
+	connection := &plugin.Connection{
+		Name:   "tencentcloud",
+		Config: TencentcloudConfig{RoleArn: &roleArn},
+	}
+
+	got := GetConfig(connection)
+	if PtrString(got.RoleArn) != "qcs::cam::uin/100000000001:roleName/steampipe-read-only" {
+		t.Fatalf("expected trimmed role ARN, got %q", PtrString(got.RoleArn))
+	}
+}
+
 func TestGetConfig(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_REGION", "")
 	secretID := "sid"
 	secretKey := "skey"
+	roleArn := "qcs::cam::uin/100000000001:roleName/steampipe-read-only"
 	endpoint := "cvm.tencentcloudapi.com"
 	want := TencentcloudConfig{
 		SecretId:  &secretID,
 		SecretKey: &secretKey,
+		RoleArn:   &roleArn,
 		Endpoint:  &endpoint,
 	}
 
@@ -181,13 +196,14 @@ func TestGetConfig(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := GetConfig(tt.connection)
 			if tt.wantEmpty {
-				if got.SecretId != nil || got.SecretKey != nil || got.Endpoint != nil {
+				if got.SecretId != nil || got.SecretKey != nil || got.RoleArn != nil || got.Endpoint != nil {
 					t.Fatalf("expected empty config, got %+v", got)
 				}
 				return
 			}
 			if PtrString(got.SecretId) != secretID ||
 				PtrString(got.SecretKey) != secretKey ||
+				PtrString(got.RoleArn) != roleArn ||
 				PtrString(got.Endpoint) != endpoint {
 				t.Fatalf("expected %+v, got %+v", want, got)
 			}

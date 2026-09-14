@@ -71,7 +71,11 @@ All tables are read-only: each service only requires the corresponding `Describe
 
 #### STS temporary credentials
 
-For cross-account access, generate temporary credentials via [STS](https://www.tencentcloud.com/document/product/1150) and set `secret_id`, `secret_key` and `token` (or `TENCENTCLOUD_SECURITY_TOKEN`). Temporary credentials expire on their own schedule and are not refreshed automatically — once expired, the plugin returns an `AuthFailure` error for every API call. Obtain a fresh token and update the configuration.
+Besides permanent access keys, Tencent Cloud also supports [STS temporary credentials](https://www.tencentcloud.com/document/product/1150) (a temporary `SecretId` / `SecretKey` / `Token` triple). Temporary credentials expire automatically: even if leaked, they stop working on their own once the lifetime ends, which reduces at the source the security risks of long-term credential exposure.
+
+#### Role Assumption
+
+To access resources in another account, set `role_arn` (or `TENCENTCLOUD_ASSUME_ROLE_ARN`) to have the plugin call [AssumeRole](https://www.tencentcloud.com/document/product/1150/47148) with the resolved source credentials. The Tencent Cloud SDK manages the returned STS temporary credentials and refreshes them as needed (refresh only applies to credentials obtained via `role_arn`, not to externally supplied ones.)
 
 ### Configuration
 
@@ -91,9 +95,14 @@ connection "tencentcloud" {
   # secret_id  = "AKIDxxxxxxxxxxxxxxxxxxxxxxxx"
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-  # STS temporary token, used together with `secret_id`/`secret_key` for cross-account
-  # access (assuming a role via STS). Also set with the `TENCENTCLOUD_SECURITY_TOKEN` env var.
+  # STS token. Only needed when using STS temporary credentials
+  # Also set with the `TENCENTCLOUD_SECURITY_TOKEN` env var.
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+  # Role Arn. When set, the plugin calls STS AssumeRole with the source credentials resolved above 
+  # and uses the returned STS temporary credentials to access resources in specified role.
+  # It can also be set with the `TENCENTCLOUD_ASSUME_ROLE_ARN` environment variable.
+  # role_arn = "qcs::cam::uin/100000000001:roleName/steampipe-read-only"
 
   # ---- Regions ----
   # `regions` specifies the list of regions to query.

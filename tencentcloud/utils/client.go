@@ -137,10 +137,22 @@ func CreateCredential(cfg TencentcloudConfig) (common.CredentialIface, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if roleArn := ResolveRoleArn(cfg); roleArn != "" {
+		return common.DefaultRoleArnProvider(secretId, secretKey, roleArn).GetCredential()
+	}
 	if token != "" {
 		return common.NewTokenCredential(secretId, secretKey, token), nil
 	}
 	return common.NewCredential(secretId, secretKey), nil
+}
+
+func ResolveRoleArn(cfg TencentcloudConfig) string {
+	roleArn := strings.TrimSpace(os.Getenv("TENCENTCLOUD_ASSUME_ROLE_ARN"))
+	if cfg.RoleArn != nil && strings.TrimSpace(*cfg.RoleArn) != "" {
+		roleArn = strings.TrimSpace(*cfg.RoleArn)
+	}
+	return roleArn
 }
 
 func ParseDNSOverrides(raw string) map[string]string {

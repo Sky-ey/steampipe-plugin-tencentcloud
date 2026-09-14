@@ -16,6 +16,7 @@ type TencentcloudConfig struct {
 	SecretId  *string `hcl:"secret_id,optional"`
 	SecretKey *string `hcl:"secret_key,optional"`
 	Token     *string `hcl:"token,optional"`
+	RoleArn   *string `hcl:"role_arn,optional"`
 
 	// Region
 	Regions []string `hcl:"regions,optional"`
@@ -103,6 +104,11 @@ func GetConfig(connection *plugin.Connection) TencentcloudConfig {
 			panic(fmt.Sprintf("Connection %s has an invalid value for 'base_url' %q: it must be a bare domain (e.g. tencentcloudapi.com), not a URL with scheme. Edit your connection configuration file and then restart Steampipe", connection.Name, raw))
 		}
 		config.BaseUrl = &raw
+	}
+
+	if config.RoleArn != nil {
+		roleArn := strings.TrimSpace(*config.RoleArn)
+		config.RoleArn = &roleArn
 	}
 
 	return config

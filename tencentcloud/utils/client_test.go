@@ -334,6 +334,25 @@ func TestInitClientValidatesCredentials(t *testing.T) {
 	}
 }
 
+func TestResolveRoleArnFromEnvironment(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_ASSUME_ROLE_ARN", "  qcs::cam::uin/100000000001:roleName/environment-role  ")
+
+	got := ResolveRoleArn(TencentcloudConfig{})
+	if got != "qcs::cam::uin/100000000001:roleName/environment-role" {
+		t.Fatalf("expected role ARN from environment, got %q", got)
+	}
+}
+
+func TestResolveRoleArnConfigOverridesEnvironment(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_ASSUME_ROLE_ARN", "qcs::cam::uin/100000000001:roleName/environment-role")
+	configured := "qcs::cam::uin/100000000002:roleName/configured-role"
+
+	got := ResolveRoleArn(TencentcloudConfig{RoleArn: &configured})
+	if got != configured {
+		t.Fatalf("expected configured role ARN %q, got %q", configured, got)
+	}
+}
+
 // 静态凭证 + STS token 应生成携带 token 的凭证(跨账号场景)
 func TestResolveCredentialStaticToken(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
