@@ -110,7 +110,10 @@ func InitClientInRegion(ctx context.Context, d *plugin.QueryData, client Client,
 func ResolveCredentialInfo(cfg TencentcloudConfig) (secretId, secretKey, token string, err error) {
 	secretId = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_ID"))
 	secretKey = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECRET_KEY"))
-	token = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECURITY_TOKEN"))
+	token = strings.TrimSpace(os.Getenv("TENCENTCLOUD_TOKEN"))
+	if token == "" {
+		token = strings.TrimSpace(os.Getenv("TENCENTCLOUD_SECURITY_TOKEN"))
+	}
 
 	if cfg.SecretId != nil && strings.TrimSpace(*cfg.SecretId) != "" {
 		secretId = strings.TrimSpace(*cfg.SecretId)

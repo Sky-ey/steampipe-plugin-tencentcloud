@@ -62,7 +62,7 @@ steampipe plugin install tencentcloud/tencentcloud
 凭证按以下顺序解析：
 
 1. 配置文件中的静态凭证（`secret_id` / `secret_key`，以及用于 STS 临时凭证的 `token`）
-2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` 与 `TENCENTCLOUD_SECURITY_TOKEN`
+2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` 与 `TENCENTCLOUD_TOKEN`（或 `TENCENTCLOUD_SECURITY_TOKEN`）
 3. TCCLI 凭证文件 `~/.tccli/default.credential`
 4. 凭证配置文件 `~/.tencentcloud/credentials`
 5. 在绑定了 CAM 角色的腾讯云 CVM 实例上运行时，使用 CVM 实例角色
@@ -73,7 +73,7 @@ steampipe plugin install tencentcloud/tencentcloud
 
 #### STS 临时凭证
 
-除永久访问密钥外，腾讯云还支持 [STS 临时凭证](https://www.tencentcloud.com/document/product/1150)（`SecretId` / `SecretKey` / `Token` 临时凭证三元组）。临时凭证具备自动过期机制：即使不慎泄露，也会在有效期结束后自动失效，从根源上减少因长期暴露带来的安全隐患。你可以自行生成临时凭证，并将其以 `secret_id`、`secret_key` 和 `token`（或环境变量 `TENCENTCLOUD_SECURITY_TOKEN`）传给插件（由外部生成的临时凭证不会被插件自动刷新）
+除永久访问密钥外，腾讯云还支持 [STS 临时凭证](https://www.tencentcloud.com/document/product/1150)（`SecretId` / `SecretKey` / `Token` 临时凭证三元组）。临时凭证具备自动过期机制：即使不慎泄露，也会在有效期结束后自动失效，从根源上减少因长期暴露带来的安全隐患。你可以自行生成临时凭证，并将其以 `secret_id`、`secret_key` 和 `token`（或环境变量 `TENCENTCLOUD_SECURITY_TOKEN` / `TENCENTCLOUD_TOKEN`）传给插件（由外部生成的临时凭证不会被插件自动刷新）
 
 #### 角色扮演
 
@@ -90,7 +90,7 @@ connection "tencentcloud" {
   # ---- 凭证 ----
   # 插件按以下顺序解析凭证：
   #   1. 配置文件中的静态凭证（`secret_id`、`secret_key`，以及可选的 `token`）
-  #   2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_SECURITY_TOKEN`
+  #   2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY`、`TENCENTCLOUD_TOKEN`（或 `TENCENTCLOUD_SECURITY_TOKEN`）
   #   3. TCCLI 凭证文件 `~/.tccli/default.credential`
   #   4. 凭证配置文件 `~/.tencentcloud/credentials`
   #   5. CVM 实例角色
@@ -98,7 +98,7 @@ connection "tencentcloud" {
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # STS Token。仅在使用 STS 临时凭证时需要
-  # 也可通过 `TENCENTCLOUD_SECURITY_TOKEN` 环境变量设置
+  # 也可通过 `TENCENTCLOUD_TOKEN`（或 `TENCENTCLOUD_SECURITY_TOKEN`）环境变量设置
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # 角色扮演。设置后，插件会使用上面解析到的源凭证调用 STS AssumeRole，

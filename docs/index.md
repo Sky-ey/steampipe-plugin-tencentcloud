@@ -62,7 +62,7 @@ The plugin authenticates with a Tencent Cloud [access key](https://www.tencentcl
 Credentials are resolved in this order:
 
 1. Static credentials in config file (`secret_id` / `secret_key`, plus optional `token` for STS temporary credentials)
-2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY` and `TENCENTCLOUD_SECURITY_TOKEN` environment variables
+2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY` and `TENCENTCLOUD_TOKEN` (or `TENCENTCLOUD_SECURITY_TOKEN`) environment variables
 3. The TCCLI credential file `~/.tccli/default.credential`
 4. The credential profile `~/.tencentcloud/credentials`
 5. CVM instance role when running on a Tencent Cloud CVM with an attached CAM role
@@ -90,7 +90,7 @@ connection "tencentcloud" {
   # ---- Credentials ----
   # The plugin resolves credentials in this order:
   #   1. Static credentials in this file (`secret_id`, `secret_key`, plus optional `token`)
-  #   2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY`, `TENCENTCLOUD_SECURITY_TOKEN` env vars
+  #   2. The `TENCENTCLOUD_SECRET_ID`, `TENCENTCLOUD_SECRET_KEY`, `TENCENTCLOUD_TOKEN` (or `TENCENTCLOUD_SECURITY_TOKEN`) env vars
   #   3. The TCCLI credential file `~/.tccli/default.credential`
   #   4. The credential profile `~/.tencentcloud/credentials`
   #   5. CVM instance role
@@ -98,7 +98,7 @@ connection "tencentcloud" {
   # secret_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # STS token. Only needed when using STS temporary credentials
-  # Also set with the `TENCENTCLOUD_SECURITY_TOKEN` env var.
+  # Also set with the `TENCENTCLOUD_TOKEN` (or `TENCENTCLOUD_SECURITY_TOKEN`) env var.
   # token = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
   # Role Arn. When set, the plugin calls STS AssumeRole with the source credentials resolved above 

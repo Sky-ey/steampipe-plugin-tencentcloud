@@ -397,6 +397,38 @@ func TestResolveCredentialEnvToken(t *testing.T) {
 	}
 }
 
+func TestResolveCredentialEnvTokenFallback(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
+	t.Setenv("TENCENTCLOUD_SECRET_KEY", "env-key")
+	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
+	t.Setenv("TENCENTCLOUD_TOKEN", "alt-env-token")
+
+	cred, err := CreateCredential(TencentcloudConfig{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	gotID, gotKey, gotToken := cred.GetCredential()
+	if gotID != "env-id" || gotKey != "env-key" || gotToken != "alt-env-token" {
+		t.Fatalf("got (%s,%s,%s)", gotID, gotKey, gotToken)
+	}
+}
+
+func TestResolveCredentialEnvTokenPreferredOverFallback(t *testing.T) {
+	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
+	t.Setenv("TENCENTCLOUD_SECRET_KEY", "env-key")
+	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "env-token")
+	t.Setenv("TENCENTCLOUD_TOKEN", "alt-env-token")
+
+	cred, err := CreateCredential(TencentcloudConfig{})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	gotID, gotKey, gotToken := cred.GetCredential()
+	if gotID != "env-id" || gotKey != "env-key" || gotToken != "env-token" {
+		t.Fatalf("got (%s,%s,%s)", gotID, gotKey, gotToken)
+	}
+}
+
 func TestResolveCredentialTCCLIFile(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
