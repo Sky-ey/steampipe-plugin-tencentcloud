@@ -35,7 +35,7 @@ func TableTencentcloudCamPolicyAttachment() *plugin.Table {
 			{Name: "entity_id", Type: proto.ColumnType_STRING, Description: "The ID of the attached entity (sub-account ID or user group ID).", Transform: transform.FromField("EntityId")},
 			{Name: "entity_name", Type: proto.ColumnType_STRING, Description: "The name of the attached entity.", Transform: transform.FromField("EntityName")},
 			{Name: "entity_uin", Type: proto.ColumnType_STRING, Description: "The UIN of the attached entity.", Transform: transform.FromField("EntityUin").NullIfZero()},
-			{Name: "related_type", Type: proto.ColumnType_INT, Description: "The type of the attached entity (1 = sub-account, 2 = user group).", Transform: transform.FromField("RelatedType")},
+			{Name: "related_type", Type: proto.ColumnType_INT, Description: "The type of the attached entity (1 = sub-account, 2 = user group, 3 = role).", Transform: transform.FromField("RelatedType")},
 			{Name: "attachment_time", Type: proto.ColumnType_TIMESTAMP, Description: "The time the policy was attached to the entity.", Transform: transform.FromField("AttachmentTime").NullIfZero()},
 			{Name: "title", Type: proto.ColumnType_STRING, Description: "Title of the resource.", Transform: transform.FromField("Title")},
 			{Name: "akas", Type: proto.ColumnType_JSON, Description: "Array of globally unique identifier strings (also known as) for the resource.", Transform: transform.FromField("Akas")},

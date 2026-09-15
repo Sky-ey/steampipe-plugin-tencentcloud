@@ -2,9 +2,9 @@
 
 > 使用 SQL 查询腾讯云资源的 Steampipe 插件。
 
-[English](README.md) | 简体中文
-
 ## 概述
+
+[Steampipe](https://steampipe.io) 是一个开源的零 ETL 引擎，可以使用 SQL 即时查询云API。
 
 使用 SQL 查询你腾讯云账号下的 CVM 实例、CBS 云盘、VPC 网络、子网等资源。
 
@@ -62,8 +62,6 @@ from
 +----------------+---------------+----------------+---------------+--------------+
 ```
 
-区域表会查询 `regions` 匹配到的所有地域。地域配置优先级为：连接配置中的 `regions` > `TENCENTCLOUD_REGION` > `ap-singapore`。可以通过 `where region = 'ap-guangzhou'` 这类 SQL 条件直接定位单个地域，跳过地域发现流程。完整的匹配规则、凭证解析与多账号（聚合连接）支持见 [docs/index.md](docs/index_zh.md#多地域查询)。
-
 ## 开发
 
 插件使用 Go 和 [Steampipe plugin SDK](https://github.com/turbot/steampipe-plugin-sdk) 构建。
@@ -82,13 +80,13 @@ make install
 make test
 ```
 
-针对本地 Mock 腾讯云 API 运行 SQL 查询契约测试套件。该套件覆盖每张表的 List/Get 查询和一个跨服务 join，并校验 API action、路径、请求体、地域以及请求次数：
+本地 Mock 腾讯云 API 进行 SQL 查询契约测试：
 
 ```bash
 make test-query
 ```
 
-契约测试套件使用隔离的临时 Steampipe 安装目录，不会写入 `~/.steampipe`。
+契约测试使用隔离的临时 Steampipe 安装目录，不会写入 `~/.steampipe`。
 
 ## 开源与贡献
 

@@ -57,7 +57,7 @@ steampipe plugin install tencentcloud/tencentcloud
 
 ### Credentials
 
-The plugin authenticates with a Tencent Cloud [access key](https://www.tencentcloud.com/document/product/598/34227) — a `SecretId` / `SecretKey` pair. Create or manage your keys in the console under **Access Management → API Key Management** ([CAM console](https://console.tencentcloud.com/cam/capi)).
+The plugin authenticates with a Tencent Cloud [access key](https://www.tencentcloud.com/document/product/598/34227) (a `SecretId` / `SecretKey` pair). Create or manage your keys in the console under **Cloud Access Management → Access Keys → [API Keys](https://console.tencentcloud.com/cam/capi)**.
 
 Credentials are resolved in this order:
 
@@ -73,7 +73,7 @@ All tables are read-only: each service only requires the corresponding `Describe
 
 #### STS temporary credentials
 
-Besides permanent access keys, Tencent Cloud also supports [STS temporary credentials](https://www.tencentcloud.com/document/product/1150) (a temporary `SecretId` / `SecretKey` / `Token` triple). Temporary credentials expire automatically: even if leaked, they stop working on their own once the lifetime ends, which reduces at the source the security risks of long-term credential exposure.
+Besides permanent access keys, Tencent Cloud also supports [STS temporary credentials](https://www.tencentcloud.com/document/product/1150) (a `SecretId` / `SecretKey` / `Token` triple). Temporary credentials expire automatically: even if leaked, they stop working on their own once the lifetime ends, which reduces at the source the security risks of long-term credential exposure.
 
 #### Role Assumption
 
@@ -174,14 +174,6 @@ connection "tencentcloud" {
 
 By default, all options are commented out in the default connection, so Steampipe will resolve your credentials from environment variables, the TCCLI credential file, the SDK credentials file, or an attached CVM instance role. This provides a quick way to get started, but you will probably want to customize your experience using the configuration options for [querying multiple regions](#multi-region-connections) and [querying multiple accounts](#multi-account-connections).
 
-Alternatively, use environment variables:
-
-```bash
-export TENCENTCLOUD_SECRET_ID=your-secret-id
-export TENCENTCLOUD_SECRET_KEY=your-secret-key
-export TENCENTCLOUD_REGION=ap-guangzhou
-```
-
 Start querying:
 
 ```bash
@@ -190,7 +182,7 @@ steampipe query
 
 ## Multi-Region Connections
 
-Most tables are regional. A Tencent Cloud region determines which regional control plane the API call is routed to — it is not a filter applied to a global result set. Resource metadata is isolated per region, so a query sent to the wrong region returns an empty result instead of an error.
+Most tables are regional. A Tencent Cloud region determines which regional control plane the API call is routed to (it is not a filter applied to a global result set). Resource metadata is isolated per region, so a query sent to the wrong region returns an empty result instead of an error.
 
 ### The `regions` argument
 
@@ -252,9 +244,9 @@ The catalog table `tencentcloud_cvm_region` is global and does not iterate over 
 
 ## Multi-Account Connections
 
-Every table exposes an `owner_uin` column holding the Tencent Cloud owner account UIN (`OwnerUin`) that owns the resource, plus the companion `caller_uin` (the calling identity) and `owner_app_id` columns. The plugin resolves these once per connection by calling the CAM `GetUserAppId` API — the cost is a single API call per connection regardless of how many tables or regions are queried.
+Every table exposes an `owner_uin` column holding the Tencent Cloud account UIN that owns the resource, plus the companion `caller_uin` (the calling identity) and `owner_app_id` columns.
 
-`owner_uin` is registered as the plugin's **connection key column**, which lets Steampipe prune child connections when an aggregator query filters by account. To query multiple accounts in one place, define one connection per account and an `aggregator` connection that combines them:
+To query multiple accounts in one place, define one connection per account and an `aggregator` connection that combines them:
 
 ```hcl
 # Development account
@@ -303,8 +295,8 @@ where owner_uin = '100012345678';
 
 | Column | Source | Description |
 |--------|--------|-------------|
-| `owner_uin` | `OwnerUin` | The master account UIN that owns the resource. Connection key column used for aggregator pruning. |
-| `caller_uin` | `Uin` | The calling identity UIN — the master account when using root credentials, or the sub-account/role UIN when called via CAM. |
+| `owner_uin` | `OwnerUin` | The master account UIN that owns the resource. |
+| `caller_uin` | `Uin` | The calling identity UIN (the master account when using root credentials), or the sub-account/role UIN when called via Role Arn. |
 | `owner_app_id` | `AppId` | The numeric application ID. Matches the `<appid>` suffix of COS bucket names (e.g. `my-bucket-1250000000`). |
 
-A sub-account connection and its master-account connection share the same `owner_uin` (both resolve to the same `OwnerUin`). Use `caller_uin` to distinguish the calling identity when needed.
+A sub-account connection and its master-account connection share the same `owner_uin`. Use `caller_uin` to distinguish the calling identity when needed.

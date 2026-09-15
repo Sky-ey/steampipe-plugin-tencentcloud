@@ -6,7 +6,7 @@ folder: "CVM"
 
 # Table: tencentcloud_cvm_metric_disk_hourly - Query CVM instance hourly disk utilization using SQL
 
-Tencent Cloud Monitor (Cloud Monitor) collects per-instance disk utilization for every CVM instance. The `tencentcloud_cvm_metric_disk_hourly` table uses the `GetMonitorData` API (namespace `QCE/CVM`, metric `DiskUsage`, period 3600 seconds) and returns one row per instance per hour over the last 24 hours, across all regions or a single region when the `region` column is filtered.
+Tencent Cloud Monitor (Cloud Monitor) collects per-instance disk utilization for every CVM instance. The `tencentcloud_cvm_metric_disk_hourly` table uses the `GetMonitorData` API (namespace `QCE/CVM`, metric `CvmDiskUsage`, period 3600 seconds) and returns one row per instance per hour over the last 24 hours, across all regions or a single region when the `region` column is filtered.
 
 Each row represents a single hourly data point of one instance: the instance ID, the timestamp of the data point, and the disk utilization value (a percentage). Disk metrics are collected by the in-instance monitor agent; instances without the agent report no data.
 

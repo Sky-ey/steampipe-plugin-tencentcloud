@@ -6,7 +6,7 @@ folder: "TKE"
 
 # Table: tencentcloud_tke_cluster - Query Tencent Kubernetes Engine clusters using SQL
 
-Tencent Kubernetes Engine (TKE) is Tencent Cloud's managed Kubernetes service. A cluster is the top-level resource that holds nodes, node pools, networking settings, and container runtime configuration. TKE clusters come in two types: `MANAGED_CLUSTER` (control plane managed by Tencent) and `INDEPENDENT_CLUSTER` (self-maned control plane).
+Tencent Kubernetes Engine (TKE) is Tencent Cloud's managed Kubernetes service. A cluster is the top-level resource that holds nodes, node pools, networking settings, and container runtime configuration. TKE clusters come in two types: `MANAGED_CLUSTER` (control plane managed by Tencent) and `INDEPENDENT_CLUSTER` (self-managed control plane).
 
 ## Table Usage Guide
 

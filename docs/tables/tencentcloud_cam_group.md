@@ -116,8 +116,7 @@ select
 from
   tencentcloud_cam_group
 where
-  remark is null
-  or remark = '';
+  remark = '';
 ```
 
 ```sql+sqlite
@@ -128,6 +127,5 @@ select
 from
   tencentcloud_cam_group
 where
-  remark is null
-  or remark = '';
+  remark = '';
 ```

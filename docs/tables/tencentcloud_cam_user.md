@@ -128,8 +128,7 @@ select
 from
   tencentcloud_cam_user
 where
-  phone_num is null
-  or phone_num = '';
+  phone_num = '';
 ```
 
 ```sql+sqlite
@@ -140,6 +139,5 @@ select
 from
   tencentcloud_cam_user
 where
-  phone_num is null
-  or phone_num = '';
+  phone_num = '';
 ```

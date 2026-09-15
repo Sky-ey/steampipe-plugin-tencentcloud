@@ -10,7 +10,7 @@ Tencent Cloud spread placement groups (disaster recover groups) distribute CVM i
 
 ## Table Usage Guide
 
-Use this table to inventory spread placement groups across regions, audit which groups are near their CVM quota, inspect the instance members of each group, and find groups by type (HOST / SW / RACK) for capacity planning.
+Use this table to inventory spread placement groups across regions, audit which groups are near their CVM quota, inspect the instance members of each group, and find groups by type (HOST / SW / RACK) for capacity planning. Note that only `disaster_recover_group_id` and `name` quals are pushed down to the API as filters; a `type` predicate is applied client-side after listing, so combining `type` with a `limit` may return fewer rows than expected.
 
 ## Examples
 

@@ -15,9 +15,9 @@ og_image: "/images/plugins/tencentcloud/tencentcloud-social-graphic.png"
 
 [Steampipe](https://steampipe.io) 是一个开源的零 ETL 引擎，可以使用 SQL 即时查询云 API。
 
-[腾讯云](https://www.tencentcloud.com/)面向通过身份验证的客户提供按需云计算平台和 API，按用量计费。
+[腾讯云](https://cloud.tencent.com/) 面向通过身份验证的客户提供按需云计算平台和 API，按用量计费。
 
-例如：
+使用示例：
 
 ```sql
 select
@@ -57,9 +57,9 @@ steampipe plugin install tencentcloud/tencentcloud
 
 ### 凭证
 
-插件使用腾讯云[访问密钥](https://www.tencentcloud.com/document/product/598/34227)进行身份认证——即 `SecretId` / `SecretKey` 密钥对。可在控制台 **访问管理 → API 密钥管理**（[CAM 控制台](https://console.tencentcloud.com/cam/capi)）中创建或管理密钥。
+插件使用腾讯云[访问密钥](https://cloud.tencent.com/document/product/598/40487)进行身份认证（`SecretId` / `SecretKey` 密钥对）可在控制台 **访问管理 → 访问密钥 → [API 密钥管理](https://console.cloud.tencent.com/cam/capi)** 中创建或管理密钥。
 
-凭证按以下顺序解析：
+密钥按以下顺序解析：
 
 1. 配置文件中的静态凭证（`secret_id` / `secret_key`，以及用于 STS 临时凭证的 `token`）
 2. 环境变量 `TENCENTCLOUD_SECRET_ID`、`TENCENTCLOUD_SECRET_KEY` 与 `TENCENTCLOUD_TOKEN`（或 `TENCENTCLOUD_SECURITY_TOKEN`）
@@ -69,15 +69,15 @@ steampipe plugin install tencentcloud/tencentcloud
 
 #### 所需权限
 
-所有表均为只读：每个服务只需要对应的 `Describe*` / `List*` API 权限。最简单的配置方式是给插件使用的 CAM 用户或角色绑定各服务的只读预设策略（如 `QcloudCVMReadOnlyAccess`、`QcloudCBSReadOnlyAccess`、`QcloudVPCReadOnlyAccess`）。策略管理详见 [CAM 文档](https://www.tencentcloud.com/document/product/598)。
+所有表均为只读：每个服务只需要对应的 `Describe*` / `List*` API 权限。最简单的配置方式是给插件使用的 CAM 用户或角色绑定各服务的只读预设策略（如 `QcloudCVMReadOnlyAccess`、`QcloudCBSReadOnlyAccess`、`QcloudVPCReadOnlyAccess`）。策略管理详见 [CAM 文档](https://cloud.tencent.com/document/product/598)。
 
 #### STS 临时凭证
 
-除永久访问密钥外，腾讯云还支持 [STS 临时凭证](https://www.tencentcloud.com/document/product/1150)（`SecretId` / `SecretKey` / `Token` 临时凭证三元组）。临时凭证具备自动过期机制：即使不慎泄露，也会在有效期结束后自动失效，从根源上减少因长期暴露带来的安全隐患。你可以自行生成临时凭证，并将其以 `secret_id`、`secret_key` 和 `token`（或环境变量 `TENCENTCLOUD_SECURITY_TOKEN` / `TENCENTCLOUD_TOKEN`）传给插件（由外部生成的临时凭证不会被插件自动刷新）
+除永久访问密钥外，腾讯云还支持 [STS 临时凭证](https://cloud.tencent.com/document/product/1312)（`SecretId` / `SecretKey` / `Token` 三元组）。临时凭证具备自动过期机制：即使不慎泄露，也会在有效期结束后自动失效，从根源上减少因长期暴露带来的安全隐患。你可以自行生成临时凭证，并将其以 `secret_id`、`secret_key` 和 `token`（或环境变量 `TENCENTCLOUD_SECURITY_TOKEN` / `TENCENTCLOUD_TOKEN`）的形式传给插件（由外部生成的临时凭证不会被插件自动刷新）
 
 #### 角色扮演
 
-要访问其他账号的资源，可设置 `role_arn`（或环境变量 `TENCENTCLOUD_ASSUME_ROLE_ARN`）。插件会使用解析到的源凭证调用 [STS AssumeRole](https://www.tencentcloud.com/document/product/1150/47148)，并使用返回的 STS 临时凭证，腾讯云 SDK 会在需要时自动刷新该凭证（刷新机制仅对通过 `role_arn` 获取的凭证生效，对外部传入的凭证无效）
+要访问其他账号的资源，可配置 `role_arn`（或环境变量 `TENCENTCLOUD_ASSUME_ROLE_ARN`）。插件会使用解析到的源凭证调用 [AssumeRole](https://cloud.tencent.com/document/product/1312/48171)，并使用返回的 STS 临时凭证，腾讯云 SDK 会在需要时自动刷新该凭证（刷新机制仅对通过 `role_arn` 获取的凭证生效，对外部传入的凭证无效）
 
 ### 配置
 
@@ -170,15 +170,7 @@ connection "tencentcloud" {
 }
 ```
 
-默认连接中所有配置项都被注释掉，因此 Steampipe 会依次从环境变量、TC CLI 凭证文件、SDK 凭证文件或绑定的 CVM 实例角色解析凭证。这可以作为快速上手的方式，但你可能希望通过[多地域查询](#多地域查询)和[多账号查询](#多账号查询)的配置选项来自定义使用体验。
-
-也可以使用环境变量：
-
-```bash
-export TENCENTCLOUD_SECRET_ID=your-secret-id
-export TENCENTCLOUD_SECRET_KEY=your-secret-key
-export TENCENTCLOUD_REGION=ap-guangzhou
-```
+默认连接配置中所有配置项都被注释了，因此 Steampipe 会依次从环境变量、TCCLI 凭证文件、SDK 凭证文件或绑定的 CVM 实例角色解析凭证。这可以作为快速上手的方式，你还可以通过[多地域查询](#多地域查询)和[多账号查询](#多账号查询)的配置项来解锁更多用法。
 
 开始查询：
 
@@ -188,11 +180,11 @@ steampipe query
 
 ## 多地域查询
 
-大多数表是区域性的。腾讯云地域决定了 API 调用被路由到哪个区域的控制面——它不是作用于全局结果集的过滤器。资源元数据按地域隔离，因此发送到错误地域的查询会返回空结果而非报错。
+大多数表是区域性的。腾讯云地域决定了 API 调用被路由到哪个区域的控制面，而不是一个作用于全局结果集的过滤器。资源数据按地域隔离，因此发送到错误地域的查询会返回空结果而非报错。
 
 ### `regions` 参数
 
-`regions` 列出每次查询要目标的地域。API 调用会并行发往所有匹配地域，行数据合并为单一结果集。
+`regions` 代表每次查询的目标地域。API请求会并行发往所有匹配的地域，而后将数据合并为一个结果集。
 
 ```hcl
 connection "tencentcloud" {
@@ -219,9 +211,9 @@ connection "tencentcloud" {
 
 **不支持**花括号展开（`{a,b}`）。取值不区分大小写。
 
-模式匹配的对象是该产品通过地域 API 返回的地域列表，因此 `regions` 只能缩小范围——不能添加不存在的或产品不支持的地域。如果 `regions` 未匹配到任何可用地域，查询会直接报错而不是返回零行。
+通配符匹配的对象是该产品通过地域 API 返回的地域列表，因此 `regions` 只能缩小范围，不能添加不存在的或产品不支持的地域。如果 `regions` 未匹配到任何可用地域，查询会直接报错而不是返回零行。
 
-### 省略 `regions` 时
+### 未配置 `regions` 时
 
 插件只查询默认地域 `ap-singapore` 并输出一条警告：
 
@@ -229,7 +221,7 @@ connection "tencentcloud" {
 You are currently using default region ap-singapore, instances in other regions will not be displayed here!
 ```
 
-其他地域的资源不会出现在结果中。要查询多个地域，请显式设置 `regions`。
+其他地域的资源不会出现在结果中。要查询多个地域，请在配置文件中配置 `regions`。
 
 ### 单条查询收窄范围
 
@@ -246,13 +238,13 @@ where
   region = 'ap-shanghai';
 ```
 
-目录表 `tencentcloud_cvm_region` 是全局表，不会按地域遍历。
+每个产品提供一个 `tencentcloud_*_region` 表，返回当前产品的可用区域
 
 ## 多账号查询
 
-每张表都提供 `owner_uin` 列，保存拥有该资源的腾讯云主账号 UIN（`OwnerUin`），并附带 `caller_uin`（调用方身份）与 `owner_app_id` 列。插件通过调用 CAM `GetUserAppId` API 每个连接解析一次——无论查询多少张表或多少个地域，开销都只有每连接一次 API 调用。
+每张表都提供 `owner_uin` 列，保存拥有该资源的腾讯云主账号 UIN（`OwnerUin`），并附带 `caller_uin`（调用方UIN）与 `owner_app_id` 列
 
-`owner_uin` 被注册为插件的 **connection key column**，当聚合查询按账号过滤时，Steampipe 可以据此裁剪子连接。要在一个地方查询多个账号，可为每个账号定义一个连接，并定义一个组合它们的 `aggregator` 连接：
+要同时查询多个账号，可为每个账号定义一个连接，并定义一个聚合它们的 `aggregator` 连接：
 
 ```hcl
 # 开发账号
@@ -271,7 +263,7 @@ connection "tencentcloud_prod" {
   regions    = ["*"]
 }
 
-# 聚合连接：合并所有匹配子连接的行
+# 聚合连接：合并所有子连接的结果
 connection "tencentcloud_all" {
   plugin      = "tencentcloud/tencentcloud"
   type        = "aggregator"
@@ -279,7 +271,7 @@ connection "tencentcloud_all" {
 }
 ```
 
-查询聚合连接即可同时看到所有账号的行：
+查询聚合连接即可同时看到所有账号的结果：
 
 ```sql
 -- 按账号、按地域统计 CVM 实例数
@@ -292,8 +284,8 @@ from
 group by
   owner_uin, region;
 
--- 过滤到单个账号——Steampipe 会跳过其他子连接，
--- 避免向错误账号发起不必要的 API 调用
+-- 过滤到单个账号
+-- Steampipe 会字段跳过其他账号，避免发起不必要的 API 调用
 select instance_id, instance_name, owner_uin
 from tencentcloud_all.tencentcloud_cvm_instance
 where owner_uin = '100012345678';
@@ -301,8 +293,8 @@ where owner_uin = '100012345678';
 
 | 列 | 来源字段 | 描述 |
 |----|----------|------|
-| `owner_uin` | `OwnerUin` | 拥有该资源的主账号 UIN。作为 connection key column 用于聚合连接裁剪。 |
-| `caller_uin` | `Uin` | 调用方身份 UIN——使用主账号凭证时即主账号，通过 CAM 调用时为子账号/角色 UIN。 |
-| `owner_app_id` | `AppId` | 数字形式的 APP ID。与 COS 存储桶名称的 `<appid>` 后缀一致（如 `my-bucket-1250000000`）。 |
+| `owner_uin` | `OwnerUin` | 拥有该资源的主账号 UIN，用于连接裁剪 |
+| `caller_uin` | `Uin` | 查询调用方的UIN（使用主账号时即为主账号UIN），通过子账号调用时为子账号/角色 UIN |
+| `owner_app_id` | `AppId` | APP ID 与 COS 存储桶名称的 `<appid>` 后缀一致（如 `my-bucket-1250000000`）|
 
-子账号连接与其主账号连接的 `owner_uin` 相同（都解析到同一个 `OwnerUin`）。需要区分调用方身份时使用 `caller_uin`。
+子账号查询和主账号查询的 `owner_uin` 相同，需要按调用方筛选时可使用 `caller_uin`

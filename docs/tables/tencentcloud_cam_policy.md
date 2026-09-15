@@ -6,7 +6,7 @@ folder: "CAM"
 
 # Table: tencentcloud_cam_policy - Query Tencent Cloud CAM policies using SQL
 
-Tencent Cloud CAM (Cloud Access Management) policies define the permissions granted to principals. Policies are either preset (QCS, managed by Tencent Cloud) or custom (Local, created by the account), and each carries a policy document, an associated service type, and optionally tags. CAM is an account-scoped global service: there is no region dimension, so the table does not expose a `region` column.
+Tencent Cloud CAM (Cloud Access Management) policies define the permissions granted to principals. Policies are either preset (QCS, managed by Tencent Cloud) or custom (Local, created by the account), and each carries a policy document, an associated service type, and optionally tags. The `tags` column is a JSON array of `{Key, Value}` objects (not a map), so tag filtering requires expanding the array. CAM is an account-scoped global service: there is no region dimension, so the table does not expose a `region` column.
 
 ## Table Usage Guide
 
@@ -126,7 +126,7 @@ group by
 
 ### List policies by tag
 
-Filter policies by a specific tag key-value pair.
+Filter policies by a specific tag key-value pair. The `tags` column is a JSON array of `{Key, Value}` objects, so expand it before matching.
 
 ```sql+postgres
 select
@@ -134,9 +134,11 @@ select
   policy_name,
   tags
 from
-  tencentcloud_cam_policy
+  tencentcloud_cam_policy,
+  jsonb_array_elements(tags) as tag
 where
-  tags ->> 'Environment' = 'Production';
+  tag ->> 'Key' = 'Environment'
+  and tag ->> 'Value' = 'Production';
 ```
 
 ```sql+sqlite
@@ -145,7 +147,9 @@ select
   policy_name,
   tags
 from
-  tencentcloud_cam_policy
+  tencentcloud_cam_policy,
+  json_each(tags) as tag
 where
-  json_extract(tags, '$.Environment') = 'Production';
+  json_extract(tag.value, '$.Key') = 'Environment'
+  and json_extract(tag.value, '$.Value') = 'Production';
 ```

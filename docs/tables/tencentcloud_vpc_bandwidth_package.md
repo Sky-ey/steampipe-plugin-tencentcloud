@@ -6,7 +6,7 @@ folder: "VPC"
 
 # Table: tencentcloud_vpc_bandwidth_package - Query Tencent Cloud VPC bandwidth packages using SQL
 
-A bandwidth package aggregates and shares bandwidth across multiple public IP resources (EIPs and load balancers) in the same region, so that all attached resources consume a single shared bandwidth pool. Bandwidth packages come in several network types (BGP, dedicated BGP, AIA BGP, static single-line) and billing modes (enhanced 95th percentile, traffic-based, bandwidth-based, daily top 5th, etc.).
+A bandwidth package aggregates and shares bandwidth across multiple public IP resources (EIPs and load balancers) in the same region, so that all attached resources consume a single shared bandwidth pool. Bandwidth packages come in several network types (BGP, dedicated BGP, AIA BGP, static single-line) and billing modes (enhanced 95th percentile `ENHANCED_95_PERCENTILE`, monthly top 5 `TOP5_POSTPAID_BY_MONTH`, monthly fixed bandwidth `FIXED_PREPAID_BY_MONTH`, bandwidth-based `BANDWIDTH_POSTPAID_BY_DAY`, traffic-based `TRAFFIC_POSTPAID_BY_HOUR`, etc.).
 
 ## Table Usage Guide
 

@@ -26,7 +26,7 @@ select
   subnet_id,
   instance_id,
   state,
-  primary,
+  "primary",
   region
 from
   tencentcloud_vpc_eni;
@@ -40,7 +40,7 @@ select
   subnet_id,
   instance_id,
   state,
-  primary,
+  "primary",
   region
 from
   tencentcloud_vpc_eni;
@@ -54,7 +54,7 @@ Filter ENIs by their attached instance ID.
 select
   network_interface_id,
   network_interface_name,
-  primary,
+  "primary",
   mac_address,
   attachment
 from
@@ -67,7 +67,7 @@ where
 select
   network_interface_id,
   network_interface_name,
-  primary,
+  "primary",
   mac_address,
   attachment
 from
@@ -90,8 +90,7 @@ select
 from
   tencentcloud_vpc_eni
 where
-  instance_id is null
-  or instance_id = '';
+  instance_id = '';
 ```
 
 ```sql+sqlite
@@ -104,8 +103,7 @@ select
 from
   tencentcloud_vpc_eni
 where
-  instance_id is null
-  or instance_id = '';
+  instance_id = '';
 ```
 
 ### Find ENIs in a specific subnet

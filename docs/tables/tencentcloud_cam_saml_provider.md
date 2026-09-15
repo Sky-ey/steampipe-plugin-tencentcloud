@@ -119,8 +119,7 @@ select
 from
   tencentcloud_cam_saml_provider
 where
-  description is null
-  or description = '';
+  description = '';
 ```
 
 ```sql+sqlite
@@ -130,6 +129,5 @@ select
 from
   tencentcloud_cam_saml_provider
 where
-  description is null
-  or description = '';
+  description = '';
 ```

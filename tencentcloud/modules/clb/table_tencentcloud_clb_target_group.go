@@ -2,8 +2,9 @@ package clb
 
 import (
 	"context"
-	"github.com/tencentcloud/steampipe-plugin-tencentcloud/tencentcloud/utils"
 	"time"
+
+	"github.com/tencentcloud/steampipe-plugin-tencentcloud/tencentcloud/utils"
 
 	clb "github.com/tencentcloud/tencentcloud-sdk-go-intl-en/tencentcloud/clb/v20180317"
 	"github.com/tencentcloud/tencentcloud-sdk-go-intl-en/tencentcloud/common"
@@ -82,7 +83,7 @@ func listClbTargetGroups(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 
 	for {
 		d.WaitForListRateLimit(ctx)
-		req := clb.NewDescribeTargetGroupListRequest()
+		req := clb.NewDescribeTargetGroupsRequest()
 		req.Offset = &offset
 		req.Limit = &pageSize
 
@@ -94,7 +95,7 @@ func listClbTargetGroups(ctx context.Context, d *plugin.QueryData, _ *plugin.Hyd
 		}
 
 		utils.LogRequest(ctx, "listClbTargetGroups", req)
-		resp, err := client.DescribeTargetGroupListWithContext(ctx, req)
+		resp, err := client.DescribeTargetGroupsWithContext(ctx, req)
 		if err != nil {
 			plugin.Logger(ctx).Error("listClbTargetGroups", "request_error", err)
 			return nil, err
@@ -138,11 +139,11 @@ func getClbTargetGroup(ctx context.Context, d *plugin.QueryData, _ *plugin.Hydra
 	if targetGroupID == "" {
 		return nil, nil
 	}
-	req := clb.NewDescribeTargetGroupListRequest()
+	req := clb.NewDescribeTargetGroupsRequest()
 	req.TargetGroupIds = common.StringPtrs([]string{targetGroupID})
 
 	utils.LogRequest(ctx, "getClbTargetGroup", req)
-	resp, err := client.DescribeTargetGroupListWithContext(ctx, req)
+	resp, err := client.DescribeTargetGroupsWithContext(ctx, req)
 	if err != nil {
 		plugin.Logger(ctx).Error("getClbTargetGroup", "request_error", err)
 		return nil, err

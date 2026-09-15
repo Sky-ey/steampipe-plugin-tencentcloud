@@ -159,7 +159,7 @@ select
 from
   tencentcloud_waf_ip_access_control
 where
-  job_type is not null;
+  job_type <> '';
 ```
 
 ```sql+sqlite
@@ -173,5 +173,5 @@ select
 from
   tencentcloud_waf_ip_access_control
 where
-  job_type is not null;
+  job_type <> '';
 ```

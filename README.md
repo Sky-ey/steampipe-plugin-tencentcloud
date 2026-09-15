@@ -28,6 +28,14 @@ connection "tencentcloud" {
 }
 ```
 
+Alternatively, use environment variables:
+
+```bash
+export TENCENTCLOUD_SECRET_ID=your-secret-id
+export TENCENTCLOUD_SECRET_KEY=your-secret-key
+export TENCENTCLOUD_REGION=ap-guangzhou
+```
+
 Run a query:
 
 ```sql
@@ -51,8 +59,6 @@ from
 | ins-7rjcx5yd   | api-gateway   | RUNNING        | S5.MEDIUM8    | ap-singapore |
 +----------------+---------------+----------------+---------------+--------------+
 ```
-
-Regional tables query every region matched by `regions`. Use a SQL condition such as `where region = 'ap-guangzhou'` to target one region directly and skip region discovery. See [docs/index.md](docs/index.md#multi-region-connections) for the full matching rules, credentials resolution, and multi-account (aggregator) support.
 
 ## Developing
 
@@ -84,4 +90,6 @@ The contract suite uses an isolated temporary Steampipe install directory and ne
 
 This repository is published under the [Apache 2.0 license](LICENSE).
 
-We welcome contributions — bug reports, documentation improvements, and code are all appreciated. To get started, see [contributing guidelines](https://steampipe.io/community/contribute). Please read the [code of conduct](https://steampipe.io/community/code-of-conduct) before participating.
+We welcome all kinds of contributions (bug reports, documentation improvements, and code).
+
+To get started, see [contributing guidelines](https://steampipe.io/community/contribute). Please read the [code of conduct](https://steampipe.io/community/code-of-conduct) before participating.

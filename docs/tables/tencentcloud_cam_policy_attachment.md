@@ -6,7 +6,7 @@ folder: "CAM"
 
 # Table: tencentcloud_cam_policy_attachment - Query Tencent Cloud CAM policy attachments using SQL
 
-Tencent Cloud CAM (Cloud Access Management) policy attachments represent the mapping between a policy and the principals (sub-accounts or user groups) it is attached to. This is the core question of IAM audits: who has been granted what permissions. CAM is an account-scoped global service: there is no region dimension, so the table does not expose a `region` column.
+Tencent Cloud CAM (Cloud Access Management) policy attachments represent the mapping between a policy and the principals (sub-accounts, user groups, or roles) it is attached to. This is the core question of IAM audits: who has been granted what permissions. The `related_type` column identifies the entity type: `1` = sub-account, `2` = user group, `3` = role. CAM is an account-scoped global service: there is no region dimension, so the table does not expose a `region` column.
 
 ## Table Usage Guide
 

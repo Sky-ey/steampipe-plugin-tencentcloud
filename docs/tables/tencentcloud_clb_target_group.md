@@ -6,11 +6,11 @@ folder: "CLB"
 
 # Table: tencentcloud_clb_target_group - Query Tencent Cloud CLB Target Groups using SQL
 
-Tencent Cloud Load Balancer (CLB) target groups group backend servers so they can be shared across listeners and load balancers. The `tencentcloud_clb_target_group` table uses the `DescribeTargetGroups` API and returns target groups in each region, including their protocol, port, health check configuration, and associated rules.
+Tencent Cloud Load Balancer (CLB) target groups group backend servers so they can be shared across listeners and load balancers. The `tencentcloud_clb_target_group` table uses the `DescribeTargetGroups` API and returns target groups in each region, including their protocol, port, health check configuration, and associated rules. The `associated_rule` column carries the listener/rule bindings (load balancer, listener, location, domain, URL and port) so you can see where each target group is referenced without querying the CLB listener APIs.
 
 ## Table Usage Guide
 
-The `tencentcloud_clb_target_group` table in Steampipe provides detailed information about CLB target groups within your Tencent Cloud account. This table allows you, as a DevOps engineer or cloud administrator, to query target group details, including the target group ID and name, backend protocol and port, VPC, scheduling algorithm, session persistence, health check configuration, and associated rules. You can use this table to audit target group configuration, find legacy v1 groups, and review health check settings.
+The `tencentcloud_clb_target_group` table in Steampipe provides detailed information about CLB target groups within your Tencent Cloud account. This table allows you, as a DevOps engineer or cloud administrator, to query target group details, including the target group ID and name, backend protocol and port, VPC, scheduling algorithm, session persistence, health check configuration, and associated listener rules. You can use this table to audit target group configuration, find legacy v1 groups, review health check settings, and trace which load balancers and rules reference each target group.
 
 ## Examples
 

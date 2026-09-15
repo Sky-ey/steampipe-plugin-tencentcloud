@@ -187,7 +187,7 @@ select
 from
   tencentcloud_waf_custom_rule
 where
-  job_type is not null;
+  job_type <> '';
 ```
 
 ```sql+sqlite
@@ -201,5 +201,5 @@ select
 from
   tencentcloud_waf_custom_rule
 where
-  job_type is not null;
+  job_type <> '';
 ```

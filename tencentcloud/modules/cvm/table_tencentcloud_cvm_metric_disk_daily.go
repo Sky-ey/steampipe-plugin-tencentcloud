@@ -12,7 +12,7 @@ func TableTencentcloudCvmMetricDiskDaily() *plugin.Table {
 	return cvmMetricTable(
 		"tencentcloud_cvm_metric_disk_daily",
 		"Daily disk utilization metric of Tencent Cloud CVM instances (last 30 days by default; a timestamp predicate narrows the queried range).",
-		"DiskUsage",
+		"CvmDiskUsage",
 		"The disk utilization percentage of the instance at the timestamp.",
 		86400,
 		30*24*time.Hour,

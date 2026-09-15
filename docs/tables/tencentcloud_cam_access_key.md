@@ -83,7 +83,7 @@ select
 from
   tencentcloud_cam_access_key
 where
-  last_used_date is null;
+  last_used_date = '';
 ```
 
 ```sql+sqlite
@@ -95,7 +95,7 @@ select
 from
   tencentcloud_cam_access_key
 where
-  last_used_date is null;
+  last_used_date = '';
 ```
 
 ### Count keys per user
