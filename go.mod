@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/hashicorp/go-hclog v1.6.3
-	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1464+incompatible
+	github.com/tencentcloud/tencentcloud-sdk-go-intl-en v3.0.1490+incompatible
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.75
 	github.com/turbot/steampipe-plugin-sdk/v5 v5.14.1
 )

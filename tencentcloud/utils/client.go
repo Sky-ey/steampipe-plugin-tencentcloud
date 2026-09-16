@@ -188,7 +188,11 @@ func CreateCredential(cfg TencentcloudConfig) (common.CredentialIface, error) {
 	}
 
 	if roleArn := ResolveRoleArn(cfg); roleArn != "" {
-		return common.DefaultRoleArnProvider(secretId, secretKey, roleArn).GetCredential()
+		credential := common.NewCredential(secretId, secretKey)
+		if token != "" {
+			credential = common.NewTokenCredential(secretId, secretKey, token)
+		}
+		return common.DefaultRoleArnProviderWithCredential(credential, roleArn).GetCredential()
 	}
 	if token != "" {
 		return common.NewTokenCredential(secretId, secretKey, token), nil
