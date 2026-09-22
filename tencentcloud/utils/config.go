@@ -42,7 +42,7 @@ func ConfigInstance() any {
 }
 
 func GetConfig(connection *plugin.Connection) TencentcloudConfig {
-	if connection == nil || connection.Config == nil {
+	if connection == nil {
 		return TencentcloudConfig{}
 	}
 	config, _ := connection.Config.(TencentcloudConfig)

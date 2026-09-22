@@ -3,6 +3,7 @@ package utils
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/go-hclog"
@@ -131,6 +132,44 @@ func TestBuildRegionListUsesRegionEnvironmentVariable(t *testing.T) {
 
 	if got := matrixRegions(matrix); !equalStringSlices(got, []string{"ap-shanghai"}) {
 		t.Fatalf("expected only ap-shanghai, got %v", got)
+	}
+}
+
+// Environment-only connections have nil Config in the SDK, not an empty config struct.
+func TestBuildRegionListWithNilConfig(t *testing.T) {
+	for _, tt := range []struct {
+		name      string
+		region    string
+		want      string
+		wantPanic string
+	}{
+		{name: "valid environment region", region: " AP-Shanghai ", want: "ap-shanghai"},
+		{name: "nonexistent environment region", region: "ap-nonexistent", wantPanic: "does not match any region available to the cvm product"},
+		{name: "malformed environment pattern", region: "ap-[", wantPanic: "invalid pattern"},
+		{name: "empty environment defaults", want: DefaultRegion},
+		{name: "blank environment defaults", region: "   ", want: DefaultRegion},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("TENCENTCLOUD_REGION", tt.region)
+			d := queryDataWithCachedRegions(t, TencentcloudConfig{}, "cvm", []string{"ap-guangzhou", "ap-shanghai"})
+			d.Connection.Config = nil
+
+			if tt.wantPanic != "" {
+				defer func() {
+					r := recover()
+					if r == nil || !strings.Contains(fmt.Sprint(r), tt.wantPanic) {
+						t.Fatalf("expected panic containing %q, got %v", tt.wantPanic, r)
+					}
+				}()
+			}
+
+			matrix := BuildRegionList(testContext(), d, "cvm")
+			if tt.wantPanic == "" {
+				if got := matrixRegions(matrix); !equalStringSlices(got, []string{tt.want}) {
+					t.Fatalf("expected [%s], got %v", tt.want, got)
+				}
+			}
+		})
 	}
 }
 
