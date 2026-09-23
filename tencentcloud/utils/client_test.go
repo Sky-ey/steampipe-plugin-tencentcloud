@@ -32,8 +32,7 @@ func (c *recordingSDKClient) Init(region string) *common.Client {
 }
 
 func TestInitClient(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
+	cleanCredentialEnvironment(t)
 
 	secretID := "configured-secret-id"
 	secretKey := "configured-secret-key"
@@ -58,6 +57,7 @@ func TestInitClient(t *testing.T) {
 }
 
 func TestInitClientUsesEnvironmentCredentials(t *testing.T) {
+	cleanCredentialEnvironment(t)
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "environment-secret-id")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "environment-secret-key")
 
@@ -306,11 +306,7 @@ func TestGetConfigValidatesBaseUrl(t *testing.T) {
 }
 
 func TestInitClientValidatesCredentials(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
-	homeDir := t.TempDir()
-	t.Setenv("HOME", homeDir)
-	t.Setenv("USERPROFILE", homeDir)
+	cleanCredentialEnvironment(t)
 
 	tests := []struct {
 		name   string
@@ -339,6 +335,33 @@ func TestInitClientValidatesCredentials(t *testing.T) {
 	}
 }
 
+func TestResolveRoleEndpoint(t *testing.T) {
+	for _, tt := range []struct {
+		name, envEndpoint, envBaseURL, endpoint, baseURL, want string
+		wantError                                              bool
+	}{
+		{name: "SDK default"},
+		{name: "configured base URL", baseURL: " internal.example.com:8443 ", want: "sts.internal.example.com:8443"},
+		{name: "configured endpoint wins", endpoint: " api.example.com ", baseURL: "unused.example.com", want: "api.example.com"},
+		{name: "environment base URL", envBaseURL: "internal.example.com", want: "sts.internal.example.com"},
+		{name: "environment endpoint wins", envEndpoint: "api.example.com", baseURL: "unused.example.com", want: "api.example.com"},
+		{name: "config endpoint overrides environment", envEndpoint: "unused.example.com", endpoint: "api.example.com", want: "api.example.com"},
+		{name: "config base URL overrides environment", envBaseURL: "unused.example.com", baseURL: "internal.example.com", want: "sts.internal.example.com"},
+		{name: "HTTPS URL", endpoint: "https://api.example.com:8443/sts", want: "api.example.com:8443/sts"},
+		{name: "HTTP unsupported", endpoint: "http://api.example.com", wantError: true},
+		{name: "invalid URL", endpoint: "https://", wantError: true},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("TENCENTCLOUD_ENDPOINT", tt.envEndpoint)
+			t.Setenv("TENCENTCLOUD_BASE_URL", tt.envBaseURL)
+			got, err := resolveSTSEndpoint(TencentcloudConfig{Endpoint: &tt.endpoint, BaseUrl: &tt.baseURL})
+			if (err != nil) != tt.wantError || got != tt.want {
+				t.Fatalf("got (%q, %v), want (%q, error=%t)", got, err, tt.want, tt.wantError)
+			}
+		})
+	}
+}
+
 func TestResolveRoleArnFromEnvironment(t *testing.T) {
 	t.Setenv("TENCENTCLOUD_ASSUME_ROLE_ARN", "  qcs::cam::uin/100000000001:roleName/environment-role  ")
 
@@ -360,9 +383,9 @@ func TestResolveRoleArnConfigOverridesEnvironment(t *testing.T) {
 
 // 静态凭证 + STS token 应生成携带 token 的凭证(跨账号场景)
 func TestResolveCredentialStaticToken(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
-	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
+	cleanCredentialEnvironment(t)
+	t.Setenv("TENCENTCLOUD_TOKEN", "env-token")
+	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "env-security-token")
 
 	sid := "static-id"
 	skey := "static-key"
@@ -381,58 +404,39 @@ func TestResolveCredentialStaticToken(t *testing.T) {
 	}
 }
 
-// 环境变量 token 同样生效
+// TENCENTCLOUD_TOKEN 优先，空值时回退到 TENCENTCLOUD_SECURITY_TOKEN。
 func TestResolveCredentialEnvToken(t *testing.T) {
+	cleanCredentialEnvironment(t)
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "env-key")
-	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "env-token")
 
-	cred, err := CreateCredential(TencentcloudConfig{})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	gotID, gotKey, gotToken := cred.GetCredential()
-	if gotID != "env-id" || gotKey != "env-key" || gotToken != "env-token" {
-		t.Fatalf("got (%s,%s,%s)", gotID, gotKey, gotToken)
-	}
-}
-
-func TestResolveCredentialEnvTokenFallback(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "env-key")
-	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
-	t.Setenv("TENCENTCLOUD_TOKEN", "alt-env-token")
-
-	cred, err := CreateCredential(TencentcloudConfig{})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	gotID, gotKey, gotToken := cred.GetCredential()
-	if gotID != "env-id" || gotKey != "env-key" || gotToken != "alt-env-token" {
-		t.Fatalf("got (%s,%s,%s)", gotID, gotKey, gotToken)
-	}
-}
-
-func TestResolveCredentialEnvTokenPreferredOverFallback(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "env-key")
-	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "env-token")
-	t.Setenv("TENCENTCLOUD_TOKEN", "alt-env-token")
-
-	cred, err := CreateCredential(TencentcloudConfig{})
-	if err != nil {
-		t.Fatalf("unexpected error: %v", err)
-	}
-	gotID, gotKey, gotToken := cred.GetCredential()
-	if gotID != "env-id" || gotKey != "env-key" || gotToken != "env-token" {
-		t.Fatalf("got (%s,%s,%s)", gotID, gotKey, gotToken)
+	for _, tt := range []struct {
+		name, token, securityToken, want string
+	}{
+		{name: "no token"},
+		{name: "primary token", token: "env-token", want: "env-token"},
+		{name: "security token fallback", securityToken: "security-token", want: "security-token"},
+		{name: "primary wins", token: "env-token", securityToken: "security-token", want: "env-token"},
+		{name: "trim primary", token: "  env-token  ", securityToken: "security-token", want: "env-token"},
+		{name: "blank primary falls back", token: "   ", securityToken: "  security-token  ", want: "security-token"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv("TENCENTCLOUD_TOKEN", tt.token)
+			t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", tt.securityToken)
+			cred, err := CreateCredential(TencentcloudConfig{})
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			gotID, gotKey, gotToken := cred.GetCredential()
+			if gotID != "env-id" || gotKey != "env-key" || gotToken != tt.want {
+				t.Fatal("resolved credentials do not match the expected environment credentials")
+			}
+		})
 	}
 }
 
 func TestResolveCredentialTCCLIFile(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
-	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
+	cleanCredentialEnvironment(t)
 	writeTCCLICredentialFile(t, `{
 		"secretId": "  tccli-id  ",
 		"secretKey": "  tccli-key  ",
@@ -450,9 +454,7 @@ func TestResolveCredentialTCCLIFile(t *testing.T) {
 }
 
 func TestResolveCredentialTCCLIFileErrors(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
-	t.Setenv("TENCENTCLOUD_SECURITY_TOKEN", "")
+	cleanCredentialEnvironment(t)
 
 	tests := []struct {
 		name      string
@@ -462,12 +464,12 @@ func TestResolveCredentialTCCLIFileErrors(t *testing.T) {
 		{
 			name:      "invalid JSON",
 			contents:  `{`,
-			wantError: "parse TC CLI credential file",
+			wantError: "parse TCCLI credential file",
 		},
 		{
-			name:      "missing secret key",
+			name:      "incomplete file falls back to unavailable default chain",
 			contents:  `{"secretId":"tccli-id"}`,
-			wantError: `must contain non-empty "secretId" and "secretKey" fields`,
+			wantError: "missing credentials",
 		},
 	}
 
@@ -484,6 +486,7 @@ func TestResolveCredentialTCCLIFileErrors(t *testing.T) {
 
 // .spc 凭证优先于环境变量
 func TestResolveCredentialSpcOverridesEnv(t *testing.T) {
+	cleanCredentialEnvironment(t)
 	t.Setenv("TENCENTCLOUD_SECRET_ID", "env-id")
 	t.Setenv("TENCENTCLOUD_SECRET_KEY", "env-key")
 
@@ -497,6 +500,58 @@ func TestResolveCredentialSpcOverridesEnv(t *testing.T) {
 	if gotID != sid || gotKey != skey {
 		t.Fatalf("expected spc credentials to win, got (%s,%s)", gotID, gotKey)
 	}
+}
+
+func TestResolveCredentialIncompleteTCCLIFileFallsBackToProfile(t *testing.T) {
+	cleanCredentialEnvironment(t)
+	profilePath := filepath.Join(t.TempDir(), "credentials")
+	if err := os.WriteFile(profilePath, []byte("[default]\nsecret_id = profile-id\nsecret_key = profile-key\n"), 0o600); err != nil {
+		t.Fatalf("failed to write SDK credential profile: %v", err)
+	}
+	t.Setenv("TENCENTCLOUD_CREDENTIALS_FILE", profilePath)
+
+	for _, tt := range []struct {
+		name, contents string
+	}{
+		{name: "empty object", contents: `{}`},
+		{name: "missing secret key", contents: `{"secretId":"tccli-id"}`},
+		{name: "missing secret ID", contents: `{"secretKey":"tccli-key"}`},
+		{name: "blank secret key", contents: `{"secretId":"tccli-id","secretKey":"   "}`},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			writeTCCLICredentialFile(t, tt.contents)
+			cred, err := CreateCredential(TencentcloudConfig{})
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			gotID, gotKey, gotToken := cred.GetCredential()
+			if gotID != "profile-id" || gotKey != "profile-key" || gotToken != "" {
+				t.Fatal("expected credentials from the SDK profile after skipping the incomplete TCCLI file")
+			}
+		})
+	}
+}
+
+// Clean credentials and client settings from the developer's environment.
+// An explicitly empty SDK profile path makes the default chain fail locally,
+// rather than falling through to the real CVM metadata service.
+func cleanCredentialEnvironment(t *testing.T) {
+	t.Helper()
+	for _, name := range []string{
+		"TENCENTCLOUD_SECRET_ID", "TENCENTCLOUD_SECRET_KEY",
+		"TENCENTCLOUD_TOKEN", "TENCENTCLOUD_SECURITY_TOKEN",
+		"TENCENTCLOUD_ASSUME_ROLE_ARN", "TENCENTCLOUD_CREDENTIALS_FILE",
+		"TENCENTCLOUD_ENDPOINT", "TENCENTCLOUD_BASE_URL",
+		"TENCENTCLOUD_INSECURE_SKIP_VERIFY", "TENCENTCLOUD_DNS_OVERRIDE",
+	} {
+		if err := os.Unsetenv(name); err != nil {
+			t.Fatalf("failed to unset %s: %v", name, err)
+		}
+	}
+	t.Setenv("TENCENTCLOUD_CREDENTIALS_FILE", "")
+	homeDir := t.TempDir()
+	t.Setenv("HOME", homeDir)
+	t.Setenv("USERPROFILE", homeDir)
 }
 
 func writeTCCLICredentialFile(t *testing.T, contents string) {

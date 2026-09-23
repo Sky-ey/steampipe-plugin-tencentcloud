@@ -137,15 +137,18 @@ connection "tencentcloud" {
 
   # 设为 `true` 允许在 `endpoint` 中使用明文 http://。默认关闭，
   # 以防止意外通过未加密连接发送凭证。
+  # 此设置不会应用于STS凭证获取或刷新
   #allow_insecure_endpoint = false
 
   # 设为 `true` 跳过 TLS 证书校验。使用 http:// endpoint 时也需要
   # （与 `allow_insecure_endpoint = true` 一起）设置此项。
+  # 此设置不会应用于STS凭证获取或刷新
   #insecure_skip_verify = false
 
   # 为 API 主机自定义 DNS 解析。键为主机名——
   # "module.example.com" 为精确匹配，"*.example.com" 为后缀匹配。
   # 值必须是合法 IP 地址。
+  # 此设置不会应用于STS凭证获取或刷新
   #dns_override = {
   #  "cvm.tencentcloudapi.com" = "10.0.0.1"
   #}

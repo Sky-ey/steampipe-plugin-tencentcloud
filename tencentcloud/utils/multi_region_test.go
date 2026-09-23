@@ -318,16 +318,16 @@ func TestBuildRegionListUsesCachedRegions(t *testing.T) {
 
 // 配置了 regions 但发现失败时必须 panic,不能静默返回空矩阵
 func TestBuildRegionListPanicsWhenDiscoveryFails(t *testing.T) {
-	t.Setenv("TENCENTCLOUD_SECRET_ID", "")
-	t.Setenv("TENCENTCLOUD_SECRET_KEY", "")
+	cleanCredentialEnvironment(t)
 
 	d := queryDataWithConfig(TencentcloudConfig{Regions: []string{"*"}})
 	d.QueryContext = &plugin.QueryContext{}
 	d.ConnectionManager = newTestConnectionManager(t)
 
 	defer func() {
-		if recover() == nil {
-			t.Fatal("expected a panic when region discovery fails")
+		r := recover()
+		if r == nil || !strings.Contains(fmt.Sprint(r), "missing credentials") {
+			t.Fatalf("expected a missing-credentials panic when region discovery fails, got %v", r)
 		}
 	}()
 

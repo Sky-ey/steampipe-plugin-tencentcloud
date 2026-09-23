@@ -3,11 +3,12 @@ package cos
 import (
 	"context"
 	"fmt"
-	"github.com/tencentcloud/steampipe-plugin-tencentcloud/tencentcloud/utils"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/tencentcloud/steampipe-plugin-tencentcloud/tencentcloud/utils"
 
 	cos "github.com/tencentyun/cos-go-sdk-v5"
 	"github.com/turbot/steampipe-plugin-sdk/v5/plugin"

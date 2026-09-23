@@ -192,12 +192,40 @@ func CreateCredential(cfg TencentcloudConfig) (common.CredentialIface, error) {
 		if token != "" {
 			credential = common.NewTokenCredential(secretId, secretKey, token)
 		}
-		return common.DefaultRoleArnProviderWithCredential(credential, roleArn).GetCredential()
+		endpoint, err := resolveSTSEndpoint(cfg)
+		if err != nil {
+			return nil, err
+		}
+		provider := common.DefaultRoleArnProviderWithCredential(credential, roleArn)
+		provider.Endpoint = endpoint
+		return provider.GetCredential()
 	}
 	if token != "" {
 		return common.NewTokenCredential(secretId, secretKey, token), nil
 	}
 	return common.NewCredential(secretId, secretKey), nil
+}
+
+func resolveSTSEndpoint(cfg TencentcloudConfig) (string, error) {
+	endpoint := strings.TrimSpace(os.Getenv("TENCENTCLOUD_ENDPOINT"))
+	baseURL := strings.TrimSpace(os.Getenv("TENCENTCLOUD_BASE_URL"))
+	if cfg.Endpoint != nil && strings.TrimSpace(*cfg.Endpoint) != "" {
+		endpoint = strings.TrimSpace(*cfg.Endpoint)
+	}
+	if cfg.BaseUrl != nil && strings.TrimSpace(*cfg.BaseUrl) != "" {
+		baseURL = strings.TrimSpace(*cfg.BaseUrl)
+	}
+	if endpoint == "" && baseURL != "" {
+		endpoint = "sts." + baseURL
+	}
+	if strings.Contains(endpoint, "://") {
+		parsed, err := url.Parse(endpoint)
+		if err != nil || parsed.Scheme != "https" || parsed.Host == "" {
+			return "", stderrors.New("invalid AssumeRole endpoint: expected a hostname or https:// URL")
+		}
+		endpoint = parsed.Host + parsed.EscapedPath()
+	}
+	return endpoint, nil
 }
 
 func ResolveRoleArn(cfg TencentcloudConfig) string {

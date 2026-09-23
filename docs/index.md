@@ -138,15 +138,18 @@ connection "tencentcloud" {
 
   # Set to `true` to allow plain `http://` endpoints in `endpoint`. Off by default
   # to prevent accidentally sending credentials over an unencrypted connection.
+  # This will not applied for STS credential request or refresh
   #allow_insecure_endpoint = false
 
   # Set to `true` to skip TLS certificate verification. Also required (together
   # with `allow_insecure_endpoint = true`) when using an `http://` endpoint.
+  # This will not applied for STS credential request or refresh
   #insecure_skip_verify = false
 
   # Custom DNS resolution for API hosts. Keys are hostnames
   # "module.example.com" for an exact match, "*.example.com" for suffix matching
   # Values must be valid IP addresses.
+  # This will not applied for STS credential request or refresh
   #dns_override = {
   #  "cvm.tencentcloudapi.com" = "10.0.0.1"
   #}
